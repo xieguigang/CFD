@@ -5,9 +5,8 @@ Module Program
 
     Sub Main(args As String())
         Do While True
-            Call Console.Clear()
             Call ProcessExplorer.Print()
-            Call Thread.Sleep(500)
+            Call Thread.Sleep(ProcessExplorer.internalMs)
         Loop
     End Sub
 End Module
