@@ -7,3 +7,4 @@ Imports System.Diagnostics.CodeAnalysis
 
 <Assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification:="<Pending>", Scope:="type", Target:="~T:wtop.ProcessExplorer")>
 <Assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification:="<Pending>", Scope:="member", Target:="~M:wtop.Process.#ctor(System.Int64,System.String)")>
+<Assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification:="<Pending>", Scope:="member", Target:="~M:wtop.ProcessItem.#ctor(System.Diagnostics.Process)")>
