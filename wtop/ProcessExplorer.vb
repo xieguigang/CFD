@@ -6,6 +6,7 @@ Imports stdNum = System.Math
 Module ProcessExplorer
 
     ReadOnly processList As New Dictionary(Of Integer, ProcessItem)
+    ReadOnly cores As Integer = App.CPUCoreNumbers
 
     ''' <summary>
     ''' refresh interval in time unit ms
@@ -55,6 +56,7 @@ Module ProcessExplorer
 
     Private Sub RenderOutput()
         Dim maxChars As Integer = Console.WindowWidth - 100
+        Dim totalCPUInterval As Double = internalMs * cores
 
         If maxChars < 16 Then
             maxChars = 16
@@ -69,7 +71,7 @@ Module ProcessExplorer
                         Return New String() {
                             p.pid,
                             Mid(p.processName, 1, 16),
-                            (p.cpuTime.TotalMilliseconds / internalMs).ToString("F1"),
+                            (100 * p.cpuTime.TotalMilliseconds / totalCPUInterval).ToString("F1"),
                             p.totalCPU.FormatTime,
                             (p.mem / 1024 / 1024).ToString("F2"),
                             p.threads,
