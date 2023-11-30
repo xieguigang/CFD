@@ -16,6 +16,20 @@ export class ui {
     public readonly viscValue: HTMLInputElement;
     public readonly mouseSelect: HTMLSelectElement;
 
+    public readonly plotSelect: HTMLSelectElement;
+    public readonly contrastSlider: HTMLInputElement;
+    public readonly pixelCheck: HTMLInputElement;
+    public readonly tracerCheck: HTMLInputElement;
+    public readonly flowlineCheck: HTMLInputElement;
+    public readonly forceCheck: HTMLInputElement;
+    public readonly sensorCheck: HTMLInputElement;
+    public readonly dataCheck: HTMLInputElement;
+    public readonly rafCheck: HTMLInputElement;
+    public readonly speedReadout: HTMLElement;
+    public readonly dataSection: HTMLElement;
+    public readonly dataArea: HTMLElement;
+    public readonly dataButton: HTMLInputElement;
+
     constructor(canvas_id: string = "theCanvas",
         speedSlider: string = "speedSlider",
         stepsSlider: string = "stepsSlider",
@@ -23,7 +37,20 @@ export class ui {
         speedValue: string = "speedValue",
         viscSlider: string = "viscSlider",
         viscValue: string = "viscValue",
-        mouseSelect: string = "mouseSelect") {
+        mouseSelect: string = "mouseSelect",
+        plotSelect: string = "plotSelect",
+        contrastSlider: string = "contrastSlider",
+        pixelCheck: string = "pixelCheck",
+        tracerCheck: string = "tracerCheck",
+        flowlineCheck: string = "flowlineCheck",
+        forceCheck: string = "forceCheck",
+        sensorCheck: string = "sensorCheck",
+        dataCheck: string = "dataCheck",
+        rafCheck: string = "rafCheck",
+        speedReadout: string = "speedReadout",
+        dataSection: string = "dataSection",
+        dataArea: string = "dataArea",
+        dataButton: string = "dataButton") {
 
         const canvas: HTMLCanvasElement = <any>document.getElementById(canvas_id);
         const context: CanvasRenderingContext2D = <any>canvas.getContext('2d');
@@ -46,6 +73,20 @@ export class ui {
         this.viscSlider = <any>document.getElementById(viscSlider);
         this.viscValue = <any>document.getElementById(viscValue);
         this.mouseSelect = <any>document.getElementById(mouseSelect);
+
+        this.plotSelect = <any>document.getElementById(plotSelect);
+        this.contrastSlider = <any>document.getElementById(contrastSlider);
+        this.pixelCheck = <any>document.getElementById(pixelCheck);
+        this.tracerCheck = <any>document.getElementById(tracerCheck);
+        this.flowlineCheck = <any>document.getElementById(flowlineCheck);
+        this.forceCheck = <any>document.getElementById(forceCheck);
+        this.sensorCheck = <any>document.getElementById(sensorCheck);
+        this.dataCheck = <any>document.getElementById(dataCheck);
+        this.rafCheck = <any>document.getElementById(rafCheck);
+        this.speedReadout = <any>document.getElementById(speedReadout);
+        this.dataSection = <any>document.getElementById(dataSection);
+        this.dataArea = <any>document.getElementById(dataArea);
+        this.dataButton = <any>document.getElementById(dataButton);
 
         this.setEvents();
     }

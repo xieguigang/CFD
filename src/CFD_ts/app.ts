@@ -24,19 +24,7 @@ for (var barrierIndex = 0; barrierIndex < barrierList.length; barrierIndex++) {
     shape.text = barrierList[barrierIndex].name;
     barrierSelect.add(shape, null);
 }
-var plotSelect: HTMLSelectElement = <any>document.getElementById('plotSelect');
-var contrastSlider: HTMLInputElement = <any>document.getElementById('contrastSlider');
-//var pixelCheck = document.getElementById('pixelCheck');
-var tracerCheck: HTMLInputElement = <any>document.getElementById('tracerCheck');
-var flowlineCheck: HTMLInputElement = <any>document.getElementById('flowlineCheck');
-var forceCheck: HTMLInputElement = <any>document.getElementById('forceCheck');
-var sensorCheck: HTMLInputElement = <any>document.getElementById('sensorCheck');
-var dataCheck: HTMLInputElement = <any>document.getElementById('dataCheck');
-var rafCheck: HTMLInputElement = <any>document.getElementById('rafCheck');
-var speedReadout: HTMLElement = <any>document.getElementById('speedReadout');
-var dataSection: HTMLElement = <any>document.getElementById('dataSection');
-var dataArea: HTMLElement = <any>document.getElementById('dataArea');
-var dataButton: HTMLInputElement = <any>document.getElementById('dataButton');
+
 var running = false;						// will be true when running
 var stepCount = 0;
 var startTime = 0;
