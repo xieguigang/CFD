@@ -1,15 +1,37 @@
 Imports System.IO
+Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.DataStorage.HDSPack.FileSystem
 
 Public Class FrameWriter : Implements IDisposable
 
     ReadOnly buf As StreamPack
 
+    ''' <summary>
+    ''' total frame count
+    ''' </summary>
     Dim total As Integer
     Dim disposedValue As Boolean
 
     Sub New(file As Stream)
         buf = New StreamPack(file)
+    End Sub
+
+    Public Sub AddFrame(time As Integer, framedata As Double()())
+        Dim path As String = $"/frame_data/{time}.dat"
+        Dim file As StreamBuffer = buf.OpenBlock(path)
+        Dim wr As New BinaryDataWriter(file) With {
+            .ByteOrder = ByteOrder.BigEndian
+        }
+
+        For Each row As Double() In framedata
+            Call wr.Write(row)
+        Next
+
+        total += 1
+
+        Call wr.Flush()
+        Call file.Flush()
+        Call file.Dispose()
     End Sub
 
     Private Sub save()
