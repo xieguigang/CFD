@@ -1,5 +1,7 @@
 export class graphics {
 
+    constructor(private canvas: HTMLCanvasElement) { }
+
     /**
      * Draw the sensor and its associated data display
     */
