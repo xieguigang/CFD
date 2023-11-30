@@ -103,7 +103,7 @@ export class CFD {
         for (var y = 0; y < ydim; y++) {
             for (var x = 0; x < xdim; x++) {
                 setEquil(x, y, u0, 0, 1);
-              this.  curl[x + y * xdim] = 0.0;
+                this.curl[x + y * xdim] = 0.0;
             }
         }
 
@@ -237,8 +237,13 @@ export class CFD {
      * Move particles along their directions of motion 
     */
     public stream() {
-        barrierCount = 0; barrierxSum = 0; barrierySum = 0;
-        barrierFx = 0.0; barrierFy = 0.0;
+        const opts = this.opts;
+        const xdim = this.pars.xdim;
+        const ydim = this.pars.ydim;
+
+        opts.barrierCount = 0; opts.barrierxSum = 0; opts.barrierySum = 0;
+        opts.barrierFx = 0.0; opts.barrierFy = 0.0;
+
         for (var y = ydim - 2; y > 0; y--) {			// first start in NW corner...
             for (var x = 1; x < xdim - 1; x++) {
                 nN[x + y * xdim] = nN[x + (y - 1) * xdim];			// move the north-moving particles
@@ -276,11 +281,11 @@ export class CFD {
                     nSE[x + 1 + (y - 1) * xdim] = nNW[index];
                     nSW[x - 1 + (y - 1) * xdim] = nNE[index];
                     // Keep track of stuff needed to plot force vector:
-                    barrierCount++;
-                    barrierxSum += x;
-                    barrierySum += y;
-                    barrierFx += nE[index] + nNE[index] + nSE[index] - nW[index] - nNW[index] - nSW[index];
-                    barrierFy += nN[index] + nNE[index] + nNW[index] - nS[index] - nSE[index] - nSW[index];
+                    opts.barrierCount++;
+                    opts.barrierxSum += x;
+                    opts.barrierySum += y;
+                    opts.barrierFx += nE[index] + nNE[index] + nSE[index] - nW[index] - nNW[index] - nSW[index];
+                    opts.barrierFy += nN[index] + nNE[index] + nNW[index] - nS[index] - nSE[index] - nSW[index];
                 }
             }
         }

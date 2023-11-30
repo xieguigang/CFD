@@ -1,5 +1,5 @@
 import { mobile } from "./global";
-import { options, uiAdapter } from "./options";
+import { four9ths, one36th, one9th, options, uiAdapter } from "./options";
 
 /**
  * this html user interface handler
@@ -185,6 +185,11 @@ export class ui implements uiAdapter {
 
     // Move the tracer particles:
     moveTracers() {
+        const xdim = this.xdim;
+        const ydim = this.ydim;
+        const tracerX = this.opts.tracerX;
+        const tracerY = this.opts.tracerY;
+
         for (var t = 0; t < this.opts.nTracers; t++) {
             var roundedX = Math.round(tracerX[t]);
             var roundedY = Math.round(tracerY[t]);
@@ -231,10 +236,6 @@ export class ui implements uiAdapter {
         var u2 = ux2 + uy2;
         var u215 = 1.5 * u2;
 
-        const four9ths = this.opts.four9ths;
-        const one9th = this.opts.one9th;
-        const one36th = this.opts.one36th;
-
         n0[i] = four9ths * newrho * (1 - u215);
         nE[i] = one9th * newrho * (1 + ux3 + 4.5 * ux2 - u215);
         nW[i] = one9th * newrho * (1 - ux3 + 4.5 * ux2 - u215);
@@ -258,8 +259,8 @@ export class ui implements uiAdapter {
 
             var canvasLoc = pageToCanvas(e.pageX, e.pageY);
             var gridLoc = canvasToGrid(canvasLoc.x, canvasLoc.y);
-            var dx = (gridLoc.x - sensorX) * pxPerSquare;
-            var dy = (gridLoc.y - sensorY) * pxPerSquare;
+            var dx = (gridLoc.x - this.opts.sensorX) * pxPerSquare;
+            var dy = (gridLoc.y - this.opts.sensorY) * pxPerSquare;
 
             if (Math.sqrt(dx * dx + dy * dy) <= 8) {
                 this.draggingSensor = true;
@@ -285,18 +286,18 @@ export class ui implements uiAdapter {
         var canvasLoc = pageToCanvas(e.pageX, e.pageY);
         if (draggingSensor) {
             var gridLoc = canvasToGrid(canvasLoc.x, canvasLoc.y);
-            sensorX = gridLoc.x;
-            sensorY = gridLoc.y;
+            this.opts.sensorX = gridLoc.x;
+            this.opts.sensorY = gridLoc.y;
             paintCanvas();
             return;
         }
         if (mouseSelect.selectedIndex == 2) {
-            mouseX = canvasLoc.x;
-            mouseY = canvasLoc.y;
+            this.opts.mouseX = canvasLoc.x;
+            this.opts.mouseY = canvasLoc.y;
             return;
         }
         var gridLoc = canvasToGrid(canvasLoc.x, canvasLoc.y);
-        if (mouseSelect.selectedIndex == 0) {
+        if (this.mouseSelect.selectedIndex == 0) {
             addBarrier(gridLoc.x, gridLoc.y);
             paintCanvas();
         } else {
@@ -358,8 +359,8 @@ export class ui implements uiAdapter {
 
     // Reset the timer that handles performance evaluation:
     resetTimer() {
-        stepCount = 0;
-        startTime = (new Date()).getTime();
+        this.opts.stepCount = 0;
+        this.opts.startTime = (new Date()).getTime();
     }
 
     // Show value of flow speed setting:
@@ -374,57 +375,63 @@ export class ui implements uiAdapter {
 
     // Show or hide the data area:
     showData() {
-        if (dataCheck.checked) {
-            dataSection.style.display = "block";
+        if (this.dataCheck.checked) {
+            this.dataSection.style.display = "block";
         } else {
-            dataSection.style.display = "none";
+            this.dataSection.style.display = "none";
         }
     }
 
     // Start or stop collecting data:
     startOrStopData() {
-        collectingData = !collectingData;
-        if (collectingData) {
-            time = 0;
-            dataArea.innerHTML = "Time \tDensity\tVel_x \tVel_y \tForce_x\tForce_y\n";
-            writeData();
-            dataButton.value = "Stop data collection";
-            showingPeriod = false;
-            periodButton.value = "Show F_y period";
+        this.opts.collectingData = !this.opts.collectingData;
+        if (this.opts.collectingData) {
+            this.opts.time = 0;
+            this.dataArea.innerHTML = "Time \tDensity\tVel_x \tVel_y \tForce_x\tForce_y\n";
+            this.writeData();
+            this.dataButton.value = "Stop data collection";
+            this.opts.showingPeriod = false;
+            this.periodButton.value = "Show F_y period";
         } else {
-            dataButton.value = "Start data collection";
+            this.dataButton.value = "Start data collection";
         }
     }
 
     // Write one line of data to the data area:
     writeData() {
-        var timeString = String(time);
+        var timeString = String(this.opts.time);
+        var xdim = this.xdim;
         while (timeString.length < 5) timeString = "0" + timeString;
-        var sIndex = sensorX + sensorY * xdim;
-        dataArea.innerHTML += timeString + "\t" + Number(rho[sIndex]).toFixed(4) + "\t"
+        var sIndex = this.opts.sensorX + this.opts.sensorY * xdim;
+        this.dataArea.innerHTML += timeString + "\t" + Number(rho[sIndex]).toFixed(4) + "\t"
             + Number(ux[sIndex]).toFixed(4) + "\t" + Number(uy[sIndex]).toFixed(4) + "\t"
-            + Number(barrierFx).toFixed(4) + "\t" + Number(barrierFy).toFixed(4) + "\n";
-        dataArea.scrollTop = dataArea.scrollHeight;
+            + Number(this.opts.barrierFx).toFixed(4) + "\t" + Number(this.opts.barrierFy).toFixed(4) + "\n";
+        this.dataArea.scrollTop = this.dataArea.scrollHeight;
     }
 
     // Handle click to "show period" button
     showPeriod() {
-        showingPeriod = !showingPeriod;
-        if (showingPeriod) {
-            time = 0;
-            lastBarrierFy = 1.0;	// arbitrary positive value
-            lastFyOscTime = -1.0;	// arbitrary negative value
-            dataArea.innerHTML = "Period of F_y oscillation\n";
-            periodButton.value = "Stop data";
-            collectingData = false;
-            dataButton.value = "Start data collection";
+        this.opts.showingPeriod = !this.opts.showingPeriod;
+
+        if (this.opts.showingPeriod) {
+            this.opts.time = 0;
+            this.opts.lastBarrierFy = 1.0;	// arbitrary positive value
+            this.opts.lastFyOscTime = -1.0;	// arbitrary negative value
+            this.dataArea.innerHTML = "Period of F_y oscillation\n";
+            this.periodButton.value = "Stop data";
+            this.opts.collectingData = false;
+            this.dataButton.value = "Start data collection";
         } else {
-            periodButton.value = "Show F_y period";
+            this.periodButton.value = "Show F_y period";
         }
     }
 
     // Write all the barrier locations to the data area:
     showBarrierLocations() {
+        const dataArea = this.dataArea;
+        const xdim = this.xdim;
+        const ydim = this.ydim;
+
         dataArea.innerHTML = '{name:"Barrier locations",\n';
         dataArea.innerHTML += 'locations:[\n';
         for (var y = 1; y < ydim - 1; y++) {
@@ -440,7 +447,7 @@ export class ui implements uiAdapter {
     placePresetBarrier() {
         var index = barrierSelect.selectedIndex;
         if (index == 0) return;
-        clearBarriers();
+        this.clearBarriers();
         var bCount = barrierList[index - 1].locations.length / 2;	// number of barrier sites
         // To decide where to place it, find minimum x and min/max y:
         var xMin = barrierList[index - 1].locations[0];
@@ -470,9 +477,13 @@ export class ui implements uiAdapter {
 
     // Print debugging data:
     debug() {
-        dataArea.innerHTML = "Tracer locations:\n";
-        for (var t = 0; t < nTracers; t++) {
-            dataArea.innerHTML += tracerX[t] + ", " + tracerY[t] + "\n";
+        const tracerX = this.opts.tracerX;
+        const tracerY = this.opts.tracerY;
+
+        this.dataArea.innerHTML = "Tracer locations:\n";
+
+        for (var t = 0; t < this.opts.nTracers; t++) {
+            this.dataArea.innerHTML += tracerX[t] + ", " + tracerY[t] + "\n";
         }
     }
 }
