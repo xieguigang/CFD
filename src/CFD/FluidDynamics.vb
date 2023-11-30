@@ -44,7 +44,7 @@ Imports std = System.Math
 ''' <remarks>
 ''' https://github.com/kobejean/cs-102-final-project-cfd
 ''' </remarks>
-Public Class CFD_HD : Inherits Simulation
+Public Class FluidDynamics : Inherits Simulation
 
     ' *************************************************************************
     '                           - SIMULATION VARIABLES -                       *
@@ -126,7 +126,6 @@ Public Class CFD_HD : Inherits Simulation
         m_collide = New collide(Me)
         m_bounce = New bounce(Me)
     End Sub
-
 
     ''' <summary>
     ''' *************************************************************************

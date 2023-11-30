@@ -2,9 +2,9 @@
 
 Public Class collide : Inherits VectorTask
 
-    ReadOnly cfd As CFD_HD
+    ReadOnly cfd As FluidDynamics
 
-    Public Sub New(cfd As CFD_HD)
+    Public Sub New(cfd As FluidDynamics)
         MyBase.New(nsize:=cfd.xdim)
         Me.cfd = cfd
     End Sub

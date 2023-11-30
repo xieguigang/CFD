@@ -2,9 +2,9 @@
 
 Public Class bounce : Inherits VectorTask
 
-    ReadOnly cfd As CFD_HD
+    ReadOnly cfd As FluidDynamics
 
-    Sub New(cfd As CFD_HD)
+    Sub New(cfd As FluidDynamics)
         MyBase.New(nsize:=cfd.xdim)
         Me.cfd = cfd
     End Sub
