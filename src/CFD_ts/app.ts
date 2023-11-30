@@ -72,22 +72,7 @@ canvas.addEventListener('touchstart', mouseDown, false);
 canvas.addEventListener('touchmove', mouseMove, false);
 document.body.addEventListener('touchend', mouseUp, false);
 
-// Create the arrays of fluid particle densities, etc. (using 1D arrays for speed):
-// To index into these arrays, use x + y*xdim, traversing rows first and then columns.
-var n0 = new Array(xdim * ydim);			// microscopic densities along each lattice direction
-var nN = new Array(xdim * ydim);
-var nS = new Array(xdim * ydim);
-var nE = new Array(xdim * ydim);
-var nW = new Array(xdim * ydim);
-var nNE = new Array(xdim * ydim);
-var nSE = new Array(xdim * ydim);
-var nNW = new Array(xdim * ydim);
-var nSW = new Array(xdim * ydim);
-var rho: number[] = new Array(xdim * ydim);			// macroscopic density
-var ux = new Array(xdim * ydim);			// macroscopic velocity
-var uy = new Array(xdim * ydim);
-var curl = new Array(xdim * ydim);
-var barrier = new Array(xdim * ydim);		// boolean array of barrier locations
+
 
 // Initialize to a steady rightward flow with no barriers:
 for (var y = 0; y < ydim; y++) {
