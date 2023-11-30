@@ -5,7 +5,7 @@
     "lib": [ "dom", "es5", "dom.iterable", "scripthost" ],
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
-    "outDir": "obj/",
+    "outDir": "../dist",
     "outFile": "../../docs/html/js/CFD.js",
     "declaration": true
   },
