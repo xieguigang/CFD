@@ -8,8 +8,8 @@ export class options {
     public barrierxSum = 0;
     public barrierySum = 0;
     public barrierFx = 0.0;						// total force on all barrier sites
-    public barrierFy = 0.0;    
-    
+    public barrierFy = 0.0;
+
     public mouseX;
     public mouseY;							// mouse location in canvas coordinates
     public oldMouseX = -1;
@@ -20,4 +20,14 @@ export class options {
     public lastBarrierFy = 1;						// for determining when F_y oscillation begins
     public lastFyOscTime = 0;						// for calculating F_y oscillation period
     public nTracers = 144;
+
+    public sensorX: number;						// coordinates of "sensor" to measure local fluid properties	
+    public sensorY: number;
+}
+
+export interface uiAdapter {
+    get contrast(): number;
+    get pxPerSquare(): number;
+    get viscosity(): number;
+    get plotType(): number ;
 }

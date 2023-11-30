@@ -1,10 +1,10 @@
 import { mobile } from "./global";
-import { options } from "./options";
+import { options, uiAdapter } from "./options";
 
 /**
  * this html user interface handler
 */
-export class ui {
+export class ui implements uiAdapter {
 
     public readonly canvas: HTMLCanvasElement;
     public readonly context: CanvasRenderingContext2D;
@@ -36,7 +36,7 @@ export class ui {
     public readonly sizeSelect: HTMLSelectElement;
 
     private draggingSensor = false;
-    private  mouseIsDown = false;
+    private mouseIsDown = false;
 
     public get pxPerSquare(): number {
         var i = this.sizeSelect.selectedIndex;
@@ -124,6 +124,18 @@ export class ui {
         }
 
         this.setEvents();
+    }
+
+    public get plotType(): number {
+        return this.plotSelect.selectedIndex;
+    }
+
+    public get viscosity(): number {
+        return Number(this.viscSlider.value);
+    }
+
+    public get contrast(): number {
+        return Number(this.contrastSlider.value);
     }
 
     private setEvents() {
@@ -235,22 +247,22 @@ export class ui {
             }
         }
 
-        this . mousePressDrag(e);
+        this.mousePressDrag(e);
     };
     mouseMove(e) {
         if (this.mouseIsDown) {
-           this .  mousePressDrag(e);
+            this.mousePressDrag(e);
         }
     };
     mouseUp(e) {
-       this.  mouseIsDown = false;
-      this .   draggingSensor = false;
+        this.mouseIsDown = false;
+        this.draggingSensor = false;
     };
 
     // Handle mouse press or drag:
     mousePressDrag(e) {
         e.preventDefault();
-        this . mouseIsDown = true;
+        this.mouseIsDown = true;
         var canvasLoc = pageToCanvas(e.pageX, e.pageY);
         if (draggingSensor) {
             var gridLoc = canvasToGrid(canvasLoc.x, canvasLoc.y);

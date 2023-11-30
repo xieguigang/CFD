@@ -1,4 +1,5 @@
 import { mobile, rgbToHex } from './global';
+import { options, uiAdapter } from './options';
 
 export class CFD {
 
@@ -24,7 +25,10 @@ export class CFD {
     */
     public running: boolean = false;
 
-    constructor(public xdim: number, public ydim: number) {
+    constructor(public xdim: number, public ydim: number,
+        private pars: uiAdapter,
+        private opts: options) {
+
         this.n0 = new Array(xdim * ydim);			// microscopic densities along each lattice direction
         this.nN = new Array(xdim * ydim);
         this.nS = new Array(xdim * ydim);
@@ -161,6 +165,7 @@ export class CFD {
             }
         }
         // Get new size from GUI selector:
+        var pxPerSquare = this.pars.pxPerSquare;
         var oldPxPerSquare = pxPerSquare;
         pxPerSquare = Number(sizeSelect.options[sizeSelect.selectedIndex].value);
         var growRatio = oldPxPerSquare / pxPerSquare;
@@ -209,8 +214,8 @@ export class CFD {
                 tracerY[t] *= growRatio;
             }
         }
-        sensorX = Math.round(sensorX * growRatio);
-        sensorY = Math.round(sensorY * growRatio);
+        this.opts.sensorX = Math.round(this.opts.sensorX * growRatio);
+        this.opts.sensorY = Math.round(this.opts.sensorY * growRatio);
         //computeCurl();
         paintCanvas();
         resetTimer();
@@ -222,6 +227,9 @@ export class CFD {
     public collide() {
         var viscosity = Number(viscSlider.value);	// kinematic viscosity coefficient in natural units
         var omega = 1 / (3 * viscosity + 0.5);		// reciprocal of relaxation time
+        var xdim = this.xdim;
+        var ydim = this.ydim;
+
         for (var y = 1; y < ydim - 1; y++) {
             for (var x = 1; x < xdim - 1; x++) {
                 var i = x + y * xdim;		// array index for this lattice site

@@ -1,13 +1,26 @@
+import { CFD } from "./CFD";
+import { options, uiAdapter } from "./options";
+import { ui } from "./ui";
+
 export class graphics {
 
-    constructor(private canvas: HTMLCanvasElement) { }
+    private canvas: HTMLCanvasElement;
+    private pars: uiAdapter;
+
+    constructor(private html: ui, private cfd: CFD, private opts: options) {
+        this.canvas = html.canvas;
+        this.pars = html;
+    }
 
     /**
      * Draw the sensor and its associated data display
     */
     public drawSensor() {
-        var canvasX = (sensorX + 0.5) * pxPerSquare;
-        var canvasY = canvas.height - (sensorY + 0.5) * pxPerSquare;
+        var canvas = this.canvas;
+        var context = this.html.context;
+        var pxPerSquare = this.pars.pxPerSquare;
+        var canvasX = (this.opts.sensorX + 0.5) * pxPerSquare;
+        var canvasY = canvas.height - (this.opts.sensorY + 0.5) * pxPerSquare;
         context.fillStyle = "rgba(180,180,180,0.7)";	// first draw gray filled circle
         context.beginPath();
         context.arc(canvasX, canvasY, 7, 0, 2 * Math.PI);
@@ -50,10 +63,13 @@ export class graphics {
     /**
      * Draw an arrow to represent the total force on the barrier(s) 
     */
-    public drawForceArrow(x, y, Fx, Fy) {
+    public drawForceArrow(x: number, y: number, Fx: number, Fy: number) {
+        const pxPerSquare = this.html.pxPerSquare;
+        const context = this.html.context;
+        const magF = Math.sqrt(Fx * Fx + Fy * Fy);
+
         context.fillStyle = "rgba(100,100,100,0.7)";
-        context.translate((x + 0.5) * pxPerSquare, canvas.height - (y + 0.5) * pxPerSquare);
-        var magF = Math.sqrt(Fx * Fx + Fy * Fy);
+        context.translate((x + 0.5) * pxPerSquare, this.canvas.height - (y + 0.5) * pxPerSquare);
         context.scale(4 * magF, 4 * magF);
         context.rotate(Math.atan2(-Fy, Fx));
         context.beginPath();
@@ -74,14 +90,19 @@ export class graphics {
     */
     public drawFlowlines() {
         var pxPerFlowline = 10;
+        var pxPerSquare = this.html.pxPerSquare;
+
         if (pxPerSquare == 1) pxPerFlowline = 6;
         if (pxPerSquare == 2) pxPerFlowline = 8;
         if (pxPerSquare == 5) pxPerFlowline = 12;
         if ((pxPerSquare == 6) || (pxPerSquare == 8)) pxPerFlowline = 15;
         if (pxPerSquare == 10) pxPerFlowline = 20;
+
         var sitesPerFlowline = pxPerFlowline / pxPerSquare;
-        var xLines = canvas.width / pxPerFlowline;
-        var yLines = canvas.height / pxPerFlowline;
+        var xLines = this.canvas.width / pxPerFlowline;
+        var yLines = this.canvas.height / pxPerFlowline;
+        var context = this.html.context;
+
         for (var yCount = 0; yCount < yLines; yCount++) {
             for (var xCount = 0; xCount < xLines; xCount++) {
                 var x = Math.round((xCount + 0.5) * sitesPerFlowline);
@@ -91,7 +112,7 @@ export class graphics {
                 var speed = Math.sqrt(thisUx * thisUx + thisUy * thisUy);
                 if (speed > 0.0001) {
                     var px = (xCount + 0.5) * pxPerFlowline;
-                    var py = canvas.height - ((yCount + 0.5) * pxPerFlowline);
+                    var py = this.canvas.height - ((yCount + 0.5) * pxPerFlowline);
                     var scale = 0.5 * pxPerFlowline / speed;
                     context.beginPath();
                     context.moveTo(px - thisUx * scale, py + thisUy * scale);
@@ -111,10 +132,13 @@ export class graphics {
      * Draw the tracer particles 
     */
     public drawTracers() {
+        const context = this.html.context;
+        const pxPerSquare = this.html.pxPerSquare;
+
         context.fillStyle = "rgb(150,150,150)";
-        for (var t = 0; t < nTracers; t++) {
+        for (var t = 0; t < this.opts.nTracers; t++) {
             var canvasX = (tracerX[t] + 0.5) * pxPerSquare;
-            var canvasY = canvas.height - (tracerY[t] + 0.5) * pxPerSquare;
+            var canvasY = this.canvas.height - (tracerY[t] + 0.5) * pxPerSquare;
             context.fillRect(canvasX - 1, canvasY - 1, 2, 2);
         }
     }
@@ -124,8 +148,8 @@ export class graphics {
     */
     public paintCanvas() {
         var cIndex = 0;
-        var contrast = Math.pow(1.2, Number(contrastSlider.value));
-        var plotType = plotSelect.selectedIndex;
+        var contrast = Math.pow(1.2, this.pars.contrast);
+        var plotType = this.pars.plotType;
         //var pixelGraphics = pixelCheck.checked;
         if (plotType == 4) computeCurl();
         for (var y = 0; y < ydim; y++) {
@@ -150,7 +174,7 @@ export class graphics {
                 }
                 //if (pixelGraphics) {
                 //colorSquare(x, y, cIndex);
-                colorSquare(x, y, redList[cIndex], greenList[cIndex], blueList[cIndex]);
+                this.colorSquare(x, y, redList[cIndex], greenList[cIndex], blueList[cIndex]);
                 //} else {
                 //	context.fillStyle = hexColorList[cIndex];
                 //	context.fillRect(x*pxPerSquare, (ydim-y-1)*pxPerSquare, pxPerSquare, pxPerSquare);
@@ -174,6 +198,8 @@ export class graphics {
         //var r = redList[cIndex];
         //var g = greenList[cIndex];
         //var b = blueList[cIndex];
+        var ydim = this.html.ydim;
+        var pxPerSquare = this.pars.pxPerSquare;
         var flippedy = ydim - y - 1;			// put y=0 at the bottom
         for (var py = flippedy * pxPerSquare; py < (flippedy + 1) * pxPerSquare; py++) {
             for (var px = x * pxPerSquare; px < (x + 1) * pxPerSquare; px++) {
@@ -189,6 +215,9 @@ export class graphics {
      * Compute the curl (actually times 2) of the macroscopic velocity field, for plotting 
     */
     public computeCurl() {
+        const ydim = this.html.ydim;
+        const xdim = this.html.xdim;
+
         for (var y = 1; y < ydim - 1; y++) {			// interior sites only; leave edges set to zero
             for (var x = 1; x < xdim - 1; x++) {
                 curl[x + y * xdim] = uy[x + 1 + y * xdim] - uy[x - 1 + y * xdim] - ux[x + (y + 1) * xdim] + ux[x + (y - 1) * xdim];
