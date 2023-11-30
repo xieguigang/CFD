@@ -43,7 +43,7 @@ Namespace Storage
 
             _dims = New Size(metadata.dims(0), metadata.dims(1))
             _dimensions = metadata.dimensions
-            _total = metadata.total / dimensions.Length
+            _total = metadata.total / dimensions.Length - 1
 
             json = buf.ReadText("/ranges.json")
             ranges = json.LoadJSON(Of Dictionary(Of String, Double()))
