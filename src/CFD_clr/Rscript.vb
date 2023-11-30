@@ -47,12 +47,13 @@ Module Rscript
     Public Function create(storage As FrameWriter,
                            <RRawVectorArgument>
                            Optional dims As Object = "1920,1080",
+                           Optional interval As Integer = 30,
                            Optional env As Environment = Nothing) As Object
 
         Dim size = InteropArgumentHelper.getSize(dims, env, [default]:="1920,1080")
         Dim session As New Session(storage, New FluidDynamics)
 
-        Return session.dims(size.SizeParser)
+        Return session.dims(size.SizeParser).interval(interval)
     End Function
 
     ''' <summary>

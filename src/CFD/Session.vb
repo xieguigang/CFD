@@ -26,6 +26,11 @@ Public Class Session
         Return Me
     End Function
 
+    Public Function interval(f As Integer) As Session
+        snapshotInterval = f
+        Return Me
+    End Function
+
     Public Sub Run()
         Dim i As Integer = 1
 
