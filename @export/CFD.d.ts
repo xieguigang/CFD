@@ -7,9 +7,6 @@
 /**
 */
 declare namespace CFD {
-   /**
-   */
-   function create_session(): any;
    module open {
       /**
         * @param mode default value Is ``null``.
@@ -22,4 +19,13 @@ declare namespace CFD {
       */
       function frameRaster(pack: object, time: object): any;
    }
+   /**
+     * @param dims default value Is ``'1920,1080'``.
+     * @param env default value Is ``null``.
+   */
+   function session(storage: object, dims?: any, env?: object): object;
+   /**
+     * @param max_time default value Is ``1000000``.
+   */
+   function start(ss: object, max_time?: object): object;
 }
