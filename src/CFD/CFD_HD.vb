@@ -81,7 +81,6 @@ Public Class CFD_HD : Inherits Simulation
     '''                            - RESET SIMULATION -                          *
     ''' **************************************************************************
     ''' </summary>
-
     Public Overrides Sub reset()
         ' initial conditions
         For x As Integer = 0 To xdim - 1
@@ -125,6 +124,7 @@ Public Class CFD_HD : Inherits Simulation
         Next
 
         m_collide = New collide(Me)
+        m_bounce = New bounce(Me)
     End Sub
 
 
@@ -133,7 +133,6 @@ Public Class CFD_HD : Inherits Simulation
     '''                          - ADVANCE SIMULATION -                          *
     ''' **************************************************************************
     ''' </summary>
-
     Public Overrides Sub advance()
         SyncLock Me
             collide()
@@ -143,6 +142,7 @@ Public Class CFD_HD : Inherits Simulation
     End Sub
 
     Dim m_collide As collide
+    Dim m_bounce As bounce
 
     ''' <summary>
     ''' *************************************************************************
@@ -151,10 +151,22 @@ Public Class CFD_HD : Inherits Simulation
     ''' From: http://physics.weber.edu/schroeder/fluids/                         *
     ''' **************************************************************************
     ''' </summary>
-    Friend Overridable Sub collide()
+    Private Sub collide()
         Call m_collide.Solve()
     End Sub
 
+    ''' <summary>
+    ''' *************************************************************************
+    '''                               - BOUNCE -                                 *
+    ''' Bounce particles off of barriers:                                        *
+    ''' (The ifs are needed to prevent array index out of bounds errors.         *
+    '''  Could handle edges separately to avoid this.)                           *
+    ''' From: http://physics.weber.edu/schroeder/fluids/                         *
+    ''' **************************************************************************
+    ''' </summary>
+    Private Sub bounce()
+        Call m_bounce.Solve()
+    End Sub
 
     ''' <summary>
     ''' *************************************************************************
@@ -163,7 +175,7 @@ Public Class CFD_HD : Inherits Simulation
     ''' From: http://physics.weber.edu/schroeder/fluids/                         *
     ''' **************************************************************************
     ''' </summary>
-    Friend Overridable Sub stream()
+    Friend Sub stream()
         For x As Integer = 0 To xdim - 1 - 1 ' first start in NW corner...
             For Y As Integer = ydim - 1 To 1 Step -1
                 nN(x)(Y) = nN(x)(Y - 1) ' move the north-moving particles
@@ -234,58 +246,6 @@ Public Class CFD_HD : Inherits Simulation
             nSE(x)(ydim - 1) = one36th * (1 + 3 * v + 3 * v * v)
             nNW(x)(ydim - 1) = one36th * (1 - 3 * v + 3 * v * v)
             nSW(x)(ydim - 1) = one36th * (1 - 3 * v + 3 * v * v)
-        Next
-    End Sub
-
-
-    ''' <summary>
-    ''' *************************************************************************
-    '''                               - BOUNCE -                                 *
-    ''' Bounce particles off of barriers:                                        *
-    ''' (The ifs are needed to prevent array index out of bounds errors.         *
-    '''  Could handle edges separately to avoid this.)                           *
-    ''' From: http://physics.weber.edu/schroeder/fluids/                         *
-    ''' **************************************************************************
-    ''' </summary>
-
-    Friend Overridable Sub bounce()
-        For x As Integer = 0 To xdim - 1
-            For Y As Integer = 0 To ydim - 1
-                If barrier(x)(Y) Then
-                    If nN(x)(Y) > 0 Then
-                        nS(x)(Y - 1) += nN(x)(Y)
-                        nN(x)(Y) = 0
-                    End If
-                    If nS(x)(Y) > 0 Then
-                        nN(x)(Y + 1) += nS(x)(Y)
-                        nS(x)(Y) = 0
-                    End If
-                    If nE(x)(Y) > 0 Then
-                        nW(x - 1)(Y) += nE(x)(Y)
-                        nE(x)(Y) = 0
-                    End If
-                    If nW(x)(Y) > 0 Then
-                        nE(x + 1)(Y) += nW(x)(Y)
-                        nW(x)(Y) = 0
-                    End If
-                    If nNW(x)(Y) > 0 Then
-                        nSE(x + 1)(Y - 1) += nNW(x)(Y)
-                        nNW(x)(Y) = 0
-                    End If
-                    If nNE(x)(Y) > 0 Then
-                        nSW(x - 1)(Y - 1) += nNE(x)(Y)
-                        nNE(x)(Y) = 0
-                    End If
-                    If nSW(x)(Y) > 0 Then
-                        nNE(x + 1)(Y + 1) += nSW(x)(Y)
-                        nSW(x)(Y) = 0
-                    End If
-                    If nSE(x)(Y) > 0 Then
-                        nNW(x - 1)(Y + 1) += nSE(x)(Y)
-                        nSE(x)(Y) = 0
-                    End If
-                End If
-            Next
         Next
     End Sub
 
