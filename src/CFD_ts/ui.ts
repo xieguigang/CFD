@@ -2,6 +2,38 @@
  * this html user interface handler
 */
 export class ui {
+
+    public readonly canvas: HTMLCanvasElement;
+    public readonly context: CanvasRenderingContext2D;
+    public readonly image: ImageData;
+
+    constructor(canvas_id: string = "theCanvas") {
+        const canvas: HTMLCanvasElement = <any>document.getElementById(canvas_id);
+        const context: CanvasRenderingContext2D = <any>canvas.getContext('2d');
+        const image: ImageData = context.createImageData(canvas.width, canvas.height);		// for direct pixel manipulation (faster than fillRect)
+
+        // set all alpha values to opaque
+        for (var i = 3; i < image.data.length; i += 4) {
+            image.data[i] = 255;
+        }
+
+        this.canvas = canvas;
+        this.context = context;
+        this.image = image;
+
+        this.setEvents();
+    }
+
+    private setEvents() {
+        this.canvas.addEventListener('mousedown', (e) => this.mouseDown(e), false);
+        this.canvas.addEventListener('mousemove', (e) => this.mouseMove(e), false);
+        this.canvas.addEventListener('touchstart', (e) => this.mouseDown(e), false);
+        this.canvas.addEventListener('touchmove', (e) => this.mouseMove(e), false);
+
+        document.body.addEventListener('mouseup', (e) => this.mouseUp(e), false);	// button release could occur outside canvas
+        document.body.addEventListener('touchend', (e) => this.mouseUp(e), false);
+    }
+
     // Set the fluid variables at the boundaries, according to the current slider value:
     setBoundaries() {
         var u0 = Number(speedSlider.value);
@@ -14,10 +46,6 @@ export class ui {
             setEquil(xdim - 1, y, u0, 0, 1);
         }
     }
-
-
-
-
 
     // Move the tracer particles:
     moveTracers() {
@@ -79,9 +107,6 @@ export class ui {
         ux[i] = newux;
         uy[i] = newuy;
     }
-
-
-
 
     // Functions to handle mouse/touch interaction:
     mouseDown(e) {
@@ -171,9 +196,6 @@ export class ui {
         }
         paintCanvas();
     }
-
-
-
 
     // Function to start or pause the simulation:
     startStop() {

@@ -4,19 +4,18 @@ import { barrierList } from "./barrier";
 import { CFD } from './CFD';
 import { mobile, rgbToHex } from './global';
 import { graphics } from "./graphics";
+import { ui } from "./ui";
 
 // Global variables:	
-const canvas: HTMLCanvasElement = <any>document.getElementById('theCanvas');
-const context: CanvasRenderingContext2D = <any>canvas.getContext('2d');
-const image = context.createImageData(canvas.width, canvas.height);		// for direct pixel manipulation (faster than fillRect)
-for (var i = 3; i < image.data.length; i += 4) image.data[i] = 255;			// set all alpha values to opaque
+const html: ui = new ui();
+
 var sizeSelect: HTMLSelectElement = <any>document.getElementById('sizeSelect');
 sizeSelect.selectedIndex = 5;
 if (mobile) sizeSelect.selectedIndex = 1;		// smaller works better on mobile platforms
 var pxPerSquare = Number(sizeSelect.options[sizeSelect.selectedIndex].value);
 // width of plotted grid site in pixels
-var xdim = canvas.width / pxPerSquare;			// grid dimensions for simulation
-var ydim = canvas.height / pxPerSquare;
+var xdim = html.canvas.width / pxPerSquare;			// grid dimensions for simulation
+var ydim = html.canvas.height / pxPerSquare;
 var stepsSlider: HTMLInputElement = <any>document.getElementById('stepsSlider');
 var startButton: HTMLInputElement = <any>document.getElementById('startButton');
 var speedSlider: HTMLInputElement = <any>document.getElementById('speedSlider');
@@ -67,15 +66,8 @@ var showingPeriod = false;
 var lastBarrierFy = 1;						// for determining when F_y oscillation begins
 var lastFyOscTime = 0;						// for calculating F_y oscillation period
 
-canvas.addEventListener('mousedown', mouseDown, false);
-canvas.addEventListener('mousemove', mouseMove, false);
-document.body.addEventListener('mouseup', mouseUp, false);	// button release could occur outside canvas
-canvas.addEventListener('touchstart', mouseDown, false);
-canvas.addEventListener('touchmove', mouseMove, false);
-document.body.addEventListener('touchend', mouseUp, false);
-
 var CFD_app = new CFD(xdim, ydim);
-var gr = new graphics(canvas);
+var gr = new graphics(html.canvas);
 
 
 
