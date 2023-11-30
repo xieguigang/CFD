@@ -1,5 +1,6 @@
 ﻿Imports System.Drawing
 Imports Microsoft.VisualBasic.ApplicationServices
+Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.My.JavaScript
 
 Public MustInherit Class Simulation : Implements requestAnimationFrame
