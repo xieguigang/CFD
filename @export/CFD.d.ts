@@ -21,9 +21,10 @@ declare namespace CFD {
    }
    /**
      * @param dims default value Is ``'1920,1080'``.
+     * @param interval default value Is ``30``.
      * @param env default value Is ``null``.
    */
-   function session(storage: object, dims?: any, env?: object): object;
+   function session(storage: object, dims?: any, interval?: object, env?: object): object;
    /**
      * @param max_time default value Is ``1000000``.
    */
