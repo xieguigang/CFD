@@ -2,6 +2,8 @@
 Imports CFD
 Imports CFD.Storage
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
@@ -75,8 +77,15 @@ Module Rscript
     ''' <param name="time"></param>
     ''' <returns></returns>
     <ExportAPI("read.frameRaster")>
-    Public Function readFrameRaster(pack As FrameReader, time As Integer) As Object
-        Dim frame As Double()() = pack.ReadFrame(time)
+    Public Function readFrameRaster(pack As FrameReader, time As Integer, Optional dimension As String = "speed2") As Object
+        Dim frame As Double()() = pack.ReadFrame(time, dimension)
+        Dim pixels As PixelData() = frame _
+            .Select(Function(row, i)
+                        Return row.Select(Function(c, j) New PixelData(i + 1, j + 1, c))
+                    End Function) _
+            .IteratesALL _
+            .ToArray
 
+        Return pixels
     End Function
 End Module
