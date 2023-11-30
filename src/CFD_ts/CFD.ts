@@ -63,31 +63,7 @@ export class CFD {
             this.barrier[x + y * this.xdim] = true;
         }
 
-        // Set up the array of colors for plotting (mimicks matplotlib "jet" colormap):
-        // (Kludge: Index nColors+1 labels the color used for drawing barriers.)
-        var nColors = this.opts.nColors;							// there are actually nColors+2 colors
-        var hexColorList = new Array(nColors + 2);
-        var redList = new Array(nColors + 2);
-        var greenList = new Array(nColors + 2);
-        var blueList = new Array(nColors + 2);
-        for (var c = 0; c <= nColors; c++) {
-            var r, g, b;
-            if (c < nColors / 8) {
-                r = 0; g = 0; b = Math.round(255 * (c + nColors / 8) / (nColors / 4));
-            } else if (c < 3 * nColors / 8) {
-                r = 0; g = Math.round(255 * (c - nColors / 8) / (nColors / 4)); b = 255;
-            } else if (c < 5 * nColors / 8) {
-                r = Math.round(255 * (c - 3 * nColors / 8) / (nColors / 4)); g = 255; b = 255 - r;
-            } else if (c < 7 * nColors / 8) {
-                r = 255; g = Math.round(255 * (7 * nColors / 8 - c) / (nColors / 4)); b = 0;
-            } else {
-                r = Math.round(255 * (9 * nColors / 8 - c) / (nColors / 4)); g = 0; b = 0;
-            }
-            redList[c] = r; greenList[c] = g; blueList[c] = b;
-            hexColorList[c] = rgbToHex(r, g, b);
-        }
-        redList[nColors + 1] = 0; greenList[nColors + 1] = 0; blueList[nColors + 1] = 0;	// barriers are black
-        hexColorList[nColors + 1] = rgbToHex(0, 0, 0);
+        
 
         // initialize to steady rightward flow
         this.initFluid();
