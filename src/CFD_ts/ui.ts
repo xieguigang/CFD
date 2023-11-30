@@ -7,10 +7,28 @@ export class ui {
     public readonly context: CanvasRenderingContext2D;
     public readonly image: ImageData;
 
-    constructor(canvas_id: string = "theCanvas") {
+    public readonly speedSlider: HTMLInputElement;
+    public readonly stepsSlider: HTMLInputElement;
+    public readonly startButton: HTMLInputElement;
+
+    public readonly speedValue: HTMLInputElement;
+    public readonly viscSlider: HTMLInputElement;
+    public readonly viscValue: HTMLInputElement;
+    public readonly mouseSelect: HTMLSelectElement;
+
+    constructor(canvas_id: string = "theCanvas",
+        speedSlider: string = "speedSlider",
+        stepsSlider: string = "stepsSlider",
+        startButton: string = "startButton",
+        speedValue: string = "speedValue",
+        viscSlider: string = "viscSlider",
+        viscValue: string = "viscValue",
+        mouseSelect: string = "mouseSelect") {
+
         const canvas: HTMLCanvasElement = <any>document.getElementById(canvas_id);
         const context: CanvasRenderingContext2D = <any>canvas.getContext('2d');
-        const image: ImageData = context.createImageData(canvas.width, canvas.height);		// for direct pixel manipulation (faster than fillRect)
+        // for direct pixel manipulation (faster than fillRect)
+        const image: ImageData = context.createImageData(canvas.width, canvas.height);
 
         // set all alpha values to opaque
         for (var i = 3; i < image.data.length; i += 4) {
@@ -20,6 +38,14 @@ export class ui {
         this.canvas = canvas;
         this.context = context;
         this.image = image;
+
+        this.speedSlider = <any>document.getElementById(speedSlider);
+        this.stepsSlider = <any>document.getElementById(stepsSlider);
+        this.startButton = <any>document.getElementById(startButton);
+        this.speedValue = <any>document.getElementById(speedValue);
+        this.viscSlider = <any>document.getElementById(viscSlider);
+        this.viscValue = <any>document.getElementById(viscValue);
+        this.mouseSelect = <any>document.getElementById(mouseSelect);
 
         this.setEvents();
     }

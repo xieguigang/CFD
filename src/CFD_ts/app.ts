@@ -16,13 +16,7 @@ var pxPerSquare = Number(sizeSelect.options[sizeSelect.selectedIndex].value);
 // width of plotted grid site in pixels
 var xdim = html.canvas.width / pxPerSquare;			// grid dimensions for simulation
 var ydim = html.canvas.height / pxPerSquare;
-var stepsSlider: HTMLInputElement = <any>document.getElementById('stepsSlider');
-var startButton: HTMLInputElement = <any>document.getElementById('startButton');
-var speedSlider: HTMLInputElement = <any>document.getElementById('speedSlider');
-var speedValue: HTMLInputElement = <any>document.getElementById('speedValue');
-var viscSlider: HTMLInputElement = <any>document.getElementById('viscSlider');
-var viscValue: HTMLInputElement = <any>document.getElementById('viscValue');
-var mouseSelect: HTMLSelectElement = <any>document.getElementById('mouseSelect');
+
 var barrierSelect: HTMLSelectElement = <any>document.getElementById('barrierSelect');
 
 for (var barrierIndex = 0; barrierIndex < barrierList.length; barrierIndex++) {
