@@ -3,9 +3,7 @@ declare module "barrier" {
         name: string;
         locations: number[];
     }
-    export namespace data {
-        const barrierList: barrier[];
-    }
+    export const barrierList: barrier[];
 }
 declare const mobile: RegExpMatchArray;
 declare const canvas: HTMLCanvasElement;
@@ -23,7 +21,6 @@ declare var viscSlider: HTMLInputElement;
 declare var viscValue: HTMLInputElement;
 declare var mouseSelect: HTMLSelectElement;
 declare var barrierSelect: HTMLSelectElement;
-declare var barrierList: any;
 declare var plotSelect: HTMLSelectElement;
 declare var contrastSlider: HTMLInputElement;
 declare var tracerCheck: HTMLInputElement;

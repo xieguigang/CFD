@@ -21,7 +21,6 @@ var viscSlider: HTMLInputElement = <any>document.getElementById('viscSlider');
 var viscValue: HTMLInputElement = <any>document.getElementById('viscValue');
 var mouseSelect: HTMLSelectElement = <any>document.getElementById('mouseSelect');
 var barrierSelect: HTMLSelectElement = <any>document.getElementById('barrierSelect');
-var barrierList = data.barrierList;
 
 for (var barrierIndex = 0; barrierIndex < barrierList.length; barrierIndex++) {
     var shape = document.createElement("option");
