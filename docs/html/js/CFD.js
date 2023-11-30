@@ -674,10 +674,10 @@ define("app", ["require", "exports", "barrier"], function (require, exports, bar
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     // Global variables:	
-    var mobile = navigator.userAgent.match(/iPhone|iPad|iPod|Android|BlackBerry|Opera Mini|IEMobile/i);
-    var canvas = document.getElementById('theCanvas');
-    var context = canvas.getContext('2d');
-    var image = context.createImageData(canvas.width, canvas.height); // for direct pixel manipulation (faster than fillRect)
+    const mobile = navigator.userAgent.match(/iPhone|iPad|iPod|Android|BlackBerry|Opera Mini|IEMobile/i);
+    const canvas = document.getElementById('theCanvas');
+    const context = canvas.getContext('2d');
+    const image = context.createImageData(canvas.width, canvas.height); // for direct pixel manipulation (faster than fillRect)
     for (var i = 3; i < image.data.length; i += 4)
         image.data[i] = 255; // set all alpha values to opaque
     var sizeSelect = document.getElementById('sizeSelect');
@@ -839,7 +839,7 @@ define("app", ["require", "exports", "barrier"], function (require, exports, bar
     }
     initFluid(); // initialize to steady rightward flow
     // Mysterious gymnastics that are apparently useful for better cross-browser animation timing:
-    var requestAnimFrame = (function (callback) {
+    const requestAnimFrame = (function (callback) {
         return window.requestAnimationFrame ||
             window.webkitRequestAnimationFrame ||
             window.mozRequestAnimationFrame ||
