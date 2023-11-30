@@ -1,5 +1,5 @@
 import { mobile, rgbToHex } from './global';
-import { options, uiAdapter } from './options';
+import { four9ths, one36th, one9th, options, uiAdapter } from './options';
 
 export class CFD {
 
@@ -89,20 +89,6 @@ export class CFD {
         redList[nColors + 1] = 0; greenList[nColors + 1] = 0; blueList[nColors + 1] = 0;	// barriers are black
         hexColorList[nColors + 1] = rgbToHex(0, 0, 0);
 
-        // Initialize array of partially transparant blacks, for drawing flow lines:
-        var transBlackArraySize = 50;
-        var transBlackArray = new Array(transBlackArraySize);
-        for (var i = 0; i < transBlackArraySize; i++) {
-            transBlackArray[i] = "rgba(0,0,0," + Number(i / transBlackArraySize).toFixed(2) + ")";
-        }
-
-        // Initialize tracers (but don't place them yet):
-        var tracerX = new Array(nTracers);
-        var tracerY = new Array(nTracers);
-        for (var t = 0; t < nTracers; t++) {
-            tracerX[t] = 0.0; tracerY[t] = 0.0;
-        }
-
         // initialize to steady rightward flow
         this.initFluid();
     }
@@ -110,13 +96,17 @@ export class CFD {
     // Function to initialize or re-initialize the fluid, based on speed slider setting:
     public initFluid() {
         // Amazingly, if I nest the y loop inside the x loop, Firefox slows down by a factor of 20
-        var u0 = Number(speedSlider.value);
+        var u0 = this.pars.speed;
+        var ydim = this.pars.ydim;
+        var xdim = this.pars.xdim;
+
         for (var y = 0; y < ydim; y++) {
             for (var x = 0; x < xdim; x++) {
                 setEquil(x, y, u0, 0, 1);
                 curl[x + y * xdim] = 0.0;
             }
         }
+
         paintCanvas();
     }
 
@@ -124,13 +114,15 @@ export class CFD {
      * Initialize the tracer particles 
     */
     public initTracers() {
-        if (tracerCheck.checked) {
-            var nRows = Math.ceil(Math.sqrt(nTracers));
+        if (this.pars.drawTracers) {
+            var nRows = Math.ceil(Math.sqrt(this.opts.nTracers));
+            var xdim = this.pars.xdim;
+            var ydim = this.pars.ydim;
             var dx = xdim / nRows;
             var dy = ydim / nRows;
             var nextX = dx / 2;
             var nextY = dy / 2;
-            for (var t = 0; t < nTracers; t++) {
+            for (var t = 0; t < this.opts.nTracers; t++) {
                 tracerX[t] = nextX;
                 tracerY[t] = nextY;
                 nextX += dx;
@@ -225,7 +217,7 @@ export class CFD {
      * Collide particles within each cell (here's the physics!) 
     */
     public collide() {
-        var viscosity = Number(viscSlider.value);	// kinematic viscosity coefficient in natural units
+        var viscosity = this.pars.viscosity;	// kinematic viscosity coefficient in natural units
         var omega = 1 / (3 * viscosity + 0.5);		// reciprocal of relaxation time
         var xdim = this.xdim;
         var ydim = this.ydim;

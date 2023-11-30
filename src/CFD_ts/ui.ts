@@ -125,6 +125,9 @@ export class ui implements uiAdapter {
 
         this.setEvents();
     }
+    public get speed(): number {
+        return Number(this.speedSlider.value);
+    }
 
     public get drawTracers(): boolean {
         return (this.tracerCheck.checked);

@@ -1,9 +1,12 @@
+
+// abbreviations
+export const four9ths = 4.0 / 9.0;
+export const one9th = 1.0 / 9.0;
+export const one36th = 1.0 / 36.0;
+
 export class options {
     public stepCount = 0;
     public startTime = 0;
-    public four9ths = 4.0 / 9.0;					// abbreviations
-    public one9th = 1.0 / 9.0;
-    public one36th = 1.0 / 36.0;
     public barrierCount = 0;
     public barrierxSum = 0;
     public barrierySum = 0;
@@ -23,16 +26,49 @@ export class options {
 
     public sensorX: number;						// coordinates of "sensor" to measure local fluid properties	
     public sensorY: number;
+
+    public tracerX: number[];
+    public tracerY: number[];
+
+    public transBlackArraySize: number = 50;
+    public transBlackArray: string[];
 }
 
 export interface uiAdapter {
+    get xdim(): number;
+    get ydim(): number;
+
     get contrast(): number;
     get pxPerSquare(): number;
     get viscosity(): number;
+    get speed(): number;
     get plotType(): number;
 
     get drawTracers(): boolean;
     get drawFlowlines(): boolean;
     get drawForceArrow(): boolean;
     get drawSensor(): boolean;
+}
+
+export function init_options(opts: options) {
+    // Initialize tracers (but don't place them yet):
+    var nTracers = this.opts.nTracers;
+    var tracerX = new Array(nTracers);
+    var tracerY = new Array(nTracers);
+
+    for (var t = 0; t < nTracers; t++) {
+        tracerX[t] = 0.0; tracerY[t] = 0.0;
+    }
+
+    opts.tracerX = tracerX;
+    opts.tracerY = tracerY;
+
+    // Initialize array of partially transparant blacks, for drawing flow lines:
+    var transBlackArray = new Array(opts.transBlackArraySize);
+
+    for (var i = 0; i < opts.transBlackArraySize; i++) {
+        transBlackArray[i] = "rgba(0,0,0," + Number(i / opts.transBlackArraySize).toFixed(2) + ")";
+    }
+
+    opts.transBlackArray = transBlackArray;
 }

@@ -4,7 +4,7 @@ import { barrierList } from "./barrier";
 import { CFD } from './CFD';
 import { mobile, rgbToHex } from './global';
 import { graphics } from "./graphics";
-import { options } from "./options";
+import { init_options, options } from "./options";
 import { ui } from "./ui";
 
 // Global variables:	
@@ -14,6 +14,8 @@ const html: ui = new ui(opts);
 // coordinates of "sensor" to measure local fluid properties	
 opts.sensorX = html.xdim / 2;
 opts.sensorY = html.ydim / 2;
+
+init_options(opts);
 
 var barrierSelect: HTMLSelectElement = <any>document.getElementById('barrierSelect');
 

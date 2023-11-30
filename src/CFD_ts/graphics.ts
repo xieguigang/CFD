@@ -105,6 +105,8 @@ export class graphics {
         var xLines = this.canvas.width / pxPerFlowline;
         var yLines = this.canvas.height / pxPerFlowline;
         var context = this.html.context;
+        var transBlackArraySize = this.opts.transBlackArraySize;
+        var transBlackArray = this.opts.transBlackArray;
 
         for (var yCount = 0; yCount < yLines; yCount++) {
             for (var xCount = 0; xCount < xLines; xCount++) {
