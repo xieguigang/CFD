@@ -14,10 +14,22 @@ export class graphics {
     public blueList: number[];
     public hexColorList: string[];
 
+    public curl: number[];
+
     constructor(private html: ui, private cfd: CFD, private opts: options) {
+        const ydim = html.ydim;
+        const xdim = html.xdim;
+
         this.canvas = html.canvas;
         this.pars = html;
         this.image = html.image;
+        this.curl = new Array(xdim * ydim);
+
+        for (var y = 0; y < ydim; y++) {
+            for (var x = 0; x < xdim; x++) {
+                this.curl[x + y * xdim] = 0.0;
+            }
+        }
 
         this.initGraphicsColors();
     }
@@ -240,6 +252,11 @@ export class graphics {
             this.computeCurl();
         }
 
+        const redList = this.redList;
+        const greenList = this.greenList;
+        const blueList = this.blueList;
+        const curl = this.curl;
+
         for (var y = 0; y < ydim; y++) {
             for (var x = 0; x < xdim; x++) {
                 if (barrier[x + y * xdim]) {
@@ -307,6 +324,7 @@ export class graphics {
     public computeCurl() {
         const ydim = this.html.ydim;
         const xdim = this.html.xdim;
+        const curl = this.curl;
 
         for (var y = 1; y < ydim - 1; y++) {			// interior sites only; leave edges set to zero
             for (var x = 1; x < xdim - 1; x++) {
