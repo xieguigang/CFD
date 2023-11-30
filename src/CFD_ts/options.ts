@@ -23,6 +23,7 @@ export class options {
     public lastBarrierFy = 1;						// for determining when F_y oscillation begins
     public lastFyOscTime = 0;						// for calculating F_y oscillation period
     public nTracers = 144;
+    public nColors = 400;
 
     public sensorX: number;						// coordinates of "sensor" to measure local fluid properties	
     public sensorY: number;

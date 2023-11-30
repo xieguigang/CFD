@@ -65,7 +65,7 @@ export class CFD {
 
         // Set up the array of colors for plotting (mimicks matplotlib "jet" colormap):
         // (Kludge: Index nColors+1 labels the color used for drawing barriers.)
-        var nColors = 400;							// there are actually nColors+2 colors
+        var nColors = this.opts.nColors;							// there are actually nColors+2 colors
         var hexColorList = new Array(nColors + 2);
         var redList = new Array(nColors + 2);
         var greenList = new Array(nColors + 2);

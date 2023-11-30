@@ -172,7 +172,7 @@ export class graphics {
         const tracerY = this.opts.tracerY;
 
         context.fillStyle = "rgb(150,150,150)";
-        
+
         for (var t = 0; t < this.opts.nTracers; t++) {
             var canvasX = (tracerX[t] + 0.5) * pxPerSquare;
             var canvasY = this.canvas.height - (tracerY[t] + 0.5) * pxPerSquare;
@@ -191,9 +191,14 @@ export class graphics {
         var ydim = this.html.ydim;
         var xdim = this.html.xdim;
         var pars = this.pars;
+        var opts = this.opts;
+        var nColors = opts.nColors;
 
         //var pixelGraphics = pixelCheck.checked;
-        if (plotType == 4) this.computeCurl();
+        if (plotType == 4) {
+            this.computeCurl();
+        }
+
         for (var y = 0; y < ydim; y++) {
             for (var x = 0; x < xdim; x++) {
                 if (barrier[x + y * xdim]) {
@@ -228,7 +233,7 @@ export class graphics {
         // Draw tracers, force vector, and/or sensor if appropriate:
         if (pars.drawTracers) this.drawTracers();
         if (pars.drawFlowlines) this.drawFlowlines();
-        if (pars.drawForceArrow) this.drawForceArrow(barrierxSum / barrierCount, barrierySum / barrierCount, barrierFx, barrierFy);
+        if (pars.drawForceArrow) this.drawForceArrow(opts.barrierxSum / opts.barrierCount, opts.barrierySum / opts.barrierCount, opts.barrierFx, opts.barrierFy);
         if (pars.drawSensor) this.drawSensor();
     }
 
