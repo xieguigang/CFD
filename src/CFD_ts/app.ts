@@ -911,3 +911,8 @@ function debug() {
         dataArea.innerHTML += tracerX[t] + ", " + tracerY[t] + "\n";
     }
 }
+
+document.getElementById("debugButton").onclick = debug;
+document.getElementById("barrierDataButton").onclick = showBarrierLocations;
+
+startButton.onclick = startStop;

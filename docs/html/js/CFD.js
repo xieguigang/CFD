@@ -1605,5 +1605,8 @@ define("app", ["require", "exports", "barrier"], function (require, exports, bar
             dataArea.innerHTML += tracerX[t] + ", " + tracerY[t] + "\n";
         }
     }
+    document.getElementById("debugButton").onclick = debug;
+    document.getElementById("barrierDataButton").onclick = showBarrierLocations;
+    startButton.onclick = startStop;
 });
 //# sourceMappingURL=CFD.js.map

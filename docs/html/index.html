@@ -37,7 +37,7 @@
 		</select>
 		<input id="resetFluidButton" type="button" onclick="initFluid()" value="Reset fluid">
 		<input id="stepButton" type="button" onclick="simulate()" value="Step">
-		<input id="startButton" type="button" onclick="startStop()" value="Start">
+		<input id="startButton" type="button" onclick="javascript:void(0);" value="Start">
 	</div>
 	<div>
 		Flow speed = <span id="speedValue">0.100</span>
@@ -100,7 +100,7 @@
 			<input id="dataButton" type="button" value="Start data collection" onclick="startOrStopData()">
 			<input id="periodButton" type="button" value="Show F_y period" onclick="showPeriod()">
 			<input id="barrierDataButton" type="button" value="Show barrier locations" onclick="showBarrierLocations()">
-			<input id="debugButton" type="button" value="Debug" onclick="debug()" style="display:none">
+			<input id="debugButton" type="button" value="Debug" onclick="javascript:void(0);" style="display:none">
 		</div>
 	</div>
 	<p style="text-align:left">This is a simulation of a two-dimensional fluid. Initially the fluid
