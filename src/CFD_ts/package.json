@@ -1,21 +1,16 @@
 {
   "name": "CFD",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.0",
+  "description": "Computational Fluid Dynamics",
   "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc --build",
-    "clean": "tsc --build --clean"
+  "author": {
+    "name": "xieguigang"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "@types/node": "^20.10.1",
-    "@typescript-eslint/eslint-plugin": "^6.13.1",
-    "@typescript-eslint/parser": "^6.13.1",
-    "eslint": "^8.54.0",
+    "@types/node": "^6.14.10",
     "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "npm": "^6.14.6"
   }
 }

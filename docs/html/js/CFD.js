@@ -693,6 +693,7 @@ var viscSlider = document.getElementById('viscSlider');
 var viscValue = document.getElementById('viscValue');
 var mouseSelect = document.getElementById('mouseSelect');
 var barrierSelect = document.getElementById('barrierSelect');
+var barrierList = require("./barrier");
 for (var barrierIndex = 0; barrierIndex < barrierList.length; barrierIndex++) {
     var shape = document.createElement("option");
     shape.text = barrierList[barrierIndex].name;
