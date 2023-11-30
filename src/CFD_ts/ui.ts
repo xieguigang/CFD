@@ -126,6 +126,22 @@ export class ui implements uiAdapter {
         this.setEvents();
     }
 
+    public get drawTracers(): boolean {
+        return (this.tracerCheck.checked);
+    }
+
+    public get drawFlowlines(): boolean {
+        return (this.flowlineCheck.checked);
+    }
+
+    public get drawForceArrow(): boolean {
+        return (this.forceCheck.checked);
+    }
+
+    public get drawSensor(): boolean {
+        return (this.sensorCheck.checked);
+    }
+
     public get plotType(): number {
         return this.plotSelect.selectedIndex;
     }

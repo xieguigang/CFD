@@ -6,10 +6,12 @@ export class graphics {
 
     private canvas: HTMLCanvasElement;
     private pars: uiAdapter;
+    private image: ImageData;
 
     constructor(private html: ui, private cfd: CFD, private opts: options) {
         this.canvas = html.canvas;
         this.pars = html;
+        this.image = html.image;
     }
 
     /**
@@ -44,11 +46,11 @@ export class graphics {
         context.fillStyle = "#000000";					// finally draw the text
         canvasX += 3;
         canvasY += 12;
-        var coordinates = "  (" + sensorX + "," + sensorY + ")";
+        var coordinates = "  (" + this.opts.sensorX + "," + this.opts.sensorY + ")";
         context.fillText(coordinates, canvasX, canvasY);
         canvasY += 14;
         var rhoSymbol = String.fromCharCode(parseInt('03C1', 16));
-        var index = sensorX + sensorY * xdim;
+        var index = this.opts.sensorX + this.opts.sensorY * this.html.xdim;
         context.fillText(" " + rhoSymbol + " =  " + Number(rho[index]).toFixed(3), canvasX, canvasY);
         canvasY += 14;
         var digitString = Number(ux[index]).toFixed(3);
@@ -91,6 +93,7 @@ export class graphics {
     public drawFlowlines() {
         var pxPerFlowline = 10;
         var pxPerSquare = this.html.pxPerSquare;
+        var xdim = this.html.xdim;
 
         if (pxPerSquare == 1) pxPerFlowline = 6;
         if (pxPerSquare == 2) pxPerFlowline = 8;
@@ -150,8 +153,12 @@ export class graphics {
         var cIndex = 0;
         var contrast = Math.pow(1.2, this.pars.contrast);
         var plotType = this.pars.plotType;
+        var ydim = this.html.ydim;
+        var xdim = this.html.xdim;
+        var pars = this.pars;
+
         //var pixelGraphics = pixelCheck.checked;
-        if (plotType == 4) computeCurl();
+        if (plotType == 4) this.computeCurl();
         for (var y = 0; y < ydim; y++) {
             for (var x = 0; x < xdim; x++) {
                 if (barrier[x + y * xdim]) {
@@ -182,12 +189,12 @@ export class graphics {
             }
         }
         //if (pixelGraphics) 
-        context.putImageData(image, 0, 0);		// blast image to the screen
+        this.html.context.putImageData(this.image, 0, 0);		// blast image to the screen
         // Draw tracers, force vector, and/or sensor if appropriate:
-        if (tracerCheck.checked) drawTracers();
-        if (flowlineCheck.checked) drawFlowlines();
-        if (forceCheck.checked) drawForceArrow(barrierxSum / barrierCount, barrierySum / barrierCount, barrierFx, barrierFy);
-        if (sensorCheck.checked) drawSensor();
+        if (pars.drawTracers) this.drawTracers();
+        if (pars.drawFlowlines) this.drawFlowlines();
+        if (pars.drawForceArrow) this.drawForceArrow(barrierxSum / barrierCount, barrierySum / barrierCount, barrierFx, barrierFy);
+        if (pars.drawSensor) this.drawSensor();
     }
 
     /**
@@ -201,6 +208,8 @@ export class graphics {
         var ydim = this.html.ydim;
         var pxPerSquare = this.pars.pxPerSquare;
         var flippedy = ydim - y - 1;			// put y=0 at the bottom
+        var image = this.image;
+
         for (var py = flippedy * pxPerSquare; py < (flippedy + 1) * pxPerSquare; py++) {
             for (var px = x * pxPerSquare; px < (x + 1) * pxPerSquare; px++) {
                 var index = (px + py * image.width) * 4;

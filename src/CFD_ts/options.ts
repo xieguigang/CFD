@@ -29,5 +29,10 @@ export interface uiAdapter {
     get contrast(): number;
     get pxPerSquare(): number;
     get viscosity(): number;
-    get plotType(): number ;
+    get plotType(): number;
+
+    get drawTracers(): boolean;
+    get drawFlowlines(): boolean;
+    get drawForceArrow(): boolean;
+    get drawSensor(): boolean;
 }
