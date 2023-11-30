@@ -2,23 +2,55 @@
 Imports System.IO
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.IO
+Imports Microsoft.VisualBasic.DataStorage.HDSPack
 Imports Microsoft.VisualBasic.DataStorage.HDSPack.FileSystem
+Imports Microsoft.VisualBasic.Serialization.JSON
 
 Namespace Storage
+
+    Public Class Metadata
+
+        Public Property total As Integer
+        Public Property dims As Integer()
+        Public Property dimensions As String()
+
+        Public Overrides Function ToString() As String
+            Return Me.GetJson
+        End Function
+
+    End Class
 
     Public Class FrameReader : Implements IDisposable
 
         ReadOnly buf As StreamPack
-        ReadOnly dims As Size
+
+        Dim ranges As Dictionary(Of String, Double())
+
+        Public ReadOnly Property dims As Size
+        Public ReadOnly Property total As Integer
+        Public ReadOnly Property dimensions As String()
 
         Private disposedValue As Boolean
 
         Sub New(file As Stream)
             buf = New StreamPack(file, [readonly]:=True)
+            Call loadMetadata()
         End Sub
 
-        Public Function ReadFrame(i As Integer) As Double()()
-            Dim path As String = $"/frame_data/{i}.dat"
+        Private Sub loadMetadata()
+            Dim json As String = buf.ReadText("/metadata.json")
+            Dim metadata As Metadata = json.LoadJSON(Of Metadata)
+
+            _dims = New Size(metadata.dims(0), metadata.dims(1))
+            _dimensions = metadata.dimensions
+            _total = metadata.total / dimensions.Length
+
+            json = buf.ReadText("/ranges.json")
+            ranges = json.LoadJSON(Of Dictionary(Of String, Double()))
+        End Sub
+
+        Public Function ReadFrame(i As Integer, dimension As String) As Double()()
+            Dim path As String = $"/framedata/{dimension}/{i}.dat"
             Dim file As Stream = buf.OpenFile(path, FileMode.Open, FileAccess.Read)
             Dim rd As New BinaryDataReader(file) With {
                 .ByteOrder = ByteOrder.BigEndian
