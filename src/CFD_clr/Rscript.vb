@@ -77,6 +77,7 @@ Module Rscript
     ''' <param name="time"></param>
     ''' <returns></returns>
     <ExportAPI("read.frameRaster")>
+    <RApiReturn(GetType(RawRaster))>
     Public Function readFrameRaster(pack As FrameReader, time As Integer, Optional dimension As String = "speed2") As Object
         Dim frame As Double()() = pack.ReadFrame(time, dimension)
         Dim pixels As PixelData() = frame _
@@ -86,6 +87,6 @@ Module Rscript
             .IteratesALL _
             .ToArray
 
-        Return pixels
+        Return New RawRaster() With {.raster = pixels}
     End Function
 End Module
