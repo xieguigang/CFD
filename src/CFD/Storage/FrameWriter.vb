@@ -2,66 +2,69 @@ Imports System.IO
 Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.DataStorage.HDSPack.FileSystem
 
-Public Class FrameWriter : Implements IDisposable
+Namespace Storage
 
-    ReadOnly buf As StreamPack
+    Public Class FrameWriter : Implements IDisposable
 
-    ''' <summary>
-    ''' total frame count
-    ''' </summary>
-    Dim total As Integer
-    Dim disposedValue As Boolean
+        ReadOnly buf As StreamPack
 
-    Sub New(file As Stream)
-        buf = New StreamPack(file)
-    End Sub
+        ''' <summary>
+        ''' total frame count
+        ''' </summary>
+        Dim total As Integer
+        Dim disposedValue As Boolean
 
-    Public Sub AddFrame(time As Integer, framedata As Double()())
-        Dim path As String = $"/frame_data/{time}.dat"
-        Dim file As StreamBuffer = buf.OpenBlock(path)
-        Dim wr As New BinaryDataWriter(file) With {
-            .ByteOrder = ByteOrder.BigEndian
-        }
+        Sub New(file As Stream)
+            buf = New StreamPack(file)
+        End Sub
 
-        For Each row As Double() In framedata
-            Call wr.Write(row)
-        Next
+        Public Sub AddFrame(time As Integer, framedata As Double()())
+            Dim path As String = $"/frame_data/{time}.dat"
+            Dim file As StreamBuffer = buf.OpenBlock(path)
+            Dim wr As New BinaryDataWriter(file) With {
+                .ByteOrder = ByteOrder.BigEndian
+            }
 
-        total += 1
+            For Each row As Double() In framedata
+                Call wr.Write(row)
+            Next
 
-        Call wr.Flush()
-        Call file.Flush()
-        Call file.Dispose()
-    End Sub
+            total += 1
 
-    Private Sub save()
+            Call wr.Flush()
+            Call file.Flush()
+            Call file.Dispose()
+        End Sub
 
-    End Sub
+        Private Sub save()
 
-    Protected Overridable Sub Dispose(disposing As Boolean)
-        If Not disposedValue Then
-            If disposing Then
-                ' TODO: ÊÍ·ÅÍÐ¹Ü×´Ì¬(ÍÐ¹Ü¶ÔÏó)
-                Call save()
-                Call buf.Dispose()
+        End Sub
+
+        Protected Overridable Sub Dispose(disposing As Boolean)
+            If Not disposedValue Then
+                If disposing Then
+                    ' TODO: ï¿½Í·ï¿½ï¿½Ð¹ï¿½×´Ì¬(ï¿½Ð¹Ü¶ï¿½ï¿½ï¿½)
+                    Call save()
+                    Call buf.Dispose()
+                End If
+
+                ' TODO: ï¿½Í·ï¿½Î´ï¿½Ð¹Üµï¿½ï¿½ï¿½Ô´(Î´ï¿½Ð¹ÜµÄ¶ï¿½ï¿½ï¿½)ï¿½ï¿½ï¿½ï¿½Ð´ï¿½Õ½ï¿½ï¿½ï¿½
+                ' TODO: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½Îª null
+                disposedValue = True
             End If
+        End Sub
 
-            ' TODO: ÊÍ·ÅÎ´ÍÐ¹ÜµÄ×ÊÔ´(Î´ÍÐ¹ÜµÄ¶ÔÏó)²¢ÖØÐ´ÖÕ½áÆ÷
-            ' TODO: ½«´óÐÍ×Ö¶ÎÉèÖÃÎª null
-            disposedValue = True
-        End If
-    End Sub
+        ' ' TODO: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Dispose(disposing As Boolean)ï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½Î´ï¿½Ð¹ï¿½ï¿½ï¿½Ô´ï¿½Ä´ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ½ï¿½ï¿½ï¿½
+        ' Protected Overrides Sub Finalize()
+        '     ' ï¿½ï¿½Òªï¿½ï¿½ï¿½Ä´Ë´ï¿½ï¿½ë¡£ï¿½ë½«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë¡°Dispose(disposing As Boolean)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        '     Dispose(disposing:=False)
+        '     MyBase.Finalize()
+        ' End Sub
 
-    ' ' TODO: ½öµ±¡°Dispose(disposing As Boolean)¡±ÓµÓÐÓÃÓÚÊÍ·ÅÎ´ÍÐ¹Ü×ÊÔ´µÄ´úÂëÊ±²ÅÌæ´úÖÕ½áÆ÷
-    ' Protected Overrides Sub Finalize()
-    '     ' ²»Òª¸ü¸Ä´Ë´úÂë¡£Çë½«ÇåÀí´úÂë·ÅÈë¡°Dispose(disposing As Boolean)¡±·½·¨ÖÐ
-    '     Dispose(disposing:=False)
-    '     MyBase.Finalize()
-    ' End Sub
-
-    Public Sub Dispose() Implements IDisposable.Dispose
-        ' ²»Òª¸ü¸Ä´Ë´úÂë¡£Çë½«ÇåÀí´úÂë·ÅÈë¡°Dispose(disposing As Boolean)¡±·½·¨ÖÐ
-        Dispose(disposing:=True)
-        GC.SuppressFinalize(Me)
-    End Sub
-End Class
+        Public Sub Dispose() Implements IDisposable.Dispose
+            ' ï¿½ï¿½Òªï¿½ï¿½ï¿½Ä´Ë´ï¿½ï¿½ë¡£ï¿½ë½«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë¡°Dispose(disposing As Boolean)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            Dispose(disposing:=True)
+            GC.SuppressFinalize(Me)
+        End Sub
+    End Class
+End Namespace
