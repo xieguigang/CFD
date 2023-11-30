@@ -23,7 +23,7 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "HDSPack", "..\..\GCModeller
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cache", "cache", "{883399C8-79EE-47C0-BA25-3C5A05920438}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CFD_clr", "CFD_clr\CFD_clr.vbproj", "{52F92634-803C-4109-BB58-3D2D71B5B841}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CFD_clr", "CFD_clr\CFD_clr.vbproj", "{52F92634-803C-4109-BB58-3D2D71B5B841}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "renv", "renv", "{F8DF50B1-B899-4936-937B-48B898486ADA}"
 EndProject
@@ -32,6 +32,8 @@ EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "R-cmd.NET5", "..\..\GCModeller\src\R-sharp\studio\R-terminal\R-cmd.NET5.vbproj", "{1148E965-1483-44ED-B8E5-5652F32977CC}"
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "msgpack-netcore5", "..\..\GCModeller\src\runtime\sciBASIC#\Data\BinaryData\msgpack\msgpack-netcore5.vbproj", "{A8C6BBA5-8295-4970-BE6F-3A0297268D19}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "R_graphic.interop", "..\..\GCModeller\src\R-sharp\Library\shares\R_graphic.interop\R_graphic.interop.shproj", "{53AF2B13-CCD5-4F73-94D5-612191E785A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -743,11 +745,14 @@ Global
 		{45B2170A-150F-46B4-8A67-DF5DE94279D3} = {F8DF50B1-B899-4936-937B-48B898486ADA}
 		{1148E965-1483-44ED-B8E5-5652F32977CC} = {F8DF50B1-B899-4936-937B-48B898486ADA}
 		{A8C6BBA5-8295-4970-BE6F-3A0297268D19} = {883399C8-79EE-47C0-BA25-3C5A05920438}
+		{53AF2B13-CCD5-4F73-94D5-612191E785A9} = {F8DF50B1-B899-4936-937B-48B898486ADA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {995AF9CE-7594-48AD-90B8-68EE8CBC8579}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\GCModeller\src\R-sharp\studio\Rstudio.common\Rstudio.common.projitems*{1148e965-1483-44ed-b8e5-5652f32977cc}*SharedItemsImports = 5
+		..\..\GCModeller\src\R-sharp\Library\shares\R_graphic.interop\R_graphic.interop.projitems*{52f92634-803c-4109-bb58-3d2d71b5b841}*SharedItemsImports = 5
+		..\..\GCModeller\src\R-sharp\Library\shares\R_graphic.interop\R_graphic.interop.projitems*{53af2b13-ccd5-4f73-94d5-612191e785a9}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

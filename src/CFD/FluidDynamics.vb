@@ -123,8 +123,8 @@ Public Class FluidDynamics : Inherits Simulation
             Next
         Next
 
-        m_collide = New collide(Me)
-        m_bounce = New bounce(Me)
+        m_collide = New Tasks.collide(Me)
+        m_bounce = New Tasks.bounce(Me)
     End Sub
 
     ''' <summary>
@@ -140,8 +140,8 @@ Public Class FluidDynamics : Inherits Simulation
         End SyncLock
     End Sub
 
-    Dim m_collide As collide
-    Dim m_bounce As bounce
+    Dim m_collide As Tasks.collide
+    Dim m_bounce As Tasks.bounce
 
     ''' <summary>
     ''' *************************************************************************
