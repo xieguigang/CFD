@@ -33,4 +33,10 @@ Module Rscript
     Public Function create()
 
     End Function
+
+    <ExportAPI("read.frameRaster")>
+    Public Function readFrameRaster(pack As FrameReader, time As Integer) As Object
+        Dim frame As Double()() = pack.ReadFrame(time)
+
+    End Function
 End Module
