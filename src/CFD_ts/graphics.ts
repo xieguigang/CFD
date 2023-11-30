@@ -168,11 +168,15 @@ export class graphics {
     public drawTracers() {
         const context = this.html.context;
         const pxPerSquare = this.html.pxPerSquare;
+        const tracerX = this.opts.tracerX;
+        const tracerY = this.opts.tracerY;
 
         context.fillStyle = "rgb(150,150,150)";
+        
         for (var t = 0; t < this.opts.nTracers; t++) {
             var canvasX = (tracerX[t] + 0.5) * pxPerSquare;
             var canvasY = this.canvas.height - (tracerY[t] + 0.5) * pxPerSquare;
+
             context.fillRect(canvasX - 1, canvasY - 1, 2, 2);
         }
     }
