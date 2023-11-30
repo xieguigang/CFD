@@ -33,6 +33,8 @@ Public Class Session
 
     Public Sub Run()
         Dim i As Integer = 1
+        Dim d As Integer = max_time / 50
+        Dim t0 As Date = Now
 
         Call CFD.reset()
         Call CFD.setDimentions(dimension.Width, dimension.Height)
@@ -49,6 +51,10 @@ Public Class Session
             End If
 
             Call CFD.advance()
+
+            If time Mod d = 0 Then
+                Call VBDebugger.EchoLine($"[{time}/{max_time}] {(time / max_time * 100).ToString("F1")}% ..... {StringFormats.ReadableElapsedTime((Now - t0).TotalMilliseconds)}")
+            End If
         Next
 
         Call storage.Dispose()
