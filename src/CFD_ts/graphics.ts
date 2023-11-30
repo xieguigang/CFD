@@ -15,6 +15,35 @@ export class graphics {
     }
 
     /**
+     * Initialize the tracer particles 
+    */
+    public initTracers() {
+        if (this.pars.drawTracers) {
+            var nRows = Math.ceil(Math.sqrt(this.opts.nTracers));
+            var xdim = this.pars.xdim;
+            var ydim = this.pars.ydim;
+            var dx = xdim / nRows;
+            var dy = ydim / nRows;
+            var nextX = dx / 2;
+            var nextY = dy / 2;
+            var tracerX = this.opts.tracerX;
+            var tracerY = this.opts.tracerY;
+
+            for (var t = 0; t < this.opts.nTracers; t++) {
+                tracerX[t] = nextX;
+                tracerY[t] = nextY;
+                nextX += dx;
+                if (nextX > xdim) {
+                    nextX = dx / 2;
+                    nextY += dy;
+                }
+            }
+        }
+
+        this.paintCanvas();
+    }
+
+    /**
      * Draw the sensor and its associated data display
     */
     public drawSensor() {

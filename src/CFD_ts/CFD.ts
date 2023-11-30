@@ -103,35 +103,10 @@ export class CFD {
         for (var y = 0; y < ydim; y++) {
             for (var x = 0; x < xdim; x++) {
                 setEquil(x, y, u0, 0, 1);
-                curl[x + y * xdim] = 0.0;
+              this.  curl[x + y * xdim] = 0.0;
             }
         }
 
-        paintCanvas();
-    }
-
-    /**
-     * Initialize the tracer particles 
-    */
-    public initTracers() {
-        if (this.pars.drawTracers) {
-            var nRows = Math.ceil(Math.sqrt(this.opts.nTracers));
-            var xdim = this.pars.xdim;
-            var ydim = this.pars.ydim;
-            var dx = xdim / nRows;
-            var dy = ydim / nRows;
-            var nextX = dx / 2;
-            var nextY = dy / 2;
-            for (var t = 0; t < this.opts.nTracers; t++) {
-                tracerX[t] = nextX;
-                tracerY[t] = nextY;
-                nextX += dx;
-                if (nextX > xdim) {
-                    nextX = dx / 2;
-                    nextY += dy;
-                }
-            }
-        }
         paintCanvas();
     }
 
