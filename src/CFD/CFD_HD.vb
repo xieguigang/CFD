@@ -76,12 +76,6 @@ Public Class CFD_HD : Inherits Simulation
     ''' </summary>
     Friend barrier As Boolean()() = RectangularArray.Matrix(Of Boolean)(xdim, ydim)
 
-
-    ' Calculation short-cuts:
-    Friend four9ths As Double = 4.0 / 9
-    Friend one9th As Double = 1.0 / 9
-    Friend one36th As Double = 1.0 / 36
-
     ''' <summary>
     ''' *************************************************************************
     '''                            - RESET SIMULATION -                          *
@@ -130,7 +124,7 @@ Public Class CFD_HD : Inherits Simulation
             Next
         Next
 
-        m_collide = New CFD_collide(Me)
+        m_collide = New collide(Me)
     End Sub
 
 
@@ -148,7 +142,7 @@ Public Class CFD_HD : Inherits Simulation
         End SyncLock
     End Sub
 
-    Dim m_collide As CFD_collide
+    Dim m_collide As collide
 
     ''' <summary>
     ''' *************************************************************************
