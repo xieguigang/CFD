@@ -17,4 +17,9 @@ declare namespace CFD {
       */
       function pack(file: any, mode?: object, env?: object): object|object;
    }
+   module read {
+      /**
+      */
+      function frameRaster(pack: object, time: object): any;
+   }
 }
