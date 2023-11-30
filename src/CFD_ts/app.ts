@@ -1,4 +1,4 @@
-/// <reference path="barrier.ts" />
+///<reference path="barrier.ts" />
 
 // Global variables:	
 const mobile = navigator.userAgent.match(/iPhone|iPad|iPod|Android|BlackBerry|Opera Mini|IEMobile/i)

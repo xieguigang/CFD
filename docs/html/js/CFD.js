@@ -669,7 +669,7 @@ define("barrier", ["require", "exports"], function (require, exports) {
         }
     ];
 });
-/// <reference path="barrier.ts" />
+///<reference path="barrier.ts" />
 // Global variables:	
 var mobile = navigator.userAgent.match(/iPhone|iPad|iPod|Android|BlackBerry|Opera Mini|IEMobile/i);
 var canvas = document.getElementById('theCanvas');

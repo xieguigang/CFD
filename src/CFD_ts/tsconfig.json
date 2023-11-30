@@ -1,13 +1,21 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
     "module": "amd",
     "target": "es5",
-    "lib": [ "dom", "es5", "dom.iterable", "scripthost" ],
+    "lib": [
+      "dom",
+      "es5",
+      "dom.iterable",
+      "scripthost"
+    ],
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "outDir": "../dist",
     "outFile": "../../docs/html/js/CFD.js",
-    "declaration": true
+    "declaration": true,
+    "preserveConstEnums": false,
+    "noImplicitAny": false
   },
   "exclude": [
     "node_modules"
