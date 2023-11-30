@@ -120,7 +120,7 @@ Module Rscript
         Dim colorSet As String = RColorPalette.getColorSet(colors, [default]:="jet")
         Dim dims As Size = pack.dims
 
-        For time As Integer = 0 To pack.total
+        For time As Integer = 1 To pack.total
             Dim frame As Double()() = pack.ReadFrame(time, dimension)
             Dim pixels As PixelData() = frame _
                 .Select(Function(row, i)
