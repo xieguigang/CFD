@@ -19,6 +19,11 @@ export class CFD {
     curl: number[];
     barrier: boolean[];		// boolean array of barrier locations
 
+    /**
+     * will be true when running
+    */
+    public running: boolean = false;
+
     constructor(public xdim: number, public ydim: number) {
         this.n0 = new Array(xdim * ydim);			// microscopic densities along each lattice direction
         this.nN = new Array(xdim * ydim);
@@ -88,7 +93,6 @@ export class CFD {
         }
 
         // Initialize tracers (but don't place them yet):
-        var nTracers = 144;
         var tracerX = new Array(nTracers);
         var tracerY = new Array(nTracers);
         for (var t = 0; t < nTracers; t++) {
@@ -354,7 +358,7 @@ export class CFD {
             writeData();
             if (time >= 10000) startOrStopData();
         }
-        if (running) {
+        if (this.running) {
             stepCount += stepsPerFrame;
             var elapsedTime = ((new Date()).getTime() - startTime) / 1000;	// time in seconds
             speedReadout.innerHTML = Number(stepCount / elapsedTime).toFixed(0);
@@ -369,7 +373,7 @@ export class CFD {
             startStop();
             initFluid();
         }
-        if (running) {
+        if (this.running) {
             if (rafCheck.checked) {
                 requestAnimFrame(function () { simulate(); });	// let browser schedule next frame
             } else {

@@ -1,3 +1,6 @@
+import { mobile } from "./global";
+import { options } from "./options";
+
 /**
  * this html user interface handler
 */
@@ -30,7 +33,30 @@ export class ui {
     public readonly dataArea: HTMLElement;
     public readonly dataButton: HTMLInputElement;
 
-    constructor(canvas_id: string = "theCanvas",
+    public readonly sizeSelect: HTMLSelectElement;
+
+    private draggingSensor = false;
+    private  mouseIsDown = false;
+
+    public get pxPerSquare(): number {
+        var i = this.sizeSelect.selectedIndex;
+        var size = this.sizeSelect.options[i].value;
+
+        return Number(size);
+    };
+
+    // width of plotted grid site in pixels
+    // grid dimensions for simulation
+    public get xdim(): number {
+        return this.canvas.width / this.pxPerSquare;
+    }
+
+    public get ydim(): number {
+        return this.canvas.height / this.pxPerSquare;
+    }
+
+    constructor(private opts: options,
+        canvas_id: string = "theCanvas",
         speedSlider: string = "speedSlider",
         stepsSlider: string = "stepsSlider",
         startButton: string = "startButton",
@@ -50,7 +76,8 @@ export class ui {
         speedReadout: string = "speedReadout",
         dataSection: string = "dataSection",
         dataArea: string = "dataArea",
-        dataButton: string = "dataButton") {
+        dataButton: string = "dataButton",
+        sizeSelect: string = "sizeSelect") {
 
         const canvas: HTMLCanvasElement = <any>document.getElementById(canvas_id);
         const context: CanvasRenderingContext2D = <any>canvas.getContext('2d');
@@ -88,6 +115,14 @@ export class ui {
         this.dataArea = <any>document.getElementById(dataArea);
         this.dataButton = <any>document.getElementById(dataButton);
 
+        this.sizeSelect = <any>document.getElementById(sizeSelect);
+        this.sizeSelect.selectedIndex = 5;
+
+        // smaller works better on mobile platforms
+        if (mobile) {
+            this.sizeSelect.selectedIndex = 1;
+        }
+
         this.setEvents();
     }
 
@@ -103,7 +138,10 @@ export class ui {
 
     // Set the fluid variables at the boundaries, according to the current slider value:
     setBoundaries() {
-        var u0 = Number(speedSlider.value);
+        const u0 = Number(this.speedSlider.value);
+        const xdim = this.xdim;
+        const ydim = this.ydim;
+
         for (var x = 0; x < xdim; x++) {
             setEquil(x, 0, u0, 0, 1);
             setEquil(x, ydim - 1, u0, 0, 1);
@@ -116,7 +154,7 @@ export class ui {
 
     // Move the tracer particles:
     moveTracers() {
-        for (var t = 0; t < nTracers; t++) {
+        for (var t = 0; t < this.opts.nTracers; t++) {
             var roundedX = Math.round(tracerX[t]);
             var roundedY = Math.round(tracerY[t]);
             var index = roundedX + roundedY * xdim;
@@ -131,10 +169,10 @@ export class ui {
 
     // "Drag" the fluid in a direction determined by the mouse (or touch) motion:
     // (The drag affects a "circle", 5 px in diameter, centered on the given coordinates.)
-    push(pushX, pushY, pushUX, pushUY) {
+    push(pushX: number, pushY: number, pushUX: number, pushUY: number) {
         // First make sure we're not too close to edge:
         var margin = 3;
-        if ((pushX > margin) && (pushX < xdim - 1 - margin) && (pushY > margin) && (pushY < ydim - 1 - margin)) {
+        if ((pushX > margin) && (pushX < this.xdim - 1 - margin) && (pushY > margin) && (pushY < this.ydim - 1 - margin)) {
             for (var dx = -1; dx <= 1; dx++) {
                 setEquil(pushX + dx, pushY + 2, pushUX, pushUY);
                 setEquil(pushX + dx, pushY - 2, pushUX, pushUY);
@@ -150,7 +188,7 @@ export class ui {
     // Set all densities in a cell to their equilibrium values for a given velocity and density:
     // (If density is omitted, it's left unchanged.)
     setEquil(x: number, y: number, newux: number, newuy: number, newrho?: number) {
-        var i = x + y * xdim;
+        var i = x + y * this.xdim;
         if (typeof newrho == 'undefined') {
             newrho = rho[i];
         }
@@ -161,6 +199,11 @@ export class ui {
         var uxuy2 = 2 * newux * newuy;
         var u2 = ux2 + uy2;
         var u215 = 1.5 * u2;
+
+        const four9ths = this.opts.four9ths;
+        const one9th = this.opts.one9th;
+        const one36th = this.opts.one36th;
+
         n0[i] = four9ths * newrho * (1 - u215);
         nE[i] = one9th * newrho * (1 + ux3 + 4.5 * ux2 - u215);
         nW[i] = one9th * newrho * (1 - ux3 + 4.5 * ux2 - u215);
@@ -175,33 +218,39 @@ export class ui {
         uy[i] = newuy;
     }
 
-    // Functions to handle mouse/touch interaction:
+    /**
+     * Functions to handle mouse/touch interaction 
+    */
     mouseDown(e) {
-        if (sensorCheck.checked) {
+        if (this.sensorCheck.checked) {
+            const pxPerSquare = this.pxPerSquare;
+
             var canvasLoc = pageToCanvas(e.pageX, e.pageY);
             var gridLoc = canvasToGrid(canvasLoc.x, canvasLoc.y);
             var dx = (gridLoc.x - sensorX) * pxPerSquare;
             var dy = (gridLoc.y - sensorY) * pxPerSquare;
+
             if (Math.sqrt(dx * dx + dy * dy) <= 8) {
-                draggingSensor = true;
+                this.draggingSensor = true;
             }
         }
-        mousePressDrag(e);
+
+        this . mousePressDrag(e);
     };
     mouseMove(e) {
-        if (mouseIsDown) {
-            mousePressDrag(e);
+        if (this.mouseIsDown) {
+           this .  mousePressDrag(e);
         }
     };
     mouseUp(e) {
-        mouseIsDown = false;
-        draggingSensor = false;
+       this.  mouseIsDown = false;
+      this .   draggingSensor = false;
     };
 
     // Handle mouse press or drag:
     mousePressDrag(e) {
         e.preventDefault();
-        mouseIsDown = true;
+        this . mouseIsDown = true;
         var canvasLoc = pageToCanvas(e.pageX, e.pageY);
         if (draggingSensor) {
             var gridLoc = canvasToGrid(canvasLoc.x, canvasLoc.y);

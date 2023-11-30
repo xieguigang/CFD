@@ -4,18 +4,15 @@ import { barrierList } from "./barrier";
 import { CFD } from './CFD';
 import { mobile, rgbToHex } from './global';
 import { graphics } from "./graphics";
+import { options } from "./options";
 import { ui } from "./ui";
 
 // Global variables:	
+const opts = new options();
 const html: ui = new ui();
 
-var sizeSelect: HTMLSelectElement = <any>document.getElementById('sizeSelect');
-sizeSelect.selectedIndex = 5;
-if (mobile) sizeSelect.selectedIndex = 1;		// smaller works better on mobile platforms
-var pxPerSquare = Number(sizeSelect.options[sizeSelect.selectedIndex].value);
-// width of plotted grid site in pixels
-var xdim = html.canvas.width / pxPerSquare;			// grid dimensions for simulation
-var ydim = html.canvas.height / pxPerSquare;
+var sensorX = html.xdim / 2;						// coordinates of "sensor" to measure local fluid properties	
+var sensorY = html.ydim / 2;
 
 var barrierSelect: HTMLSelectElement = <any>document.getElementById('barrierSelect');
 
@@ -25,30 +22,7 @@ for (var barrierIndex = 0; barrierIndex < barrierList.length; barrierIndex++) {
     barrierSelect.add(shape, null);
 }
 
-var running = false;						// will be true when running
-var stepCount = 0;
-var startTime = 0;
-var four9ths = 4.0 / 9.0;					// abbreviations
-var one9th = 1.0 / 9.0;
-var one36th = 1.0 / 36.0;
-var barrierCount = 0;
-var barrierxSum = 0;
-var barrierySum = 0;
-var barrierFx = 0.0;						// total force on all barrier sites
-var barrierFy = 0.0;
-var sensorX = xdim / 2;						// coordinates of "sensor" to measure local fluid properties	
-var sensorY = ydim / 2;
-var draggingSensor = false;
-var mouseIsDown = false;
-var mouseX, mouseY;							// mouse location in canvas coordinates
-var oldMouseX = -1, oldMouseY = -1;			// mouse coordinates from previous simulation frame
-var collectingData = false;
-var time = 0;								// time (in simulation step units) since data collection started
-var showingPeriod = false;
-var lastBarrierFy = 1;						// for determining when F_y oscillation begins
-var lastFyOscTime = 0;						// for calculating F_y oscillation period
-
-var CFD_app = new CFD(xdim, ydim);
+var CFD_app = new CFD(html.xdim, html.ydim);
 var gr = new graphics(html.canvas);
 
 
