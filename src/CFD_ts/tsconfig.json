@@ -10,6 +10,7 @@
       "scripthost"
     ],
     "sourceMap": true,
+    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "outDir": "../dist",
     "outFile": "../../docs/html/js/CFD.js",
