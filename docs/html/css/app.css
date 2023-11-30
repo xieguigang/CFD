@@ -1,0 +1,33 @@
+body {
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* gray background, center everything */
+p {
+    margin-left: auto;
+    margin-right: auto;
+    width: 600px;
+}
+
+/* keep paragraphs narrow and centered */
+input {
+    font-size: 115%;
+}
+
+/* make buttons bigger */
+input[type="range"] {
+    width: 90px;
+}
+
+/* make sliders shorter */
+select {
+    font-size: 115%;
+}
+
+/* make selectors bigger too */
+li {
+    text-align: left;
+}
