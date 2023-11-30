@@ -22,6 +22,7 @@ Public Class Session
 
     Public Function dims(val As Size) As Session
         dimension = val
+        storage.dimension(val)
         Return Me
     End Function
 
@@ -32,11 +33,16 @@ Public Class Session
         For time As Integer = 0 To max_time
             If time Mod snapshotInterval = 0 Then
                 ' take snapshot
-
+                Call storage.addFrame(time, NameOf(FluidDynamics.density), CFD.density)
+                Call storage.addFrame(time, NameOf(FluidDynamics.xvel), CFD.xvel)
+                Call storage.addFrame(time, NameOf(FluidDynamics.yvel), CFD.yvel)
+                Call storage.addFrame(time, NameOf(FluidDynamics.speed2), CFD.speed2)
             End If
 
             Call CFD.advance()
         Next
+
+        Call storage.Dispose()
     End Sub
 
 End Class
