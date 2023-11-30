@@ -2,10 +2,10 @@
   "compileOnSave": false,
   "compilerOptions": {
     "module": "AMD",
-    "target": "es6",
+    "target": "es5",
     "lib": [
       "dom",
-      "es6",
+      "es5",
       "dom.iterable",
       "scripthost"
     ],
