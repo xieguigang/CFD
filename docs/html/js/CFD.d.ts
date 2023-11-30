@@ -1,3 +1,12 @@
+declare module "barrier" {
+    export interface barrier {
+        name: string;
+        locations: number[];
+    }
+    export namespace data {
+        const barrierList: barrier[];
+    }
+}
 declare const mobile: RegExpMatchArray;
 declare const canvas: HTMLCanvasElement;
 declare const context: CanvasRenderingContext2D;
@@ -14,6 +23,7 @@ declare var viscSlider: HTMLInputElement;
 declare var viscValue: HTMLInputElement;
 declare var mouseSelect: HTMLSelectElement;
 declare var barrierSelect: HTMLSelectElement;
+declare var barrierList: any;
 declare var plotSelect: HTMLSelectElement;
 declare var contrastSlider: HTMLInputElement;
 declare var tracerCheck: HTMLInputElement;
@@ -75,6 +85,7 @@ declare var transBlackArray: any[];
 declare var nTracers: number;
 declare var tracerX: any[];
 declare var tracerY: any[];
+declare const requestAnimFrame: (callback: () => void) => void;
 declare function simulate(): void;
 declare function setBoundaries(): void;
 declare function collide(): void;

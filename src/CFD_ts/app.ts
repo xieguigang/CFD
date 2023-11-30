@@ -1,3 +1,5 @@
+/// <reference path="barrier.ts" />
+
 // Global variables:	
 const mobile = navigator.userAgent.match(/iPhone|iPad|iPod|Android|BlackBerry|Opera Mini|IEMobile/i)
 const canvas: HTMLCanvasElement = <any>document.getElementById('theCanvas');
@@ -19,6 +21,8 @@ var viscSlider: HTMLInputElement = <any>document.getElementById('viscSlider');
 var viscValue: HTMLInputElement = <any>document.getElementById('viscValue');
 var mouseSelect: HTMLSelectElement = <any>document.getElementById('mouseSelect');
 var barrierSelect: HTMLSelectElement = <any>document.getElementById('barrierSelect');
+var barrierList = data.barrierList;
+
 for (var barrierIndex = 0; barrierIndex < barrierList.length; barrierIndex++) {
     var shape = document.createElement("option");
     shape.text = barrierList[barrierIndex].name;
@@ -152,7 +156,7 @@ for (var t = 0; t < nTracers; t++) {
 initFluid();		// initialize to steady rightward flow
 
 // Mysterious gymnastics that are apparently useful for better cross-browser animation timing:
-window.requestAnimFrame = (function (callback) {
+const requestAnimFrame: (callback: () => void) => void = (function (callback) {
     return window.requestAnimationFrame ||
         window.webkitRequestAnimationFrame ||
         window.mozRequestAnimationFrame ||
