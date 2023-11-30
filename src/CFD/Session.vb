@@ -27,16 +27,20 @@ Public Class Session
     End Function
 
     Public Sub Run()
+        Dim i As Integer = 1
+
         Call CFD.reset()
         Call CFD.setDimentions(dimension.Width, dimension.Height)
 
         For time As Integer = 0 To max_time
             If time Mod snapshotInterval = 0 Then
                 ' take snapshot
-                Call storage.addFrame(time, NameOf(FluidDynamics.density), CFD.density)
-                Call storage.addFrame(time, NameOf(FluidDynamics.xvel), CFD.xvel)
-                Call storage.addFrame(time, NameOf(FluidDynamics.yvel), CFD.yvel)
-                Call storage.addFrame(time, NameOf(FluidDynamics.speed2), CFD.speed2)
+                Call storage.addFrame(i, NameOf(FluidDynamics.density), CFD.density)
+                Call storage.addFrame(i, NameOf(FluidDynamics.xvel), CFD.xvel)
+                Call storage.addFrame(i, NameOf(FluidDynamics.yvel), CFD.yvel)
+                Call storage.addFrame(i, NameOf(FluidDynamics.speed2), CFD.speed2)
+
+                i += 1
             End If
 
             Call CFD.advance()
