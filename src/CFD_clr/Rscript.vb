@@ -28,4 +28,9 @@ Module Rscript
             Return New FrameWriter(buf.TryCast(Of Stream))
         End If
     End Function
+
+    <ExportAPI("create_session")>
+    Public Function create()
+
+    End Function
 End Module
