@@ -1,5 +1,6 @@
 ﻿Imports System.Runtime.CompilerServices
 Imports System.Text
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports CFD
 Imports CFD_form.RibbonLib.Controls
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
@@ -13,7 +14,7 @@ Public Class FormMain
     Dim ribbon1 As New Ribbon
     Dim vsToolStripExtender1 As New VisualStudioToolStripExtender
     Dim vS2015LightTheme1 As New VS2015LightTheme
-    Dim dockPanel As DockPanel
+    Dim dockPanel As New DockPanel
 
     ReadOnly _toolStripProfessionalRenderer As New ToolStripProfessionalRenderer()
 
@@ -42,7 +43,11 @@ Public Class FormMain
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+        dockPanel.Theme = vS2015LightTheme1
+        EnableVSRenderer(VisualStudioToolStripExtender.VsVersion.Vs2015, vS2015LightTheme1)
     End Sub
 
+    Private Sub EnableVSRenderer(ByVal version As VisualStudioToolStripExtender.VsVersion, ByVal theme As ThemeBase)
+        vsToolStripExtender1.SetStyle(StatusStrip1, version, theme)
+    End Sub
 End Class
