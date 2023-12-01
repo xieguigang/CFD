@@ -1,4 +1,5 @@
 declare module "global" {
+    export const UA: RegExp;
     export const mobile: boolean;
     export function componentToHex(c: number): string;
     /**

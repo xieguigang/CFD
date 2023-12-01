@@ -1,4 +1,13 @@
-export const mobile: boolean = navigator.userAgent.match(/iPhone|iPad|iPod|Android|BlackBerry|Opera Mini|IEMobile/i).length > 0;
+export const UA = /iPhone|iPad|iPod|Android|BlackBerry|Opera Mini|IEMobile/i;
+export const mobile: boolean = (() => {
+    let ua = navigator.userAgent.match(UA);
+
+    if (!ua) {
+        return false;
+    } else {
+        return true;
+    }
+})();
 
 export function componentToHex(c: number) {
     var hex = c.toString(16);

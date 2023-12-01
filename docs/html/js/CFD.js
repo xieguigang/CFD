@@ -1,8 +1,17 @@
 define("global", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.requestAnimFrame = exports.rgbToHex = exports.componentToHex = exports.mobile = void 0;
-    exports.mobile = navigator.userAgent.match(/iPhone|iPad|iPod|Android|BlackBerry|Opera Mini|IEMobile/i).length > 0;
+    exports.requestAnimFrame = exports.rgbToHex = exports.componentToHex = exports.mobile = exports.UA = void 0;
+    exports.UA = /iPhone|iPad|iPod|Android|BlackBerry|Opera Mini|IEMobile/i;
+    exports.mobile = (function () {
+        var ua = navigator.userAgent.match(exports.UA);
+        if (!ua) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    })();
     function componentToHex(c) {
         var hex = c.toString(16);
         return hex.length == 1 ? "0" + hex : hex;
