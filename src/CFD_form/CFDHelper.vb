@@ -8,6 +8,14 @@ Public Class CFDHelper : Inherits DataAdapter
     Public Property ColorLevels As Integer = 255
 
     Public Property TracerSpeedLevel As Double = 25
+    Public Property RefreshRate As Integer
+        Get
+            Return 1000 / timer.Interval
+        End Get
+        Set(value As Integer)
+            timer.Interval = 1000 / value
+        End Set
+    End Property
 
     Public ReadOnly Property dimension As Size
         Get
@@ -15,8 +23,11 @@ Public Class CFDHelper : Inherits DataAdapter
         End Get
     End Property
 
-    Public Sub New(CFD As FluidDynamics)
+    Dim timer As Timer
+
+    Public Sub New(CFD As FluidDynamics, timer As Timer)
         MyBase.New(CFD)
+        Me.timer = timer
     End Sub
 
     Public Sub SetBarrierPoint(xy As Point, r As Integer)

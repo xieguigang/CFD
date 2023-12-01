@@ -11,11 +11,20 @@ Imports WeifenLuo.WinFormsUI.Docking
 Public Class frmCFDCanvas
 
     Dim CFD As New FluidDynamics(600, 480, 2500)
-    Dim reader As New CFDHelper(CFD)
+    Dim reader As CFDHelper
     Dim colors As SolidBrush()
     Dim offset As New DoubleRange(0, 255)
     Dim drawLine As Boolean = False
     Dim toolkit As New toolCFDParameters
+
+    Sub New()
+
+        ' 此调用是设计器所必需的。
+        InitializeComponent()
+
+        ' 在 InitializeComponent() 调用之后添加任何初始化。
+        reader = New CFDHelper(CFD, Timer1)
+    End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Call CFD.advance()
@@ -127,13 +136,13 @@ Public Class frmCFDCanvas
     End Sub
 
     Private Sub frmCFDCanvas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        UpdatePalette
-        CFD.reset
+        UpdatePalette()
+        CFD.reset()
 
-        AddHandler RibbonItems.ButtonReset.ExecuteEvent, Sub() resetCFD
-        AddHandler ribbonItems.ButtonClearBarrier.ExecuteEvent, Sub() CFD.clearBarrier
+        AddHandler ribbonItems.ButtonReset.ExecuteEvent, Sub() resetCFD()
+        AddHandler ribbonItems.ButtonClearBarrier.ExecuteEvent, Sub() CFD.clearBarrier()
 
-        toolkit.Show(dockPanel)
+        toolkit.Show(DockPanel)
         toolkit.DockState = DockState.DockLeft
         toolkit.SetTarget(reader, callback:=Me)
 
