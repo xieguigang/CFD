@@ -62,12 +62,18 @@ export interface uiAdapter {
     get drawFlowlines(): boolean;
     get drawForceArrow(): boolean;
     get drawSensor(): boolean;
+
+    canvasToGrid(x: number, y: number): {
+        x: number,
+        y: number
+    };
 }
 
 export interface Idebugger {
     writeData(): void;
     moveTracers(): void;
     dataAreaWriteLine(s: string): void;
+    setSpeedReadout(s: string): void;
 }
 
 export function init_options(opts: options) {

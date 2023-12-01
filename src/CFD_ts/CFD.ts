@@ -306,7 +306,7 @@ export class CFD {
 
         if (mouseIsDown && mouseSelect.selectedIndex == 2) {
             if (this.opts.oldMouseX >= 0) {
-                var gridLoc = canvasToGrid(this.opts.mouseX, this.opts.mouseY);
+                var gridLoc = this.pars.canvasToGrid(this.opts.mouseX, this.opts.mouseY);
                 var pxPerSquare = this.pars.pxPerSquare;
 
                 pushX = gridLoc.x;
@@ -333,13 +333,15 @@ export class CFD {
             if (this.opts.showingPeriod && (this.opts.barrierFy > 0) && (this.opts.lastBarrierFy <= 0)) {
                 var thisFyOscTime = this.opts.time - this.opts.barrierFy / (this.opts.barrierFy - this.opts.lastBarrierFy);	// interpolate when Fy changed sign
                 if (this.opts.lastFyOscTime > 0) {
-                    this.debug.dataAreaWriteLine(Number(thisFyOscTime - this.opts.lastFyOscTime).toFixed(2));                   
+                    this.debug.dataAreaWriteLine(Number(thisFyOscTime - this.opts.lastFyOscTime).toFixed(2));
                 }
                 this.opts.lastFyOscTime = thisFyOscTime;
             }
             this.opts.lastBarrierFy = this.opts.barrierFy;
         }
-        paintCanvas();
+
+        this.paintCanvas();
+
         if (this.opts.collectingData) {
             this.debug.writeData();
             if (this.opts.time >= 10000) startOrStopData();
@@ -347,7 +349,7 @@ export class CFD {
         if (this.running) {
             this.opts.stepCount += stepsPerFrame;
             var elapsedTime = ((new Date()).getTime() - this.opts.startTime) / 1000;	// time in seconds
-            speedReadout.innerHTML = Number(this.opts.stepCount / elapsedTime).toFixed(0);
+            this.debug.setSpeedReadout(Number(this.opts.stepCount / elapsedTime).toFixed(0));
         }
 
         let stable = true;

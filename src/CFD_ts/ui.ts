@@ -143,7 +143,10 @@ export class ui implements uiAdapter, Idebugger {
 
         this.setEvents();
     }
-    
+    setSpeedReadout(s: string): void {
+        this.speedReadout.innerHTML = s;
+    }
+
     dataAreaWriteLine(s: string): void {
         this.dataArea.innerHTML += s + "\n";
         this.dataArea.scrollTop = this.dataArea.scrollHeight;
