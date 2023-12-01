@@ -21,8 +21,8 @@ export class options {
         public barrierFx = 0.0,				// total force on all barrier sites
         public barrierFy = 0.0,
 
-        public mouseX: number,
-        public mouseY: number,				// mouse location in canvas coordinates
+        public mouseX: number = -1,
+        public mouseY: number = -1,			// mouse location in canvas coordinates
         public oldMouseX = -1,
         public oldMouseY = -1,			    // mouse coordinates from previous simulation frame
         public collectingData = false,
@@ -33,14 +33,14 @@ export class options {
         public nTracers = 144,
         public nColors = 400,
 
-        public sensorX: number,				// coordinates of "sensor" to measure local fluid properties	
-        public sensorY: number,
+        public sensorX: number = -1,		// coordinates of "sensor" to measure local fluid properties	
+        public sensorY: number = -1,
 
-        public tracerX: number[],
-        public tracerY: number[],
+        public tracerX: number[] = null,
+        public tracerY: number[] = null,
 
         public transBlackArraySize: number = 50,
-        public transBlackArray: string[]
+        public transBlackArray: string[] = null
     ) { }
 }
 

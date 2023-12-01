@@ -3,43 +3,46 @@ export interface barrier {
     locations: number[];
 }
 
+const short_line = <barrier>{
+    name: "Short line",
+    locations: [
+        12, 15,
+        12, 16,
+        12, 17,
+        12, 18,
+        12, 19,
+        12, 20,
+        12, 21,
+        12, 22,
+        12, 23]
+};
+
+const long_line = <barrier>{
+    name: "Long line",
+    locations: [
+        13, 11,
+        13, 12,
+        13, 13,
+        13, 14,
+        13, 15,
+        13, 16,
+        13, 17,
+        13, 18,
+        13, 19,
+        13, 20,
+        13, 21,
+        13, 22,
+        13, 23,
+        13, 24,
+        13, 25,
+        13, 26,
+        13, 27,
+        13, 28
+    ]
+};
+
 export const barrierList: barrier[] = [
-    <barrier>{
-        name: "Short line",
-        locations: [
-            12, 15,
-            12, 16,
-            12, 17,
-            12, 18,
-            12, 19,
-            12, 20,
-            12, 21,
-            12, 22,
-            12, 23]
-    },
-    <barrier>{
-        name: "Long line",
-        locations: [
-            13, 11,
-            13, 12,
-            13, 13,
-            13, 14,
-            13, 15,
-            13, 16,
-            13, 17,
-            13, 18,
-            13, 19,
-            13, 20,
-            13, 21,
-            13, 22,
-            13, 23,
-            13, 24,
-            13, 25,
-            13, 26,
-            13, 27,
-            13, 28
-        ]
-    },
+    short_line, long_line,
     <barrier>{
         name: "Diagonal",
         locations: [
