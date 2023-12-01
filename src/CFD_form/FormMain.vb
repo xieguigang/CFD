@@ -22,6 +22,7 @@ Public Class FormMain
 
         dockPanel.Dock = DockStyle.Fill
         dockPanel.ShowDocumentIcon = True
+        dockPanel.DockLeftPortion = 250.0R
 
         vsToolStripExtender1.DefaultRenderer = _toolStripProfessionalRenderer
 

@@ -205,7 +205,7 @@ Public Class frmCFDCanvas
         toolkit.DockState = DockState.DockLeft
         toolkit.SetTarget(reader, callback:=Me)
 
-        TabText = "Computational Fluid Dynamics"
+        TabText = $"CFD Project - {Now.Year}{Now.Month.ToString.PadLeft(1, "0"c)}{Now.Day.ToString.PadLeft(1, "0"c)}-{App.ElapsedMilliseconds}"
 
         Call main.EnableVSRenderer(ContextMenuStrip1)
     End Sub

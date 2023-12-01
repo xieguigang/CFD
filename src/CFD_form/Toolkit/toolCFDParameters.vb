@@ -1,5 +1,4 @@
-﻿Imports System.Diagnostics.Eventing
-Imports WeifenLuo.WinFormsUI.Docking
+﻿Imports WeifenLuo.WinFormsUI.Docking
 
 Public Class toolCFDParameters
 
@@ -29,6 +28,6 @@ Public Class toolCFDParameters
     End Sub
 
     Private Sub toolCFDParameters_Load(sender As Object, e As EventArgs) Handles Me.Load
-        TabText = "CFD Parameters"
+        TabText = "Simulator Parameters"
     End Sub
 End Class
