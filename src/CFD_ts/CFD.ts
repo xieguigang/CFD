@@ -304,7 +304,7 @@ export class CFD {
 
         this.setBoundaries();
 
-        if (mouseIsDown && mouseSelect.selectedIndex == 2) {
+        if (this.pars.dragFluid) {
             if (this.opts.oldMouseX >= 0) {
                 var gridLoc = this.pars.canvasToGrid(this.opts.mouseX, this.opts.mouseY);
                 var pxPerSquare = this.pars.pxPerSquare;
@@ -344,7 +344,7 @@ export class CFD {
 
         if (this.opts.collectingData) {
             this.debug.writeData();
-            if (this.opts.time >= 10000) startOrStopData();
+            if (this.opts.time >= 10000) this.debug.startOrStopData();
         }
         if (this.running) {
             this.opts.stepCount += stepsPerFrame;
@@ -363,7 +363,7 @@ export class CFD {
         }
         if (!stable) {
             window.alert("The simulation has become unstable due to excessive fluid speeds.");
-            this.startStop();
+            this.pars.startStop();
             this.initFluid();
         }
         if (this.running) {

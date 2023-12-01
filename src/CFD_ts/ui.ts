@@ -143,6 +143,9 @@ export class ui implements uiAdapter, Idebugger {
 
         this.setEvents();
     }
+    get dragFluid(): boolean {
+        return this.mouseIsDown && this.mouseSelect.selectedIndex == 2;
+    }
     get requestFrame(): boolean {
         return this.rafCheck.checked;
     }

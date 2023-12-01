@@ -64,7 +64,9 @@ export interface uiAdapter {
     get drawSensor(): boolean;
 
     get requestFrame(): boolean;
+    get dragFluid(): boolean;
 
+    startStop(): void;
     canvasToGrid(x: number, y: number): {
         x: number,
         y: number
@@ -76,6 +78,7 @@ export interface Idebugger {
     moveTracers(): void;
     dataAreaWriteLine(s: string): void;
     setSpeedReadout(s: string): void;
+    startOrStopData(): void;
 }
 
 export function init_options(opts: options) {

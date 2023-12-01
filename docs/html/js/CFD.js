@@ -1,6 +1,7 @@
 define("global", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.requestAnimFrame = exports.rgbToHex = exports.componentToHex = exports.mobile = void 0;
     exports.mobile = navigator.userAgent.match(/iPhone|iPad|iPod|Android|BlackBerry|Opera Mini|IEMobile/i).length > 0;
     function componentToHex(c) {
         var hex = c.toString(16);
@@ -34,6 +35,7 @@ define("global", ["require", "exports"], function (require, exports) {
 define("options", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.init_options = exports.options = exports.one36th = exports.one9th = exports.four9ths = void 0;
     // abbreviations
     exports.four9ths = 4.0 / 9.0;
     exports.one9th = 1.0 / 9.0;
@@ -105,42 +107,6 @@ define("options", ["require", "exports"], function (require, exports) {
         return options;
     }());
     exports.options = options;
-    get;
-    xdim();
-    number;
-    get;
-    ydim();
-    number;
-    get;
-    contrast();
-    number;
-    get;
-    pxPerSquare();
-    number;
-    get;
-    viscosity();
-    number;
-    get;
-    speed();
-    number;
-    get;
-    plotType();
-    number;
-    get;
-    steps();
-    number;
-    get;
-    drawTracers();
-    boolean;
-    get;
-    drawFlowlines();
-    boolean;
-    get;
-    drawForceArrow();
-    boolean;
-    get;
-    drawSensor();
-    boolean;
     function init_options(opts) {
         // Initialize tracers (but don't place them yet):
         var nTracers = this.opts.nTracers;
@@ -164,12 +130,14 @@ define("options", ["require", "exports"], function (require, exports) {
 define("CFD", ["require", "exports", "global", "options"], function (require, exports, global_1, options_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CFD = void 0;
     var CFD = /** @class */ (function () {
-        function CFD(xdim, ydim, pars, opts) {
+        function CFD(xdim, ydim, pars, opts, debug) {
             this.xdim = xdim;
             this.ydim = ydim;
             this.pars = pars;
             this.opts = opts;
+            this.debug = debug;
             /**
              * will be true when running
             */
@@ -221,6 +189,25 @@ define("CFD", ["require", "exports", "global", "options"], function (require, ex
                 }
             }
             this.paintCanvas();
+        };
+        // "Drag" the fluid in a direction determined by the mouse (or touch) motion:
+        // (The drag affects a "circle", 5 px in diameter, centered on the given coordinates.)
+        CFD.prototype.push = function (pushX, pushY, pushUX, pushUY) {
+            // First make sure we're not too close to edge:
+            var margin = 3;
+            var xdim = this.xdim;
+            var ydim = this.ydim;
+            if ((pushX > margin) && (pushX < xdim - 1 - margin) && (pushY > margin) && (pushY < ydim - 1 - margin)) {
+                for (var dx = -1; dx <= 1; dx++) {
+                    this.setEquil(pushX + dx, pushY + 2, pushUX, pushUY);
+                    this.setEquil(pushX + dx, pushY - 2, pushUX, pushUY);
+                }
+                for (var dx = -2; dx <= 2; dx++) {
+                    for (var dy = -1; dy <= 1; dy++) {
+                        this.setEquil(pushX + dx, pushY + dy, pushUX, pushUY);
+                    }
+                }
+            }
         };
         /**
          * Set the fluid variables at the boundaries,
@@ -326,8 +313,8 @@ define("CFD", ["require", "exports", "global", "options"], function (require, ex
         */
         CFD.prototype.stream = function () {
             var opts = this.opts;
-            var xdim = this.pars.xdim;
-            var ydim = this.pars.ydim;
+            var xdim = this.xdim;
+            var ydim = this.ydim;
             var n0 = this.n0;
             var nN = this.nN;
             var nS = this.nS;
@@ -397,14 +384,16 @@ define("CFD", ["require", "exports", "global", "options"], function (require, ex
         */
         CFD.prototype.simulate = function () {
             var _this = this;
-            var stepsPerFrame = this.pars.steps; // number of simulation steps per animation frame
-            this.setBoundaries();
+            // number of simulation steps per animation frame
+            var stepsPerFrame = this.pars.steps;
             // Test to see if we're dragging the fluid:
             var pushing = false;
             var pushX, pushY, pushUX, pushUY;
-            if (mouseIsDown && mouseSelect.selectedIndex == 2) {
+            this.setBoundaries();
+            if (this.pars.dragFluid) {
                 if (this.opts.oldMouseX >= 0) {
-                    var gridLoc = canvasToGrid(this.opts.mouseX, this.opts.mouseY);
+                    var gridLoc = this.pars.canvasToGrid(this.opts.mouseX, this.opts.mouseY);
+                    var pxPerSquare = this.pars.pxPerSquare;
                     pushX = gridLoc.x;
                     pushY = gridLoc.y;
                     pushUX = (this.opts.mouseX - this.opts.oldMouseX) / pxPerSquare / stepsPerFrame;
@@ -426,32 +415,30 @@ define("CFD", ["require", "exports", "global", "options"], function (require, ex
             for (var step = 0; step < stepsPerFrame; step++) {
                 this.collide();
                 this.stream();
-                if (tracerCheck.checked)
-                    moveTracers();
+                if (this.pars.drawTracers)
+                    this.debug.moveTracers();
                 if (pushing)
-                    push(pushX, pushY, pushUX, pushUY);
+                    this.push(pushX, pushY, pushUX, pushUY);
                 this.opts.time++;
                 if (this.opts.showingPeriod && (this.opts.barrierFy > 0) && (this.opts.lastBarrierFy <= 0)) {
                     var thisFyOscTime = this.opts.time - this.opts.barrierFy / (this.opts.barrierFy - this.opts.lastBarrierFy); // interpolate when Fy changed sign
                     if (this.opts.lastFyOscTime > 0) {
-                        var period = thisFyOscTime - this.opts.lastFyOscTime;
-                        dataArea.innerHTML += Number(period).toFixed(2) + "\n";
-                        dataArea.scrollTop = dataArea.scrollHeight;
+                        this.debug.dataAreaWriteLine(Number(thisFyOscTime - this.opts.lastFyOscTime).toFixed(2));
                     }
                     this.opts.lastFyOscTime = thisFyOscTime;
                 }
                 this.opts.lastBarrierFy = this.opts.barrierFy;
             }
-            paintCanvas();
+            this.paintCanvas();
             if (this.opts.collectingData) {
-                writeData();
+                this.debug.writeData();
                 if (this.opts.time >= 10000)
-                    startOrStopData();
+                    this.debug.startOrStopData();
             }
             if (this.running) {
                 this.opts.stepCount += stepsPerFrame;
                 var elapsedTime = ((new Date()).getTime() - this.opts.startTime) / 1000; // time in seconds
-                speedReadout.innerHTML = Number(this.opts.stepCount / elapsedTime).toFixed(0);
+                this.debug.setSpeedReadout(Number(this.opts.stepCount / elapsedTime).toFixed(0));
             }
             var stable = true;
             var xdim = this.pars.xdim;
@@ -464,12 +451,12 @@ define("CFD", ["require", "exports", "global", "options"], function (require, ex
             }
             if (!stable) {
                 window.alert("The simulation has become unstable due to excessive fluid speeds.");
-                startStop();
-                initFluid();
+                this.pars.startStop();
+                this.initFluid();
             }
             if (this.running) {
-                if (rafCheck.checked) {
-                    requestAnimFrame(function () { return _this.simulate(); }); // let browser schedule next frame
+                if (this.pars.requestFrame) {
+                    (0, global_1.requestAnimFrame)(function () { return _this.simulate(); }); // let browser schedule next frame
                 }
                 else {
                     window.setTimeout(function () { return _this.simulate(); }, 1); // schedule next frame asap (nominally 1 ms but always more)
@@ -483,6 +470,7 @@ define("CFD", ["require", "exports", "global", "options"], function (require, ex
 define("barrier", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.barrierList = void 0;
     var short_line = {
         name: "Short line",
         locations: [
@@ -1155,6 +1143,7 @@ define("barrier", ["require", "exports"], function (require, exports) {
 define("ui", ["require", "exports", "barrier", "global"], function (require, exports, barrier_1, global_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ui = void 0;
     /**
      * this html user interface handler
     */
@@ -1240,7 +1229,7 @@ define("ui", ["require", "exports", "barrier", "global"], function (require, exp
                 var size = this.sizeSelect.options[i].value;
                 return Number(size);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         ;
@@ -1250,16 +1239,37 @@ define("ui", ["require", "exports", "barrier", "global"], function (require, exp
             get: function () {
                 return this.canvas.width / this.pxPerSquare;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ui.prototype, "ydim", {
             get: function () {
                 return this.canvas.height / this.pxPerSquare;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
+        Object.defineProperty(ui.prototype, "dragFluid", {
+            get: function () {
+                return this.mouseIsDown && this.mouseSelect.selectedIndex == 2;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(ui.prototype, "requestFrame", {
+            get: function () {
+                return this.rafCheck.checked;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        ui.prototype.setSpeedReadout = function (s) {
+            this.speedReadout.innerHTML = s;
+        };
+        ui.prototype.dataAreaWriteLine = function (s) {
+            this.dataArea.innerHTML += s + "\n";
+            this.dataArea.scrollTop = this.dataArea.scrollHeight;
+        };
         ui.prototype.connectEngine = function (CFD) {
             this.CFD = CFD;
         };
@@ -1270,7 +1280,7 @@ define("ui", ["require", "exports", "barrier", "global"], function (require, exp
             get: function () {
                 return Number(this.stepsSlider.value);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         ;
@@ -1278,56 +1288,56 @@ define("ui", ["require", "exports", "barrier", "global"], function (require, exp
             get: function () {
                 return Number(this.speedSlider.value);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ui.prototype, "drawTracers", {
             get: function () {
                 return (this.tracerCheck.checked);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ui.prototype, "drawFlowlines", {
             get: function () {
                 return (this.flowlineCheck.checked);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ui.prototype, "drawForceArrow", {
             get: function () {
                 return (this.forceCheck.checked);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ui.prototype, "drawSensor", {
             get: function () {
                 return (this.sensorCheck.checked);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ui.prototype, "plotType", {
             get: function () {
                 return this.plotSelect.selectedIndex;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ui.prototype, "viscosity", {
             get: function () {
                 return Number(this.viscSlider.value);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(ui.prototype, "contrast", {
             get: function () {
                 return Number(this.contrastSlider.value);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         ui.prototype.setEvents = function () {
@@ -1356,23 +1366,6 @@ define("ui", ["require", "exports", "barrier", "global"], function (require, exp
                 if (tracerX[t] > xdim - 1) {
                     tracerX[t] = 0;
                     tracerY[t] = Math.random() * ydim;
-                }
-            }
-        };
-        // "Drag" the fluid in a direction determined by the mouse (or touch) motion:
-        // (The drag affects a "circle", 5 px in diameter, centered on the given coordinates.)
-        ui.prototype.push = function (pushX, pushY, pushUX, pushUY) {
-            // First make sure we're not too close to edge:
-            var margin = 3;
-            if ((pushX > margin) && (pushX < this.xdim - 1 - margin) && (pushY > margin) && (pushY < this.ydim - 1 - margin)) {
-                for (var dx = -1; dx <= 1; dx++) {
-                    this.CFD.setEquil(pushX + dx, pushY + 2, pushUX, pushUY);
-                    this.CFD.setEquil(pushX + dx, pushY - 2, pushUX, pushUY);
-                }
-                for (var dx = -2; dx <= 2; dx++) {
-                    for (var dy = -1; dy <= 1; dy++) {
-                        this.CFD.setEquil(pushX + dx, pushY + dy, pushUX, pushUY);
-                    }
                 }
             }
         };
@@ -1621,6 +1614,7 @@ define("ui", ["require", "exports", "barrier", "global"], function (require, exp
 define("graphics", ["require", "exports", "global"], function (require, exports, global_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.graphics = void 0;
     var graphics = /** @class */ (function () {
         function graphics(html, cfd, opts) {
             this.html = html;
@@ -1632,6 +1626,7 @@ define("graphics", ["require", "exports", "global"], function (require, exports,
             this.pars = html;
             this.image = html.image;
             this.curl = new Array(xdim * ydim);
+            // initFluid() 
             for (var y = 0; y < ydim; y++) {
                 for (var x = 0; x < xdim; x++) {
                     this.curl[x + y * xdim] = 0.0;
@@ -1644,7 +1639,7 @@ define("graphics", ["require", "exports", "global"], function (require, exports,
                 var _this = this;
                 return function () { return _this.paintCanvas(); };
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         graphics.prototype.initGraphicsColors = function () {
@@ -1685,12 +1680,12 @@ define("graphics", ["require", "exports", "global"], function (require, exports,
                 redList[c] = r;
                 greenList[c] = g;
                 blueList[c] = b;
-                hexColorList[c] = global_3.rgbToHex(r, g, b);
+                hexColorList[c] = (0, global_3.rgbToHex)(r, g, b);
             }
             redList[nColors + 1] = 0;
             greenList[nColors + 1] = 0;
             blueList[nColors + 1] = 0; // barriers are black
-            hexColorList[nColors + 1] = global_3.rgbToHex(0, 0, 0);
+            hexColorList[nColors + 1] = (0, global_3.rgbToHex)(0, 0, 0);
             this.redList = redList;
             this.greenList = greenList;
             this.blueList = blueList;
@@ -1975,6 +1970,7 @@ define("graphics", ["require", "exports", "global"], function (require, exports,
 define("app", ["require", "exports", "CFD", "graphics", "options", "ui"], function (require, exports, CFD_1, graphics_1, options_2, ui_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.app = void 0;
     var app = /** @class */ (function () {
         function app(opts, html) {
             if (opts === void 0) { opts = new options_2.options(); }
@@ -1984,8 +1980,8 @@ define("app", ["require", "exports", "CFD", "graphics", "options", "ui"], functi
             // coordinates of "sensor" to measure local fluid properties	
             opts.sensorX = html.xdim / 2;
             opts.sensorY = html.ydim / 2;
-            options_2.init_options(opts);
-            this.engine = new CFD_1.CFD(html.xdim, html.ydim, html, opts);
+            (0, options_2.init_options)(opts);
+            this.engine = new CFD_1.CFD(html.xdim, html.ydim, html, opts, html);
             this.graphics = new graphics_1.graphics(html, this.engine, opts);
             html.connectEngine(this.engine);
             html.connectGraphicsDevice(this.graphics);

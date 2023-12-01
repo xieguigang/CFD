@@ -66,17 +66,47 @@ declare module "options" {
         sensorY?: number, tracerX?: number[], tracerY?: number[], transBlackArraySize?: number, transBlackArray?: string[]);
     }
     export interface uiAdapter {
+        get xdim(): number;
+        get ydim(): number;
+        get contrast(): number;
+        get pxPerSquare(): number;
+        get viscosity(): number;
+        get speed(): number;
+        get plotType(): number;
+        get steps(): number;
+        /**
+         * tracerCheck.checked
+        */
+        get drawTracers(): boolean;
+        get drawFlowlines(): boolean;
+        get drawForceArrow(): boolean;
+        get drawSensor(): boolean;
+        get requestFrame(): boolean;
+        get dragFluid(): boolean;
+        startStop(): void;
+        canvasToGrid(x: number, y: number): {
+            x: number;
+            y: number;
+        };
+    }
+    export interface Idebugger {
+        writeData(): void;
+        moveTracers(): void;
+        dataAreaWriteLine(s: string): void;
+        setSpeedReadout(s: string): void;
+        startOrStopData(): void;
     }
     export function init_options(opts: options): void;
 }
 declare module "CFD" {
     import { IrequestPaintCanvas } from "global";
-    import { options, uiAdapter } from "options";
+    import { Idebugger, options, uiAdapter } from "options";
     export class CFD {
         xdim: number;
         ydim: number;
         private pars;
         private opts;
+        private debug;
         n0: number[];
         nN: number[];
         nS: number[];
@@ -95,10 +125,11 @@ declare module "CFD" {
          * will be true when running
         */
         running: boolean;
-        constructor(xdim: number, ydim: number, pars: uiAdapter, opts: options);
+        constructor(xdim: number, ydim: number, pars: uiAdapter, opts: options, debug: Idebugger);
         setupGraphicsDevice(gr: IrequestPaintCanvas): void;
         private init;
         initFluid(): void;
+        push(pushX: number, pushY: number, pushUX: number, pushUY: number): void;
         /**
          * Set the fluid variables at the boundaries,
          * according to the current slider value
@@ -129,11 +160,11 @@ declare module "barrier" {
 declare module "ui" {
     import { CFD } from "CFD";
     import { graphics } from "graphics";
-    import { options, uiAdapter } from "options";
+    import { Idebugger, options, uiAdapter } from "options";
     /**
      * this html user interface handler
     */
-    export class ui implements uiAdapter {
+    export class ui implements uiAdapter, Idebugger {
         private opts;
         readonly canvas: HTMLCanvasElement;
         readonly context: CanvasRenderingContext2D;
@@ -169,6 +200,10 @@ declare module "ui" {
         get xdim(): number;
         get ydim(): number;
         constructor(opts: options, canvas_id?: string, speedSlider?: string, stepsSlider?: string, startButton?: string, speedValue?: string, viscSlider?: string, viscValue?: string, mouseSelect?: string, plotSelect?: string, contrastSlider?: string, pixelCheck?: string, tracerCheck?: string, flowlineCheck?: string, forceCheck?: string, sensorCheck?: string, dataCheck?: string, rafCheck?: string, speedReadout?: string, dataSection?: string, dataArea?: string, dataButton?: string, sizeSelect?: string, barrierSelect?: string, periodButton?: string);
+        get dragFluid(): boolean;
+        get requestFrame(): boolean;
+        setSpeedReadout(s: string): void;
+        dataAreaWriteLine(s: string): void;
         connectEngine(CFD: CFD): void;
         connectGraphicsDevice(g: graphics): void;
         get steps(): number;
@@ -182,7 +217,6 @@ declare module "ui" {
         get contrast(): number;
         private setEvents;
         moveTracers(): void;
-        push(pushX: number, pushY: number, pushUX: number, pushUY: number): void;
         /**
          * Functions to handle mouse/touch interaction
         */
@@ -190,7 +224,7 @@ declare module "ui" {
         mouseMove(e: any): void;
         mouseUp(e: any): void;
         mousePressDrag(e: any): void;
-        pageToCanvas(pageX: any, pageY: any): {
+        pageToCanvas(pageX: number, pageY: number): {
             x: number;
             y: number;
         };
@@ -198,8 +232,8 @@ declare module "ui" {
             x: number;
             y: number;
         };
-        addBarrier(x: any, y: any): void;
-        removeBarrier(x: any, y: any): void;
+        addBarrier(x: number, y: number): void;
+        removeBarrier(x: number, y: number): void;
         clearBarriers(): void;
         startStop(): void;
         /**
