@@ -23,6 +23,7 @@ Partial Class FormMain
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormMain))
         Timer1 = New Timer(components)
         StatusStrip1 = New StatusStrip()
         ToolStripStatusLabel1 = New ToolStripStatusLabel()
@@ -75,6 +76,7 @@ Partial Class FormMain
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(800, 450)
         Controls.Add(StatusStrip1)
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
         Name = "FormMain"
         Text = "Computational Fluid Dynamics"
         StatusStrip1.ResumeLayout(False)

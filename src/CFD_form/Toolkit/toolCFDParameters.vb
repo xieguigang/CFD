@@ -27,4 +27,8 @@ Public Class toolCFDParameters
 
         e.ChangedItem.Select()
     End Sub
+
+    Private Sub toolCFDParameters_Load(sender As Object, e As EventArgs) Handles Me.Load
+        TabText = "CFD Parameters"
+    End Sub
 End Class

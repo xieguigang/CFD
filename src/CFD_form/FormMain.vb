@@ -21,6 +21,7 @@ Public Class FormMain
         Me.Controls.Add(dockPanel)
 
         dockPanel.Dock = DockStyle.Fill
+        dockPanel.ShowDocumentIcon = True
 
         vsToolStripExtender1.DefaultRenderer = _toolStripProfessionalRenderer
 
