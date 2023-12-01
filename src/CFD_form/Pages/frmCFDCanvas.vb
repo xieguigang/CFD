@@ -16,6 +16,7 @@ Public Class frmCFDCanvas
     Dim colors As SolidBrush()
     Dim offset As New DoubleRange(0, 255)
     Dim drawLine As Boolean = False
+    Dim toolkit As New toolCFDParameters
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Call CFD.advance()
