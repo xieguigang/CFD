@@ -33,6 +33,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="RibbonMarkup.ribbon" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="RibbonMarkup.ribbon" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Import Include="System.Data" />
     <Import Include="System.Drawing" />
     <Import Include="System.Windows.Forms" />
@@ -49,6 +57,12 @@
     <ProjectReference Include="..\..\..\GCModeller\src\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
     <ProjectReference Include="..\..\..\GCModeller\src\runtime\sciBASIC#\mime\text%html\html_netcore5.vbproj" />
     <ProjectReference Include="..\CFD\CFD.vbproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="WindowsRibbon">
+      <HintPath>Ribbon\WindowsRibbon.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

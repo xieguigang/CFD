@@ -41,7 +41,7 @@ Partial Class Form1
         PictureBox1.Dock = DockStyle.Fill
         PictureBox1.Location = New Point(0, 0)
         PictureBox1.Name = "PictureBox1"
-        PictureBox1.Size = New Size(530, 450)
+        PictureBox1.Size = New Size(530, 300)
         PictureBox1.TabIndex = 0
         PictureBox1.TabStop = False
         ' 
@@ -52,8 +52,7 @@ Partial Class Form1
         ' 
         ' SplitContainer1
         ' 
-        SplitContainer1.Dock = DockStyle.Fill
-        SplitContainer1.Location = New Point(0, 0)
+        SplitContainer1.Location = New Point(0, 150)
         SplitContainer1.Name = "SplitContainer1"
         ' 
         ' SplitContainer1.Panel1
@@ -63,7 +62,7 @@ Partial Class Form1
         ' SplitContainer1.Panel2
         ' 
         SplitContainer1.Panel2.Controls.Add(PictureBox1)
-        SplitContainer1.Size = New Size(800, 450)
+        SplitContainer1.Size = New Size(800, 300)
         SplitContainer1.SplitterDistance = 266
         SplitContainer1.TabIndex = 1
         ' 
@@ -72,7 +71,7 @@ Partial Class Form1
         PropertyGrid1.Dock = DockStyle.Fill
         PropertyGrid1.Location = New Point(0, 0)
         PropertyGrid1.Name = "PropertyGrid1"
-        PropertyGrid1.Size = New Size(266, 450)
+        PropertyGrid1.Size = New Size(266, 300)
         PropertyGrid1.TabIndex = 0
         ' 
         ' Form1
