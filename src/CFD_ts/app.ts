@@ -80,6 +80,18 @@ class app {
         this.engine.initFluid();
     }
 
+    public showPeriod() {
+        this.html.showPeriod();
+    }
+
+    public showBarrierLocations() {
+        this.html.showBarrierLocations();
+    }
+
+    public debug() {
+        this.html.debug();
+    }
+
     /**
      * Resize the grid
     */

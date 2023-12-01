@@ -1063,6 +1063,15 @@ var app = /** @class */ (function () {
     app.prototype.initFluid = function () {
         this.engine.initFluid();
     };
+    app.prototype.showPeriod = function () {
+        this.html.showPeriod();
+    };
+    app.prototype.showBarrierLocations = function () {
+        this.html.showBarrierLocations();
+    };
+    app.prototype.debug = function () {
+        this.html.debug();
+    };
     /**
      * Resize the grid
     */

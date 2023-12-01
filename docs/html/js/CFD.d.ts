@@ -73,6 +73,9 @@ declare class app {
     adjustViscosity(): void;
     simulate(): void;
     initFluid(): void;
+    showPeriod(): void;
+    showBarrierLocations(): void;
+    debug(): void;
     /**
      * Resize the grid
     */
