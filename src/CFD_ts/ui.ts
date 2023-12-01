@@ -1,6 +1,7 @@
 import { barrierList } from "./barrier";
 import { CFD } from "./CFD";
-import { mobile } from "./global";
+import { IrequestPaintCanvas, mobile } from "./global";
+import { graphics } from "./graphics";
 import { four9ths, one36th, one9th, options, uiAdapter } from "./options";
 
 /**
@@ -34,6 +35,7 @@ export class ui implements uiAdapter {
     public readonly dataSection: HTMLElement;
     public readonly dataArea: HTMLElement;
     public readonly dataButton: HTMLInputElement;
+    public readonly periodButton: HTMLInputElement;
 
     public readonly sizeSelect: HTMLSelectElement;
     public readonly barrierSelect: HTMLSelectElement;
@@ -41,6 +43,7 @@ export class ui implements uiAdapter {
     private draggingSensor = false;
     private mouseIsDown = false;
     private CFD: CFD;
+    private paintCanvas: IrequestPaintCanvas;
 
     public get pxPerSquare(): number {
         var i = this.sizeSelect.selectedIndex;
@@ -82,7 +85,8 @@ export class ui implements uiAdapter {
         dataArea: string = "dataArea",
         dataButton: string = "dataButton",
         sizeSelect: string = "sizeSelect",
-        barrierSelect: string = 'barrierSelect') {
+        barrierSelect: string = 'barrierSelect',
+        periodButton: string = 'periodButton') {
 
         const canvas: HTMLCanvasElement = <any>document.getElementById(canvas_id);
         const context: CanvasRenderingContext2D = <any>canvas.getContext('2d');
@@ -119,6 +123,7 @@ export class ui implements uiAdapter {
         this.dataSection = <any>document.getElementById(dataSection);
         this.dataArea = <any>document.getElementById(dataArea);
         this.dataButton = <any>document.getElementById(dataButton);
+        this.periodButton = <any>document.getElementById(periodButton);
 
         this.sizeSelect = <any>document.getElementById(sizeSelect);
         this.sizeSelect.selectedIndex = 5;
@@ -141,6 +146,10 @@ export class ui implements uiAdapter {
 
     public connectEngine(CFD: CFD) {
         this.CFD = CFD;
+    }
+
+    public connectGraphicsDevice(g: graphics) {
+        this.paintCanvas = g.requestPaintCanvas;
     }
 
     public get speed(): number {
@@ -280,7 +289,7 @@ export class ui implements uiAdapter {
             var gridLoc = this.canvasToGrid(canvasLoc.x, canvasLoc.y);
             this.opts.sensorX = gridLoc.x;
             this.opts.sensorY = gridLoc.y;
-            paintCanvas();
+            this.paintCanvas();
             return;
         }
         if (this.mouseSelect.selectedIndex == 2) {
@@ -291,7 +300,7 @@ export class ui implements uiAdapter {
         var gridLoc = this.canvasToGrid(canvasLoc.x, canvasLoc.y);
         if (this.mouseSelect.selectedIndex == 0) {
             this.addBarrier(gridLoc.x, gridLoc.y);
-            paintCanvas();
+            this.paintCanvas();
         } else {
             this.removeBarrier(gridLoc.x, gridLoc.y);
         }
@@ -329,7 +338,7 @@ export class ui implements uiAdapter {
 
         if (barrier[x + y * xdim]) {
             barrier[x + y * xdim] = false;
-            paintCanvas();
+            this.paintCanvas();
         }
     }
 
@@ -345,7 +354,7 @@ export class ui implements uiAdapter {
             }
         }
 
-        paintCanvas();
+        this.paintCanvas();
     }
 
     // Function to start or pause the simulation:
@@ -485,7 +494,7 @@ export class ui implements uiAdapter {
             var y = barrierList[index - 1].locations[siteIndex + 1] - yAverage + Math.round(ydim / 2);
             this.addBarrier(x, y);
         }
-        paintCanvas();
+        this.paintCanvas();
         this.barrierSelect.selectedIndex = 0;	// A choice on this menu is a one-time action, not an ongoing setting
     }
 

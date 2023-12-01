@@ -1,5 +1,5 @@
 import { CFD } from "./CFD";
-import { rgbToHex } from "./global";
+import { IrequestPaintCanvas, rgbToHex } from "./global";
 import { options, uiAdapter } from "./options";
 import { ui } from "./ui";
 
@@ -15,6 +15,10 @@ export class graphics {
     public hexColorList: string[];
 
     public curl: number[];
+
+    public get requestPaintCanvas(): IrequestPaintCanvas {
+        return () => this.paintCanvas();
+    }
 
     constructor(private html: ui, private cfd: CFD, private opts: options) {
         const ydim = html.ydim;
