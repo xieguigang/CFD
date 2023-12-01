@@ -1,4 +1,5 @@
-﻿Imports CFD
+﻿Imports System.Runtime.CompilerServices
+Imports CFD
 Imports CFD_form.RibbonLib.Controls
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
@@ -8,7 +9,7 @@ Imports RibbonLib
 Public Class Form1
 
     Dim CFD As New FluidDynamics(300, 200)
-    Dim reader As New DataAdapter(CFD)
+    Dim reader As New CFDHelper(CFD)
     Dim colors As SolidBrush()
     Dim offset As New DoubleRange(0, 255)
     Dim ribbon1 As New Ribbon
@@ -30,11 +31,19 @@ Public Class Form1
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
-        CFD.advance()
+        Call CFD.advance()
 
+        Select Case reader.DrawFrameData
+            Case FrameTypes.Speed : Call Render(frame:=reader.GetSpeed)
+            Case FrameTypes.Density : Call Render(frame:=reader.GetDensity)
+            Case FrameTypes.XVel : Call Render(frame:=reader.GetXVel)
+            Case FrameTypes.YVel : Call Render(frame:=reader.GetYVel)
+        End Select
+    End Sub
+
+    Private Sub Render(frame As Double()())
         Dim bitmap As New Bitmap(CFD.xdim, CFD.ydim)
         Dim g As Graphics = Graphics.FromImage(bitmap)
-        Dim frame As Double()() = reader.GetSpeed
         Dim range As DoubleRange = frame.AsParallel.Select(Function(a) {a.Min, a.Max}).IteratesALL.Range
 
         For i As Integer = 0 To frame.Length - 1
@@ -49,16 +58,49 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-
-        colors = GetColors(ScalerPalette.Jet.Description, 256).Select(Function(c) New SolidBrush(c)).ToArray
+        UpdatePalette()
         CFD.reset()
         PropertyGrid1.SelectedObject = reader
         PropertyGrid1.Refresh()
+
+        AddHandler ribbonItems.ButtonReset.ExecuteEvent, Sub() Call resetCFD()
+    End Sub
+
+    Private Sub resetCFD()
+        Call CFD.reset()
+    End Sub
+
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Private Sub UpdatePalette()
+        offset = New DoubleRange(0, reader.ColorLevels)
+        colors = GetColors(reader.Colors.Description, reader.ColorLevels + 1) _
+            .Select(Function(c) New SolidBrush(c)) _
+            .ToArray
     End Sub
 
     Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
-        Dim xy As Point = PictureBox1.PointToClient(Cursor.Position)
+        Call reader.SetBarrierPoint(GetCFDPosition, 2)
+    End Sub
 
+    Private Function GetCFDPosition() As Point
+        Dim xy As Point = PictureBox1.PointToClient(Cursor.Position)
+        Dim sizeView As Size = PictureBox1.Size
+        Dim ratio As New SizeF(sizeView.Width / CFD.xdim, sizeView.Height / CFD.ydim)
+
+        Return New Point(xy.X / ratio.Width, xy.Y / ratio.Height)
+    End Function
+
+    Private Sub PictureBox1_MouseMove(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseMove
+        Dim xy = GetCFDPosition()
+        ToolStripStatusLabel2.Text = $"[{xy.X},{xy.Y}]"
+    End Sub
+
+    Private Sub PropertyGrid1_PropertyValueChanged(s As Object, e As PropertyValueChangedEventArgs) Handles PropertyGrid1.PropertyValueChanged
+        Select Case e.ChangedItem.Label
+            Case NameOf(CFDHelper.DrawFrameData)
+                ' do nothing
+            Case NameOf(CFDHelper.Colors), NameOf(CFDHelper.ColorLevels)
+                Call UpdatePalette()
+        End Select
     End Sub
 End Class

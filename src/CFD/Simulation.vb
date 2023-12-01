@@ -24,7 +24,7 @@ End Class
 
 Public Class DataAdapter
 
-    ReadOnly CFD As FluidDynamics
+    Protected ReadOnly CFD As FluidDynamics
 
     Public Property velocity As Double
         Get
@@ -52,4 +52,27 @@ Public Class DataAdapter
         Return CFD.speed2
     End Function
 
+    Public Function GetDensity() As Double()()
+        Return CFD.rho
+    End Function
+
+    Public Function GetXVel() As Double()()
+        Return CFD.xvel
+    End Function
+
+    Public Function GetYVel() As Double()()
+        Return CFD.yvel
+    End Function
+
+    Public Function GetBarrier() As Boolean()()
+        Return CFD.barrier
+    End Function
+
 End Class
+
+Public Enum FrameTypes
+    Speed
+    Density
+    XVel
+    YVel
+End Enum
