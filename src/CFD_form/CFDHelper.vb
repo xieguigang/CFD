@@ -4,7 +4,7 @@ Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Public Class CFDHelper : Inherits DataAdapter
 
     Public Property DrawFrameData As FrameTypes
-    Public Property Colors As ScalerPalette
+    Public Property Colors As ScalerPalette = ScalerPalette.FlexImaging
     Public Property ColorLevels As Integer = 255
 
     Public Property TracerSpeedLevel As Double = 25

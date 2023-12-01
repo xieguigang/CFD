@@ -84,7 +84,9 @@ Public Class FluidDynamics : Inherits Simulation
     ''' </summary>
     Friend barrier As Boolean()() = RectangularArray.Matrix(Of Boolean)(xdim, ydim)
 
-    Friend tracer As PointF()
+    Dim tracer As PointF()
+    Dim tracer_dy As Double
+    Dim tracer_y As Double
 
     Sub New(width As Integer, height As Integer, Optional nTracers As Integer = 900)
         Call MyBase.New(width, height)
@@ -96,6 +98,7 @@ Public Class FluidDynamics : Inherits Simulation
         Dim netY = dy / 2
 
         tracer = New PointF(nTracers - 1) {}
+        tracer_dy = dy
 
         For i As Integer = 0 To nTracers - 1
             tracer(i) = New PointF(netX, netY)
@@ -123,7 +126,12 @@ Public Class FluidDynamics : Inherits Simulation
             tracer(t) = New PointF(tracer(t).X + xvel(rx)(ry) * factor, tracer(t).Y + yvel(rx)(ry) * factor)
 
             If tracer(t).X > xdim - 1 Then
-                tracer(t) = New PointF(0, tracer(t).Y)
+                tracer(t) = New PointF(0, tracer_y)
+                tracer_y += tracer_dy
+
+                If tracer_y > ydim Then
+                    tracer_y = 0
+                End If
             End If
         Next
 
