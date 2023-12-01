@@ -1,4 +1,4 @@
-import { mobile, rgbToHex } from './global';
+import { IrequestPaintCanvas, mobile, rgbToHex } from './global';
 import { four9ths, one36th, one9th, options, uiAdapter } from './options';
 
 export class CFD {
@@ -19,6 +19,8 @@ export class CFD {
     uy: number[];
 
     barrier: boolean[];		// boolean array of barrier locations
+
+    paintCanvas: IrequestPaintCanvas;
 
     /**
      * will be true when running
@@ -44,6 +46,10 @@ export class CFD {
         this.barrier = new Array(xdim * ydim);		// boolean array of barrier locations
 
         this.init();
+    }
+
+    public setupGraphicsDevice(gr: IrequestPaintCanvas) {
+        this.paintCanvas = gr;
     }
 
     private init(): void {
@@ -80,7 +86,26 @@ export class CFD {
             }
         }
 
-        paintCanvas();
+       this. paintCanvas();
+    }
+
+    /**
+     * Set the fluid variables at the boundaries, 
+     * according to the current slider value 
+    */
+    setBoundaries() {
+        const u0 = this.pars.speed;
+        const xdim = this.xdim;
+        const ydim = this.ydim;
+
+        for (var x = 0; x < xdim; x++) {
+            this.setEquil(x, 0, u0, 0, 1);
+            this.setEquil(x, ydim - 1, u0, 0, 1);
+        }
+        for (var y = 1; y < ydim - 1; y++) {
+            this.setEquil(0, y, u0, 0, 1);
+            this.setEquil(xdim - 1, y, u0, 0, 1);
+        }
     }
 
     // Set all densities in a cell to their equilibrium values for a given velocity and density:
@@ -111,84 +136,6 @@ export class CFD {
         this.rho[i] = newrho;
         this.ux[i] = newux;
         this.uy[i] = newuy;
-    }
-
-    /**
-     * Resize the grid
-    */
-    public resize() {
-        // First up-sample the macroscopic variables into temporary arrays at max resolution:
-        var tempRho = new Array(canvas.width * canvas.height);
-        var tempUx = new Array(canvas.width * canvas.height);
-        var tempUy = new Array(canvas.width * canvas.height);
-        var tempBarrier = new Array(canvas.width * canvas.height);
-        for (var y = 0; y < canvas.height; y++) {
-            for (var x = 0; x < canvas.width; x++) {
-                var tempIndex = x + y * canvas.width;
-                var xOld = Math.floor(x / pxPerSquare);
-                var yOld = Math.floor(y / pxPerSquare);
-                var oldIndex = xOld + yOld * xdim;
-                tempRho[tempIndex] = rho[oldIndex];
-                tempUx[tempIndex] = ux[oldIndex];
-                tempUy[tempIndex] = uy[oldIndex];
-                tempBarrier[tempIndex] = barrier[oldIndex];
-            }
-        }
-        // Get new size from GUI selector:
-        var pxPerSquare = this.pars.pxPerSquare;
-        var oldPxPerSquare = pxPerSquare;
-        pxPerSquare = Number(sizeSelect.options[sizeSelect.selectedIndex].value);
-        var growRatio = oldPxPerSquare / pxPerSquare;
-        xdim = canvas.width / pxPerSquare;
-        ydim = canvas.height / pxPerSquare;
-        // Create new arrays at the desired resolution:
-        n0 = new Array(xdim * ydim);
-        nN = new Array(xdim * ydim);
-        nS = new Array(xdim * ydim);
-        nE = new Array(xdim * ydim);
-        nW = new Array(xdim * ydim);
-        nNE = new Array(xdim * ydim);
-        nSE = new Array(xdim * ydim);
-        nNW = new Array(xdim * ydim);
-        nSW = new Array(xdim * ydim);
-        rho = new Array(xdim * ydim);
-        ux = new Array(xdim * ydim);
-        uy = new Array(xdim * ydim);
-        curl = new Array(xdim * ydim);
-        barrier = new Array(xdim * ydim);
-        // Down-sample the temporary arrays into the new arrays:
-        for (var yNew = 0; yNew < ydim; yNew++) {
-            for (var xNew = 0; xNew < xdim; xNew++) {
-                var rhoTotal = 0;
-                var uxTotal = 0;
-                var uyTotal = 0;
-                var barrierTotal = 0;
-                for (var y = yNew * pxPerSquare; y < (yNew + 1) * pxPerSquare; y++) {
-                    for (var x = xNew * pxPerSquare; x < (xNew + 1) * pxPerSquare; x++) {
-                        var index = x + y * canvas.width;
-                        rhoTotal += tempRho[index];
-                        uxTotal += tempUx[index];
-                        uyTotal += tempUy[index];
-                        if (tempBarrier[index]) barrierTotal++;
-                    }
-                }
-                setEquil(xNew, yNew, uxTotal / (pxPerSquare * pxPerSquare), uyTotal / (pxPerSquare * pxPerSquare), rhoTotal / (pxPerSquare * pxPerSquare))
-                curl[xNew + yNew * xdim] = 0.0;
-                barrier[xNew + yNew * xdim] = (barrierTotal >= pxPerSquare * pxPerSquare / 2);
-            }
-        }
-        setBoundaries();
-        if (tracerCheck.checked) {
-            for (var t = 0; t < nTracers; t++) {
-                tracerX[t] *= growRatio;
-                tracerY[t] *= growRatio;
-            }
-        }
-        this.opts.sensorX = Math.round(this.opts.sensorX * growRatio);
-        this.opts.sensorY = Math.round(this.opts.sensorY * growRatio);
-        //computeCurl();
-        paintCanvas();
-        resetTimer();
     }
 
     /**
@@ -387,7 +334,7 @@ export class CFD {
         }
         if (this.running) {
             if (rafCheck.checked) {
-                requestAnimFrame(function () { simulate(); });	// let browser schedule next frame
+                requestAnimFrame(() => this.simulate());	// let browser schedule next frame
             } else {
                 window.setTimeout(simulate, 1);	// schedule next frame asap (nominally 1 ms but always more)
             }

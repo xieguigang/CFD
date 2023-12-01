@@ -194,22 +194,6 @@ export class ui implements uiAdapter {
         document.body.addEventListener('touchend', (e) => this.mouseUp(e), false);
     }
 
-    // Set the fluid variables at the boundaries, according to the current slider value:
-    setBoundaries() {
-        const u0 = Number(this.speedSlider.value);
-        const xdim = this.xdim;
-        const ydim = this.ydim;
-
-        for (var x = 0; x < xdim; x++) {
-            this.CFD.setEquil(x, 0, u0, 0, 1);
-            this.CFD.setEquil(x, ydim - 1, u0, 0, 1);
-        }
-        for (var y = 1; y < ydim - 1; y++) {
-            this.CFD.setEquil(0, y, u0, 0, 1);
-            this.CFD.setEquil(xdim - 1, y, u0, 0, 1);
-        }
-    }
-
     // Move the tracer particles:
     moveTracers() {
         const xdim = this.xdim;
@@ -370,7 +354,9 @@ export class ui implements uiAdapter {
         }
     }
 
-    // Reset the timer that handles performance evaluation:
+    /**
+     * Reset the timer that handles performance evaluation 
+    */
     resetTimer() {
         this.opts.stepCount = 0;
         this.opts.startTime = (new Date()).getTime();
