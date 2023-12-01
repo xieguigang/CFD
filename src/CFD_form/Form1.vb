@@ -101,6 +101,10 @@ Public Class Form1
         Dim xy = GetCFDPosition()
         Dim tooltip As New StringBuilder
 
+        If drawLine Then
+            Call reader.SetBarrierPoint(xy, 1)
+        End If
+
         ToolStripStatusLabel2.Text = $"[{xy.X},{xy.Y}]"
 
         Dim speed As Double = reader.GetSpeed(xy)
@@ -126,5 +130,17 @@ Public Class Form1
             Case NameOf(CFDHelper.Colors), NameOf(CFDHelper.ColorLevels)
                 Call UpdatePalette()
         End Select
+
+        e.ChangedItem.Select()
+    End Sub
+
+    Dim drawLine As Boolean = False
+
+    Private Sub PictureBox1_MouseUp(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseUp
+        drawLine = False
+    End Sub
+
+    Private Sub PictureBox1_MouseDown(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseDown
+        drawLine = True
     End Sub
 End Class
