@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <StartupObject>Sub Main</StartupObject>
+    <TargetFramework>net6.0-windows10.0.17763.0</TargetFramework>
+    <StartupObject>CFD_form.My.MyApplication</StartupObject>
     <UseWindowsForms>true</UseWindowsForms>
     <MyType>WindowsForms</MyType>
     <Platforms>AnyCPU;x64</Platforms>
@@ -60,6 +60,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="WindowsDocking">
+      <HintPath>Ribbon\WindowsDocking.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsDocking.ThemeVS2015">
+      <HintPath>Ribbon\WindowsDocking.ThemeVS2015.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsRibbon">
       <HintPath>Ribbon\WindowsRibbon.dll</HintPath>
     </Reference>

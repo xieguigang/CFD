@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class Form1
+Partial Class FormMain
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -23,8 +23,10 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormMain))
         PictureBox1 = New PictureBox()
+        ContextMenuStrip1 = New ContextMenuStrip(components)
+        MarkPointToolStripMenuItem = New ToolStripMenuItem()
         Timer1 = New Timer(components)
         SplitContainer1 = New SplitContainer()
         PropertyGrid1 = New PropertyGrid()
@@ -33,15 +35,13 @@ Partial Class Form1
         ToolStripStatusLabel2 = New ToolStripStatusLabel()
         ToolStripProgressBar1 = New ToolStripProgressBar()
         ToolTip1 = New ToolTip(components)
-        ContextMenuStrip1 = New ContextMenuStrip(components)
-        MarkPointToolStripMenuItem = New ToolStripMenuItem()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
+        ContextMenuStrip1.SuspendLayout()
         CType(SplitContainer1, ComponentModel.ISupportInitialize).BeginInit()
         SplitContainer1.Panel1.SuspendLayout()
         SplitContainer1.Panel2.SuspendLayout()
         SplitContainer1.SuspendLayout()
         StatusStrip1.SuspendLayout()
-        ContextMenuStrip1.SuspendLayout()
         SuspendLayout()
         ' 
         ' PictureBox1
@@ -49,12 +49,24 @@ Partial Class Form1
         PictureBox1.BackgroundImageLayout = ImageLayout.Stretch
         PictureBox1.ContextMenuStrip = ContextMenuStrip1
         PictureBox1.Cursor = Cursors.Cross
-        PictureBox1.Dock = DockStyle.Fill
         PictureBox1.Location = New Point(0, 0)
         PictureBox1.Name = "PictureBox1"
         PictureBox1.Size = New Size(530, 428)
         PictureBox1.TabIndex = 0
         PictureBox1.TabStop = False
+        ' 
+        ' ContextMenuStrip1
+        ' 
+        ContextMenuStrip1.Items.AddRange(New ToolStripItem() {MarkPointToolStripMenuItem})
+        ContextMenuStrip1.Name = "ContextMenuStrip1"
+        ContextMenuStrip1.Size = New Size(133, 26)
+        ' 
+        ' MarkPointToolStripMenuItem
+        ' 
+        MarkPointToolStripMenuItem.Image = CType(resources.GetObject("MarkPointToolStripMenuItem.Image"), Image)
+        MarkPointToolStripMenuItem.Name = "MarkPointToolStripMenuItem"
+        MarkPointToolStripMenuItem.Size = New Size(132, 22)
+        MarkPointToolStripMenuItem.Text = "Mark Point"
         ' 
         ' Timer1
         ' 
@@ -118,36 +130,23 @@ Partial Class Form1
         ToolTip1.ToolTipIcon = ToolTipIcon.Info
         ToolTip1.ToolTipTitle = "Point Information"
         ' 
-        ' ContextMenuStrip1
-        ' 
-        ContextMenuStrip1.Items.AddRange(New ToolStripItem() {MarkPointToolStripMenuItem})
-        ContextMenuStrip1.Name = "ContextMenuStrip1"
-        ContextMenuStrip1.Size = New Size(133, 26)
-        ' 
-        ' MarkPointToolStripMenuItem
-        ' 
-        MarkPointToolStripMenuItem.Image = CType(resources.GetObject("MarkPointToolStripMenuItem.Image"), Image)
-        MarkPointToolStripMenuItem.Name = "MarkPointToolStripMenuItem"
-        MarkPointToolStripMenuItem.Size = New Size(132, 22)
-        MarkPointToolStripMenuItem.Text = "Mark Point"
-        ' 
-        ' Form1
+        ' FormMain
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(800, 450)
         Controls.Add(SplitContainer1)
         Controls.Add(StatusStrip1)
-        Name = "Form1"
+        Name = "FormMain"
         Text = "Computational Fluid Dynamics"
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
+        ContextMenuStrip1.ResumeLayout(False)
         SplitContainer1.Panel1.ResumeLayout(False)
         SplitContainer1.Panel2.ResumeLayout(False)
         CType(SplitContainer1, ComponentModel.ISupportInitialize).EndInit()
         SplitContainer1.ResumeLayout(False)
         StatusStrip1.ResumeLayout(False)
         StatusStrip1.PerformLayout()
-        ContextMenuStrip1.ResumeLayout(False)
         ResumeLayout(False)
         PerformLayout()
     End Sub

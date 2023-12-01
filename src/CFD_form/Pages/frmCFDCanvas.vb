@@ -6,30 +6,16 @@ Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Linq
 Imports RibbonLib
+Imports WeifenLuo.WinFormsUI.Docking
 
-Public Class Form1
+
+Public Class frmCFDCanvas
 
     Dim CFD As New FluidDynamics(300, 200)
     Dim reader As New CFDHelper(CFD)
     Dim colors As SolidBrush()
     Dim offset As New DoubleRange(0, 255)
-    Dim ribbon1 As New Ribbon
-    Dim ribbonItems As RibbonItems
-
-    Sub New()
-
-        ' 此调用是设计器所必需的。
-        InitializeComponent()
-
-        Me.Controls.Add(ribbon1)
-
-        ' 在 InitializeComponent() 调用之后添加任何初始化。
-        ribbon1.ResourceName = $"{App.AssemblyName}.RibbonMarkup.ribbon"
-        ribbon1.Dock = DockStyle.Top
-        ribbon1.Height = 100
-        ribbon1.SendToBack()
-        ribbonItems = New RibbonItems(ribbon1)
-    End Sub
+    Dim drawLine As Boolean = False
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Call CFD.advance()
@@ -62,16 +48,6 @@ Public Class Form1
         PictureBox1.BackgroundImage = bitmap
     End Sub
 
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        UpdatePalette()
-        CFD.reset()
-        PropertyGrid1.SelectedObject = reader
-        PropertyGrid1.Refresh()
-
-        AddHandler ribbonItems.ButtonReset.ExecuteEvent, Sub() Call resetCFD()
-        AddHandler ribbonItems.ButtonClearBarrier.ExecuteEvent, Sub() Call CFD.clearBarrier()
-    End Sub
-
     Private Sub resetCFD()
         Call CFD.reset()
     End Sub
@@ -82,6 +58,14 @@ Public Class Form1
         colors = GetColors(reader.Colors.Description, reader.ColorLevels + 1) _
             .Select(Function(c) New SolidBrush(c)) _
             .ToArray
+    End Sub
+
+    Private Sub PictureBox1_MouseUp(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseUp
+        drawLine = False
+    End Sub
+
+    Private Sub PictureBox1_MouseDown(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseDown
+        drawLine = True
     End Sub
 
     Private Sub PictureBox1_MouseClick(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseClick
@@ -130,25 +114,11 @@ Public Class Form1
         ToolTip1.SetToolTip(PictureBox1, tooltip.ToString)
     End Sub
 
-    Private Sub PropertyGrid1_PropertyValueChanged(s As Object, e As PropertyValueChangedEventArgs) Handles PropertyGrid1.PropertyValueChanged
-        Select Case e.ChangedItem.Label
-            Case NameOf(CFDHelper.DrawFrameData)
-                ' do nothing
-            Case NameOf(CFDHelper.Colors), NameOf(CFDHelper.ColorLevels)
-                Call UpdatePalette()
-        End Select
+    Private Sub frmCFDCanvas_Load(sender As Object, e As EventArgs) Handles Me.Load
+        UpdatePalette()
+        CFD.reset()
 
-        e.ChangedItem.Select()
+        AddHandler RibbonItems.ButtonReset.ExecuteEvent, Sub() Call resetCFD()
+        AddHandler RibbonItems.ButtonClearBarrier.ExecuteEvent, Sub() Call CFD.clearBarrier()
     End Sub
-
-    Dim drawLine As Boolean = False
-
-    Private Sub PictureBox1_MouseUp(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseUp
-        drawLine = False
-    End Sub
-
-    Private Sub PictureBox1_MouseDown(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseDown
-        drawLine = True
-    End Sub
-
 End Class
