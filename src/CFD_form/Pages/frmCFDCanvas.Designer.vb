@@ -25,10 +25,10 @@ Partial Class frmCFDCanvas
         components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmCFDCanvas))
         PictureBox1 = New PictureBox()
-        ToolTip1 = New ToolTip(components)
-        Timer1 = New Timer(components)
         ContextMenuStrip1 = New ContextMenuStrip(components)
         MarkPointToolStripMenuItem = New ToolStripMenuItem()
+        ToolTip1 = New ToolTip(components)
+        Timer1 = New Timer(components)
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         ContextMenuStrip1.SuspendLayout()
         SuspendLayout()
@@ -44,11 +44,6 @@ Partial Class frmCFDCanvas
         PictureBox1.TabIndex = 0
         PictureBox1.TabStop = False
         ' 
-        ' Timer1
-        ' 
-        Timer1.Enabled = True
-        Timer1.Interval = 50
-        ' 
         ' ContextMenuStrip1
         ' 
         ContextMenuStrip1.Items.AddRange(New ToolStripItem() {MarkPointToolStripMenuItem})
@@ -61,6 +56,11 @@ Partial Class frmCFDCanvas
         MarkPointToolStripMenuItem.Name = "MarkPointToolStripMenuItem"
         MarkPointToolStripMenuItem.Size = New Size(132, 22)
         MarkPointToolStripMenuItem.Text = "Mark Point"
+        ' 
+        ' Timer1
+        ' 
+        Timer1.Enabled = True
+        Timer1.Interval = 20
         ' 
         ' frmCFDCanvas
         ' 
