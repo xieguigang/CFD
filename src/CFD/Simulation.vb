@@ -4,12 +4,12 @@
     '                           - DIMENTIONS -         -----                  *
     ' *************************************************************************
     ' number of data points / pixels per dimention
-    Friend xdim As Integer = 1920
-    Friend ydim As Integer = 1080
+    Public ReadOnly Property xdim As Integer = 1920
+    Public ReadOnly Property ydim As Integer = 1080
 
     Public Overridable Sub setDimentions(width As Integer, height As Integer)
-        xdim = width
-        ydim = height
+        _xdim = width
+        _ydim = height
     End Sub
 
     ''' <summary>
@@ -19,5 +19,19 @@
     ''' </summary>
     Public MustOverride Sub reset()
     Public MustOverride Sub advance()
+
+End Class
+
+Public Class DataReader
+
+    ReadOnly CFD As FluidDynamics
+
+    Sub New(CFD As FluidDynamics)
+        Me.CFD = CFD
+    End Sub
+
+    Public Function GetSpeed() As Double()()
+        Return CFD.speed2
+    End Function
 
 End Class
