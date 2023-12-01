@@ -78,9 +78,10 @@ Public Class frmCFDCanvas
     Private Sub drawFlowlines(g As Graphics)
         Dim xdim = CFD.xdim
         Dim ydim = CFD.ydim
-        Dim len As Single = 10
-        Dim xLines = xdim / len
-        Dim yLines = ydim / len
+        Dim lenX As Single = 13
+        Dim lenY As Single = 8
+        Dim xLines = xdim / lenX
+        Dim yLines = ydim / lenY
 
         Dim ux = reader.GetXVel
         Dim uy = reader.GetYVel
@@ -88,8 +89,8 @@ Public Class frmCFDCanvas
 
         For yCount As Integer = 0 To yLines - 1
             For xCount As Integer = 0 To xLines - 1
-                Dim x = xCount * len
-                Dim y = yCount * len
+                Dim x = xCount * lenX
+                Dim y = yCount * lenY
                 Dim vx = ux(x)(y)
                 Dim vy = uy(x)(y)
                 Dim speed As Double = std.Sqrt(vx ^ 2 + vy ^ 2)
@@ -102,19 +103,19 @@ Public Class frmCFDCanvas
 
         For yCount As Integer = 0 To yLines - 1
             For xCount As Integer = 0 To xLines - 1
-                Dim x = xCount * len
-                Dim y = yCount * len
+                Dim x = xCount * lenX
+                Dim y = yCount * lenY
                 Dim vx = ux(x)(y)
                 Dim vy = uy(x)(y)
                 Dim speed As Double = std.Sqrt(vx ^ 2 + vy ^ 2)
 
                 If speed > 0.0001 Then
-                    Dim scale = 200 * speed
+                    Dim scale = 300 * speed
                     Dim p0 As New PointF(x - vx * scale, y + vy * scale)
                     Dim p1 As New PointF(x + vx * scale, y - vy * scale)
                     Dim offset As Integer = speedRange.ScaleMapping(speed, grayOffset)
                     Dim color As SolidBrush = grays(offset)
-                    Dim line As New Pen(color, 1)
+                    Dim line As New Pen(color, 0.85)
 
                     g.DrawLine(line, p0, p1)
                 End If
