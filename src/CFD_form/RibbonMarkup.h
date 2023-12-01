@@ -24,4 +24,4 @@
 #define cmdCommandPanel_TooltipTitle_RESID 60013
 #define cmdCommandPanel_TooltipDescription_RESID 60014
 #define InternalCmd2_LabelTitle_RESID 60015
-#define InternalCmd6_LabelTitle_RESID 60016
+#define InternalCmd4_LabelTitle_RESID 60016

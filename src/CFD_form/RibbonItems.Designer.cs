@@ -21,16 +21,14 @@ namespace RibbonLib.Controls
         {
             public const uint cmdTabPage = 3;
             public const uint cmdCommandGroup = 4;
-            public const uint cmdCommandPanel = 5;
             public const uint cmdButtonReset = 2;
         }
 
         // ContextPopup CommandName
 
         public Ribbon Ribbon { get; private set; }
-        public RibbonTabGroup TabPage { get; private set; }
-        public RibbonTab CommandGroup { get; private set; }
-        public RibbonGroup CommandPanel { get; private set; }
+        public RibbonTab TabPage { get; private set; }
+        public RibbonGroup CommandGroup { get; private set; }
         public RibbonButton ButtonReset { get; private set; }
 
         public RibbonItems(Ribbon ribbon)
@@ -38,9 +36,8 @@ namespace RibbonLib.Controls
             if (ribbon == null)
                 throw new ArgumentNullException(nameof(ribbon), "Parameter is null");
             this.Ribbon = ribbon;
-            TabPage = new RibbonTabGroup(ribbon, Cmd.cmdTabPage);
-            CommandGroup = new RibbonTab(ribbon, Cmd.cmdCommandGroup);
-            CommandPanel = new RibbonGroup(ribbon, Cmd.cmdCommandPanel);
+            TabPage = new RibbonTab(ribbon, Cmd.cmdTabPage);
+            CommandGroup = new RibbonGroup(ribbon, Cmd.cmdCommandGroup);
             ButtonReset = new RibbonButton(ribbon, Cmd.cmdButtonReset);
         }
 

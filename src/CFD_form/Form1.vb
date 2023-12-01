@@ -19,6 +19,8 @@ Public Class Form1
         ' 此调用是设计器所必需的。
         InitializeComponent()
 
+        Me.Controls.Add(ribbon1)
+
         ' 在 InitializeComponent() 调用之后添加任何初始化。
         ribbon1.ResourceName = $"{App.AssemblyName}.RibbonMarkup.ribbon"
         ribbon1.Dock = DockStyle.Top

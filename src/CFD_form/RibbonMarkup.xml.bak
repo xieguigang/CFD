@@ -16,18 +16,22 @@
   <Application.Views>
     <Ribbon>
       <Ribbon.ApplicationMenu>
-        <ApplicationMenu />
+        <ApplicationMenu>
+          <ApplicationMenu.RecentItems>
+            <RecentItems />
+          </ApplicationMenu.RecentItems>
+        </ApplicationMenu>
       </Ribbon.ApplicationMenu>
       <Ribbon.QuickAccessToolbar>
         <QuickAccessToolbar />
       </Ribbon.QuickAccessToolbar>
-      <Ribbon.ContextualTabs>
-        <TabGroup CommandName="cmdTabPage">
-          <Tab CommandName="cmdCommandGroup">
-            <Group />
-          </Tab>
-        </TabGroup>
-      </Ribbon.ContextualTabs>
+      <Ribbon.Tabs>
+        <Tab CommandName="cmdTabPage">
+          <Group CommandName="cmdCommandGroup">
+            <Button CommandName="cmdButtonReset" />
+          </Group>
+        </Tab>
+      </Ribbon.Tabs>
     </Ribbon>
     <ContextPopup />
   </Application.Views>
