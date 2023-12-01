@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application xmlns="http://schemas.microsoft.com/windows/2009/Ribbon">
+  <Application.Commands>
+    <Command Name="cmdButtonReset" Id="2" LabelTitle="Reset" LabelDescription="Reset" TooltipTitle="Reset" TooltipDescription="Reset">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-reset-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-reset-96.png</Image>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="cmdTabPage" Id="3" />
+    <Command Name="cmdCommandGroup" Id="4" LabelTitle="Menu" LabelDescription="Menu" TooltipTitle="Menu" TooltipDescription="Menu" />
+    <Command Name="cmdCommandPanel" Id="5" LabelTitle="Menu" LabelDescription="Menu" TooltipTitle="Menu" TooltipDescription="Menu" />
+  </Application.Commands>
+  <Application.Views>
+    <Ribbon>
+      <Ribbon.ApplicationMenu>
+        <ApplicationMenu />
+      </Ribbon.ApplicationMenu>
+      <Ribbon.QuickAccessToolbar>
+        <QuickAccessToolbar />
+      </Ribbon.QuickAccessToolbar>
+      <Ribbon.ContextualTabs>
+        <TabGroup CommandName="cmdTabPage">
+          <Tab CommandName="cmdCommandGroup">
+            <Group CommandName="cmdCommandPanel" SizeDefinition="OneButton">
+              <Button CommandName="cmdButtonReset" />
+            </Group>
+          </Tab>
+        </TabGroup>
+      </Ribbon.ContextualTabs>
+    </Ribbon>
+    <ContextPopup />
+  </Application.Views>
+</Application>
+<!--ResourceName Value="APPLICATION"-->

@@ -13,7 +13,7 @@ Namespace Tasks
 
         Protected Overrides Sub Solve(start As Integer, ends As Integer, cpu_id As Integer)
             For x As Integer = start To ends - 1
-                For Y As Integer = 0 To cfd.ydim - 1
+                For Y As Integer = 1 To cfd.ydim - 2
                     If cfd.barrier(x)(Y) Then
                         If cfd.nN(x)(Y) > 0 Then
                             cfd.nS(x)(Y - 1) += cfd.nN(x)(Y)

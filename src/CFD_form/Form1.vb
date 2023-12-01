@@ -5,8 +5,8 @@ Imports Microsoft.VisualBasic.Linq
 
 Public Class Form1
 
-    Dim CFD As New FluidDynamics(240, 150)
-    Dim reader As New DataReader(CFD)
+    Dim CFD As New FluidDynamics(300, 200)
+    Dim reader As New DataAdapter(CFD)
     Dim colors As SolidBrush()
     Dim offset As New DoubleRange(0, 255)
 
@@ -29,8 +29,15 @@ Public Class Form1
         PictureBox1.BackgroundImage = bitmap
     End Sub
 
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
-        colors = Designer.GetColors(ScalerPalette.Jet.Description, 256).Select(Function(c) New SolidBrush(c)).ToArray
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        colors = GetColors(ScalerPalette.Jet.Description, 256).Select(Function(c) New SolidBrush(c)).ToArray
         CFD.reset()
+        PropertyGrid1.SelectedObject = reader
+        PropertyGrid1.Refresh()
+    End Sub
+
+    Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
+        Dim xy As Point = PictureBox1.PointToClient(Cursor.Position)
+
     End Sub
 End Class

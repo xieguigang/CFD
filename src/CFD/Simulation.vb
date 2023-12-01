@@ -22,9 +22,27 @@
 
 End Class
 
-Public Class DataReader
+Public Class DataAdapter
 
     ReadOnly CFD As FluidDynamics
+
+    Public Property velocity As Double
+        Get
+            Return CFD.velocity
+        End Get
+        Set(value As Double)
+            CFD.velocity = value
+        End Set
+    End Property
+
+    Public Property viscocity As Double
+        Get
+            Return CFD.viscocity
+        End Get
+        Set(value As Double)
+            CFD.viscocity = value
+        End Set
+    End Property
 
     Sub New(CFD As FluidDynamics)
         Me.CFD = CFD
