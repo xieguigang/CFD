@@ -65,7 +65,7 @@ Public Class frmCFDCanvas
 
         If ribbonItems.CheckShowTracer.BooleanValue Then
             For Each pt As PointF In CFD.moveTracers(reader.TracerSpeedLevel)
-                Call g.FillRectangle(Brushes.Black, New RectangleF(pt, New Size(2, 2)))
+                Call g.FillRectangle(Brushes.Black, New RectangleF(pt, New Size(1, 1)))
             Next
         End If
         If ribbonItems.CheckShowFlowLine.BooleanValue Then

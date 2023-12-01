@@ -130,7 +130,7 @@ Public Class FluidDynamics : Inherits Simulation
                 tracer_y += tracer_dy
 
                 If tracer_y > ydim Then
-                    tracer_y = 0
+                    tracer_y = tracer_dy / 2
                 End If
             End If
         Next
