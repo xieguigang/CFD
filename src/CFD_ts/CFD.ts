@@ -50,6 +50,7 @@ namespace Model {
 
         public setupGraphicsDevice(gr: Global.IrequestPaintCanvas) {
             this.paintCanvas = gr;
+            this.paintCanvas();
         }
 
         private init(): void {
@@ -85,8 +86,6 @@ namespace Model {
                     // this.curl[x + y * xdim] = 0.0;
                 }
             }
-
-            this.paintCanvas();
         }
 
         // "Drag" the fluid in a direction determined by the mouse (or touch) motion:
@@ -367,7 +366,7 @@ namespace Model {
             }
             if (this.running) {
                 if (this.pars.requestFrame) {
-                    Global.requestAnimFrame(() => this.simulate());	// let browser schedule next frame
+                    requestAnimationFrame(() => this.simulate());	// let browser schedule next frame
                 } else {
                     window.setTimeout(() => this.simulate(), 1);	// schedule next frame asap (nominally 1 ms but always more)
                 }

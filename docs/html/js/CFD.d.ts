@@ -62,6 +62,13 @@ declare class app {
     private graphics;
     constructor(opts?: Model.options, html?: Model.ui);
     startStop(): void;
+    resetTimer(): void;
+    clearBarriers(): void;
+    paintCanvas(): void;
+    placePresetBarrier(): void;
+    initTracers(): void;
+    showData(): void;
+    startOrStopData(): void;
     /**
      * Resize the grid
     */

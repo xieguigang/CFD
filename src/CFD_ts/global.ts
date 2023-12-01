@@ -39,15 +39,18 @@ module Global {
     */
     export const requestAnimFrame: IrequestAnimFrame = (function (callback) {
         const win: any = window;
+        const fallback = (callback) => {
+            window.setTimeout(callback, 1);		// second parameter is time in ms
+        };
 
-        return window.requestAnimationFrame ||
-            win.webkitRequestAnimationFrame ||
-            win.mozRequestAnimationFrame ||
-            win.oRequestAnimationFrame ||
-            win.msRequestAnimationFrame ||
-
-            function (callback) {
-                window.setTimeout(callback, 1);		// second parameter is time in ms
-            };
+        if (window.requestAnimationFrame) {
+            return (window.requestAnimationFrame);
+        } else {
+            return win.webkitRequestAnimationFrame ||
+                win.mozRequestAnimationFrame ||
+                win.oRequestAnimationFrame ||
+                win.msRequestAnimationFrame ||
+                fallback;
+        }
     })();
 }

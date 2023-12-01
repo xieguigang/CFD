@@ -52,7 +52,7 @@
 			<option value="erase">Erase barriers</option>
 			<option value="push">Drag fluid</option>
 		</select>
-		<select id="barrierSelect" onchange="placePresetBarrier()">
+		<select id="barrierSelect" onchange="CFD.placePresetBarrier()">
 			<option>Barrier shapes</option>
 			<option>Short line</option>
 			<option>Long line</option>
@@ -66,10 +66,10 @@
 			<option>Wedge</option>
 			<option>Airfoil</option>
 		</select>
-		<input id="clearButton" type="button" onclick="clearBarriers()" value="Clear barriers">
+		<input id="clearButton" type="button" onclick="CFD.clearBarriers()" value="Clear barriers">
 	</div>
 	<div>
-		<select id="plotSelect" onchange="paintCanvas()">
+		<select id="plotSelect" onchange="CFD.paintCanvas()">
 			<option>Plot density</option>
 			<option>Plot x velocity</option>
 			<option>Plot y velocity</option>
@@ -77,27 +77,27 @@
 			<option selected="">Plot curl</option>
 		</select>
 		&nbsp;&nbsp;Contrast:
-		<input id="contrastSlider" type="range" min="-10" max="10" step="1" value="0" onchange="paintCanvas()">
+		<input id="contrastSlider" type="range" min="-10" max="10" step="1" value="0" onchange="CFD.paintCanvas()">
 	</div>
 	<div>
 		Animation speed:
-		<input id="stepsSlider" type="range" min="1" max="40" step="1" value="20" onchange="resetTimer()">
+		<input id="stepsSlider" type="range" min="1" max="40" step="1" value="20" onchange="CFD.resetTimer()">
 		&nbsp;&nbsp;Steps per second: <span id="speedReadout">0</span>
-		&nbsp;&nbsp;<input id="rafCheck" type="checkbox" checked="" onchange="resetTimer()">Faster?
+		&nbsp;&nbsp;<input id="rafCheck" type="checkbox" checked="" onchange="CFD.resetTimer()">Faster?
 	</div>
 	<div style="margin-top:4px">
-		<!--<input id="pixelCheck" type="checkbox" checked onchange="resetTimer()">Use pixel graphics-->
+
 		Show:
-		<input id="tracerCheck" type="checkbox" onchange="initTracers()">Tracers
-		<input id="flowlineCheck" type="checkbox" onchange="paintCanvas()">Flowlines
-		<input id="forceCheck" type="checkbox" onchange="paintCanvas()">Force on barriers
-		<input id="sensorCheck" type="checkbox" onchange="paintCanvas()">Sensor
-		<input id="dataCheck" type="checkbox" onchange="showData()">Data
+		<input id="tracerCheck" type="checkbox" onchange="CFD.initTracers()">Tracers
+		<input id="flowlineCheck" type="checkbox" onchange="CFD.paintCanvas()">Flowlines
+		<input id="forceCheck" type="checkbox" onchange="CFD.paintCanvas()">Force on barriers
+		<input id="sensorCheck" type="checkbox" onchange="CFD.paintCanvas()">Sensor
+		<input id="dataCheck" type="checkbox" onchange="CFD.showData()">Data
 	</div>
 	<div id="dataSection" style="display:none">
 		<textarea id="dataArea" rows="8" cols="50" disabled="" readonly=""></textarea>
 		<div>
-			<input id="dataButton" type="button" value="Start data collection" onclick="startOrStopData()">
+			<input id="dataButton" type="button" value="Start data collection" onclick="CFD.startOrStopData()">
 			<input id="periodButton" type="button" value="Show F_y period" onclick="showPeriod()">
 			<input id="barrierDataButton" type="button" value="Show barrier locations" onclick="showBarrierLocations()">
 			<input id="debugButton" type="button" value="Debug" onclick="javascript:void(0);" style="display:none">

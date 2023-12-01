@@ -28,6 +28,7 @@ var Model;
         }
         CFD.prototype.setupGraphicsDevice = function (gr) {
             this.paintCanvas = gr;
+            this.paintCanvas();
         };
         CFD.prototype.init = function () {
             // Initialize to a steady rightward flow with no barriers:
@@ -57,7 +58,6 @@ var Model;
                     // this.curl[x + y * xdim] = 0.0;
                 }
             }
-            this.paintCanvas();
         };
         // "Drag" the fluid in a direction determined by the mouse (or touch) motion:
         // (The drag affects a "circle", 5 px in diameter, centered on the given coordinates.)
@@ -325,7 +325,7 @@ var Model;
             }
             if (this.running) {
                 if (this.pars.requestFrame) {
-                    Global.requestAnimFrame(function () { return _this.simulate(); }); // let browser schedule next frame
+                    requestAnimationFrame(function () { return _this.simulate(); }); // let browser schedule next frame
                 }
                 else {
                     window.setTimeout(function () { return _this.simulate(); }, 1); // schedule next frame asap (nominally 1 ms but always more)
@@ -1030,6 +1030,27 @@ var app = /** @class */ (function () {
     app.prototype.startStop = function () {
         this.html.startStop();
     };
+    app.prototype.resetTimer = function () {
+        this.html.resetTimer();
+    };
+    app.prototype.clearBarriers = function () {
+        this.html.clearBarriers();
+    };
+    app.prototype.paintCanvas = function () {
+        this.graphics.paintCanvas();
+    };
+    app.prototype.placePresetBarrier = function () {
+        this.html.placePresetBarrier();
+    };
+    app.prototype.initTracers = function () {
+        this.graphics.initTracers();
+    };
+    app.prototype.showData = function () {
+        this.html.showData();
+    };
+    app.prototype.startOrStopData = function () {
+        this.html.startOrStopData();
+    };
     /**
      * Resize the grid
     */
@@ -1146,14 +1167,19 @@ var Global;
     */
     Global.requestAnimFrame = (function (callback) {
         var win = window;
-        return window.requestAnimationFrame ||
-            win.webkitRequestAnimationFrame ||
-            win.mozRequestAnimationFrame ||
-            win.oRequestAnimationFrame ||
-            win.msRequestAnimationFrame ||
-            function (callback) {
-                window.setTimeout(callback, 1); // second parameter is time in ms
-            };
+        var fallback = function (callback) {
+            window.setTimeout(callback, 1); // second parameter is time in ms
+        };
+        if (window.requestAnimationFrame) {
+            return (window.requestAnimationFrame);
+        }
+        else {
+            return win.webkitRequestAnimationFrame ||
+                win.mozRequestAnimationFrame ||
+                win.oRequestAnimationFrame ||
+                win.msRequestAnimationFrame ||
+                fallback;
+        }
     })();
 })(Global || (Global = {}));
 var Model;

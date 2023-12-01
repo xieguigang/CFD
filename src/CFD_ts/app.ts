@@ -36,6 +36,34 @@ class app {
         this.html.startStop();
     }
 
+    public resetTimer() {
+        this.html.resetTimer();
+    }
+
+    public clearBarriers() {
+        this.html.clearBarriers();
+    }
+
+    public paintCanvas() {
+        this.graphics.paintCanvas();
+    }
+
+    public placePresetBarrier() {
+        this.html.placePresetBarrier();
+    }
+
+    public initTracers() {
+        this.graphics.initTracers();
+    }
+
+    public showData() {
+        this.html.showData();
+    }
+
+    public startOrStopData() {
+        this.html.startOrStopData();
+    }
+
     /**
      * Resize the grid
     */
