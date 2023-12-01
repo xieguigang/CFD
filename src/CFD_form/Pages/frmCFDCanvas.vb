@@ -1,4 +1,6 @@
-﻿Imports System.Runtime.CompilerServices
+﻿Imports System.Drawing.Drawing2D
+Imports System.Drawing.Text
+Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports CFD
 Imports CFD_form.RibbonLib.Controls
@@ -45,6 +47,10 @@ Public Class frmCFDCanvas
         Dim g As Graphics = Graphics.FromImage(bitmap)
         Dim range As DoubleRange = frame.AsParallel.Select(Function(a) {a.Min, a.Max}).IteratesALL.Range
 
+        g.CompositingQuality = CompositingQuality.HighSpeed
+        g.TextRenderingHint = TextRenderingHint.SystemDefault
+        g.SmoothingMode = SmoothingMode.None
+
         If range.Min.IsNaNImaginary OrElse range.Max.IsNaNImaginary Then
             Return
         End If
@@ -61,7 +67,8 @@ Public Class frmCFDCanvas
             For Each pt As PointF In CFD.moveTracers(reader.TracerSpeedLevel)
                 Call g.FillRectangle(Brushes.Black, New RectangleF(pt, New Size(2, 2)))
             Next
-
+        End If
+        If ribbonItems.CheckShowFlowLine.BooleanValue Then
             Call drawFlowlines(g)
         End If
 

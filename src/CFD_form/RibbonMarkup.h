@@ -56,5 +56,12 @@
 #define cmdMenu2_LabelDescription_RESID 60040
 #define cmdMenu2_TooltipTitle_RESID 60041
 #define cmdMenu2_TooltipDescription_RESID 60042
-#define InternalCmd2_LabelTitle_RESID 60043
-#define InternalCmd4_LabelTitle_RESID 60044
+#define cmdCheckShowFlowLine 11 
+#define cmdCheckShowFlowLine_LabelTitle_RESID 60043
+#define cmdCheckShowFlowLine_LabelDescription_RESID 60044
+#define cmdCheckShowFlowLine_TooltipTitle_RESID 60045
+#define cmdCheckShowFlowLine_TooltipDescription_RESID 60046
+#define cmdCheckShowFlowLine_SmallImages_192__RESID 60047
+#define cmdCheckShowFlowLine_LargeImages_192__RESID 60048
+#define InternalCmd2_LabelTitle_RESID 60049
+#define InternalCmd4_LabelTitle_RESID 60050

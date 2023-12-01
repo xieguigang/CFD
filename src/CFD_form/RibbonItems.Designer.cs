@@ -26,6 +26,7 @@ namespace RibbonLib.Controls
             public const uint cmdCheckDrawBarrier = 7;
             public const uint cmdMenu2 = 10;
             public const uint cmdCheckShowTracer = 9;
+            public const uint cmdCheckShowFlowLine = 11;
         }
 
         // ContextPopup CommandName
@@ -39,6 +40,7 @@ namespace RibbonLib.Controls
         public RibbonToggleButton CheckDrawBarrier { get; private set; }
         public RibbonGroup Menu2 { get; private set; }
         public RibbonToggleButton CheckShowTracer { get; private set; }
+        public RibbonToggleButton CheckShowFlowLine { get; private set; }
 
         public RibbonItems(Ribbon ribbon)
         {
@@ -53,6 +55,7 @@ namespace RibbonLib.Controls
             CheckDrawBarrier = new RibbonToggleButton(ribbon, Cmd.cmdCheckDrawBarrier);
             Menu2 = new RibbonGroup(ribbon, Cmd.cmdMenu2);
             CheckShowTracer = new RibbonToggleButton(ribbon, Cmd.cmdCheckShowTracer);
+            CheckShowFlowLine = new RibbonToggleButton(ribbon, Cmd.cmdCheckShowFlowLine);
         }
 
     }

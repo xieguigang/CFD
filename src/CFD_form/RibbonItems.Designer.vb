@@ -23,6 +23,7 @@ Namespace RibbonLib.Controls
             Public Const cmdCheckDrawBarrier As UInteger = 7
             Public Const cmdMenu2 As UInteger = 10
             Public Const cmdCheckShowTracer As UInteger = 9
+            Public Const cmdCheckShowFlowLine As UInteger = 11
         End Class
 
         ' ContextPopup CommandName
@@ -81,6 +82,12 @@ Namespace RibbonLib.Controls
                 Return _CheckShowTracer
             End Get
         End Property
+        Private _CheckShowFlowLine As RibbonToggleButton
+        Public ReadOnly Property CheckShowFlowLine As RibbonToggleButton
+            Get
+                Return _CheckShowFlowLine
+            End Get
+        End Property
 
         Public Sub New(ByVal ribbon As Ribbon)
             If ribbon Is Nothing Then
@@ -95,6 +102,7 @@ Namespace RibbonLib.Controls
             _CheckDrawBarrier = New RibbonToggleButton(_ribbon, Cmd.cmdCheckDrawBarrier)
             _Menu2 = New RibbonGroup(_ribbon, Cmd.cmdMenu2)
             _CheckShowTracer = New RibbonToggleButton(_ribbon, Cmd.cmdCheckShowTracer)
+            _CheckShowFlowLine = New RibbonToggleButton(_ribbon, Cmd.cmdCheckShowFlowLine)
         End Sub
 
     End Class

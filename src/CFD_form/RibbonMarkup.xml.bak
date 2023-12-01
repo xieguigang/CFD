@@ -45,6 +45,14 @@
       </Command.LargeImages>
     </Command>
     <Command Name="cmdMenu2" Id="10" LabelTitle="Debugger" LabelDescription="Debugger" TooltipTitle="Debugger" TooltipDescription="Debugger" />
+    <Command Name="cmdCheckShowFlowLine" Id="11" LabelTitle="Show Flowline" LabelDescription="Show Flowline" TooltipTitle="Show Flowline" TooltipDescription="Show Flowline">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-journey-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-journey-96.png</Image>
+      </Command.LargeImages>
+    </Command>
   </Application.Commands>
   <Application.Views>
     <Ribbon>
@@ -65,6 +73,9 @@
             <Button CommandName="cmdButtonReset" />
             <Button CommandName="cmdButtonClearBarrier" />
             <ToggleButton CommandName="cmdCheckDrawBarrier" />
+          </Group>
+          <Group CommandName="cmdMenu2" SizeDefinition="OneButton">
+            <ToggleButton CommandName="cmdCheckShowTracer" />
           </Group>
         </Tab>
       </Ribbon.Tabs>
