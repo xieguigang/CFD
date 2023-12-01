@@ -25,7 +25,7 @@
 		browsers. For best results, use Google Chrome.</canvas>
 
 	<div>
-		<select id="sizeSelect" onchange="resize()">
+		<select id="sizeSelect" onchange="CFD.resize()">
 			<option value="10">60 x 24</option>
 			<option value="8">75 x 30</option>
 			<option value="6">100 x 40</option>
@@ -35,16 +35,16 @@
 			<option value="2">300 x 120</option>
 			<option value="1">600 x 240</option>
 		</select>
-		<input id="resetFluidButton" type="button" onclick="initFluid()" value="Reset fluid">
-		<input id="stepButton" type="button" onclick="simulate()" value="Step">
-		<input id="startButton" type="button" onclick="javascript:void(0);" value="Start">
+		<input id="resetFluidButton" type="button" onclick="CFD.initFluid()" value="Reset fluid">
+		<input id="stepButton" type="button" onclick="CFD.simulate()" value="Step">
+		<input id="startButton" type="button" onclick="CFD.startStop();" value="Start">
 	</div>
 	<div>
 		Flow speed = <span id="speedValue">0.100</span>
-		<input id="speedSlider" type="range" min="0" max="0.12" step="0.005" value="0.1" onchange="adjustSpeed()">
+		<input id="speedSlider" type="range" min="0" max="0.12" step="0.005" value="0.1" onchange="CFD.adjustSpeed()">
 		&nbsp;&nbsp;Viscosity = <span id="viscValue">0.020</span>
 		<input id="viscSlider" type="range" min="0.005" max="0.2" step="0.005" value="0.02"
-			onchange="adjustViscosity()">
+			onchange="CFD.adjustViscosity()">
 	</div>
 	<div style="margin-top:3px">
 		<select id="mouseSelect">
@@ -53,18 +53,6 @@
 			<option value="push">Drag fluid</option>
 		</select>
 		<select id="barrierSelect" onchange="CFD.placePresetBarrier()">
-			<option>Barrier shapes</option>
-			<option>Short line</option>
-			<option>Long line</option>
-			<option>Diagonal</option>
-			<option>Shallow diagonal</option>
-			<option>Small circle</option>
-			<option>Large circle</option>
-			<option>Line with spoiler</option>
-			<option>Circle with spoiler</option>
-			<option>Right angle</option>
-			<option>Wedge</option>
-			<option>Airfoil</option>
 		</select>
 		<input id="clearButton" type="button" onclick="CFD.clearBarriers()" value="Clear barriers">
 	</div>

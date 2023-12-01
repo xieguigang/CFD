@@ -1051,6 +1051,18 @@ var app = /** @class */ (function () {
     app.prototype.startOrStopData = function () {
         this.html.startOrStopData();
     };
+    app.prototype.adjustSpeed = function () {
+        this.html.adjustSpeed();
+    };
+    app.prototype.adjustViscosity = function () {
+        this.html.adjustViscosity();
+    };
+    app.prototype.simulate = function () {
+        this.engine.simulate();
+    };
+    app.prototype.initFluid = function () {
+        this.engine.initFluid();
+    };
     /**
      * Resize the grid
     */
@@ -2057,20 +2069,20 @@ var Model;
             if (index == 0)
                 return;
             this.clearBarriers();
-            var bCount = Model.barrierList[index - 1].locations.length / 2; // number of barrier sites
+            var bCount = Model.barrierList[index].locations.length / 2; // number of barrier sites
             // To decide where to place it, find minimum x and min/max y:
-            var xMin = Model.barrierList[index - 1].locations[0];
-            var yMin = Model.barrierList[index - 1].locations[1];
+            var xMin = Model.barrierList[index].locations[0];
+            var yMin = Model.barrierList[index].locations[1];
             var yMax = yMin;
             for (var siteIndex = 2; siteIndex < 2 * bCount; siteIndex += 2) {
-                if (Model.barrierList[index - 1].locations[siteIndex] < xMin) {
-                    xMin = Model.barrierList[index - 1].locations[siteIndex];
+                if (Model.barrierList[index].locations[siteIndex] < xMin) {
+                    xMin = Model.barrierList[index].locations[siteIndex];
                 }
-                if (Model.barrierList[index - 1].locations[siteIndex + 1] < yMin) {
-                    yMin = Model.barrierList[index - 1].locations[siteIndex + 1];
+                if (Model.barrierList[index].locations[siteIndex + 1] < yMin) {
+                    yMin = Model.barrierList[index].locations[siteIndex + 1];
                 }
-                if (Model.barrierList[index - 1].locations[siteIndex + 1] > yMax) {
-                    yMax = Model.barrierList[index - 1].locations[siteIndex + 1];
+                if (Model.barrierList[index].locations[siteIndex + 1] > yMax) {
+                    yMax = Model.barrierList[index].locations[siteIndex + 1];
                 }
             }
             var yAverage = Math.round((yMin + yMax) / 2);
@@ -2078,12 +2090,12 @@ var Model;
             var ydim = this.ydim;
             // Now place the barriers:
             for (var siteIndex = 0; siteIndex < 2 * bCount; siteIndex += 2) {
-                var x = Model.barrierList[index - 1].locations[siteIndex] - xMin + Math.round(ydim / 3);
-                var y = Model.barrierList[index - 1].locations[siteIndex + 1] - yAverage + Math.round(ydim / 2);
+                var x = Model.barrierList[index].locations[siteIndex] - xMin + Math.round(ydim / 3);
+                var y = Model.barrierList[index].locations[siteIndex + 1] - yAverage + Math.round(ydim / 2);
                 this.addBarrier(x, y);
             }
             this.paintCanvas();
-            this.barrierSelect.selectedIndex = 0; // A choice on this menu is a one-time action, not an ongoing setting
+            // this.barrierSelect.selectedIndex = 0;	// A choice on this menu is a one-time action, not an ongoing setting
         };
         // Print debugging data:
         ui.prototype.debug = function () {

@@ -64,6 +64,22 @@ class app {
         this.html.startOrStopData();
     }
 
+    public adjustSpeed() {
+        this.html.adjustSpeed();
+    }
+
+    public adjustViscosity() {
+        this.html.adjustViscosity();
+    }
+
+    public simulate() {
+        this.engine.simulate();
+    }
+
+    public initFluid() {
+        this.engine.initFluid();
+    }
+
     /**
      * Resize the grid
     */

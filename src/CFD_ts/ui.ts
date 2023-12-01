@@ -451,20 +451,20 @@ namespace Model {
             var index = this.barrierSelect.selectedIndex;
             if (index == 0) return;
             this.clearBarriers();
-            var bCount = barrierList[index - 1].locations.length / 2;	// number of barrier sites
+            var bCount = barrierList[index].locations.length / 2;	// number of barrier sites
             // To decide where to place it, find minimum x and min/max y:
-            var xMin = barrierList[index - 1].locations[0];
-            var yMin = barrierList[index - 1].locations[1];
+            var xMin = barrierList[index].locations[0];
+            var yMin = barrierList[index].locations[1];
             var yMax = yMin;
             for (var siteIndex = 2; siteIndex < 2 * bCount; siteIndex += 2) {
-                if (barrierList[index - 1].locations[siteIndex] < xMin) {
-                    xMin = barrierList[index - 1].locations[siteIndex];
+                if (barrierList[index].locations[siteIndex] < xMin) {
+                    xMin = barrierList[index].locations[siteIndex];
                 }
-                if (barrierList[index - 1].locations[siteIndex + 1] < yMin) {
-                    yMin = barrierList[index - 1].locations[siteIndex + 1];
+                if (barrierList[index].locations[siteIndex + 1] < yMin) {
+                    yMin = barrierList[index].locations[siteIndex + 1];
                 }
-                if (barrierList[index - 1].locations[siteIndex + 1] > yMax) {
-                    yMax = barrierList[index - 1].locations[siteIndex + 1];
+                if (barrierList[index].locations[siteIndex + 1] > yMax) {
+                    yMax = barrierList[index].locations[siteIndex + 1];
                 }
             }
 
@@ -474,12 +474,12 @@ namespace Model {
 
             // Now place the barriers:
             for (var siteIndex = 0; siteIndex < 2 * bCount; siteIndex += 2) {
-                var x = barrierList[index - 1].locations[siteIndex] - xMin + Math.round(ydim / 3);
-                var y = barrierList[index - 1].locations[siteIndex + 1] - yAverage + Math.round(ydim / 2);
+                var x = barrierList[index].locations[siteIndex] - xMin + Math.round(ydim / 3);
+                var y = barrierList[index].locations[siteIndex + 1] - yAverage + Math.round(ydim / 2);
                 this.addBarrier(x, y);
             }
             this.paintCanvas();
-            this.barrierSelect.selectedIndex = 0;	// A choice on this menu is a one-time action, not an ongoing setting
+            // this.barrierSelect.selectedIndex = 0;	// A choice on this menu is a one-time action, not an ongoing setting
         }
 
         // Print debugging data:

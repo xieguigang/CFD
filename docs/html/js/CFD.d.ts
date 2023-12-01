@@ -69,6 +69,10 @@ declare class app {
     initTracers(): void;
     showData(): void;
     startOrStopData(): void;
+    adjustSpeed(): void;
+    adjustViscosity(): void;
+    simulate(): void;
+    initFluid(): void;
     /**
      * Resize the grid
     */
