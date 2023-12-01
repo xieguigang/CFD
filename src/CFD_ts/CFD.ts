@@ -1,4 +1,4 @@
-import { IrequestPaintCanvas, mobile, rgbToHex } from './global';
+import { IrequestPaintCanvas, mobile, requestAnimFrame, rgbToHex } from './global';
 import { Idebugger, four9ths, one36th, one9th, options, uiAdapter } from './options';
 
 export class CFD {
@@ -367,7 +367,7 @@ export class CFD {
             this.initFluid();
         }
         if (this.running) {
-            if (rafCheck.checked) {
+            if (this.pars.requestFrame) {
                 requestAnimFrame(() => this.simulate());	// let browser schedule next frame
             } else {
                 window.setTimeout(() => this.simulate(), 1);	// schedule next frame asap (nominally 1 ms but always more)

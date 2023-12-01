@@ -143,6 +143,9 @@ export class ui implements uiAdapter, Idebugger {
 
         this.setEvents();
     }
+    get requestFrame(): boolean {
+        return this.rafCheck.checked;
+    }
     setSpeedReadout(s: string): void {
         this.speedReadout.innerHTML = s;
     }

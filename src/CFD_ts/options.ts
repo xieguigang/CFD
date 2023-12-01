@@ -63,6 +63,8 @@ export interface uiAdapter {
     get drawForceArrow(): boolean;
     get drawSensor(): boolean;
 
+    get requestFrame(): boolean;
+
     canvasToGrid(x: number, y: number): {
         x: number,
         y: number
