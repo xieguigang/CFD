@@ -11,7 +11,6 @@
 using System;
 using RibbonLib;
 using RibbonLib.Controls;
-using RibbonLib.Interop;
 
 namespace RibbonLib.Controls
 {
@@ -21,8 +20,12 @@ namespace RibbonLib.Controls
         {
             public const uint cmdTabPage = 3;
             public const uint cmdCommandGroup = 4;
+            public const uint cmdFileOpen = 8;
             public const uint cmdButtonReset = 2;
             public const uint cmdButtonClearBarrier = 6;
+            public const uint cmdCheckDrawBarrier = 7;
+            public const uint cmdMenu2 = 10;
+            public const uint cmdCheckShowTracer = 9;
         }
 
         // ContextPopup CommandName
@@ -30,8 +33,12 @@ namespace RibbonLib.Controls
         public Ribbon Ribbon { get; private set; }
         public RibbonTab TabPage { get; private set; }
         public RibbonGroup CommandGroup { get; private set; }
+        public RibbonButton FileOpen { get; private set; }
         public RibbonButton ButtonReset { get; private set; }
         public RibbonButton ButtonClearBarrier { get; private set; }
+        public RibbonToggleButton CheckDrawBarrier { get; private set; }
+        public RibbonGroup Menu2 { get; private set; }
+        public RibbonToggleButton CheckShowTracer { get; private set; }
 
         public RibbonItems(Ribbon ribbon)
         {
@@ -40,8 +47,12 @@ namespace RibbonLib.Controls
             this.Ribbon = ribbon;
             TabPage = new RibbonTab(ribbon, Cmd.cmdTabPage);
             CommandGroup = new RibbonGroup(ribbon, Cmd.cmdCommandGroup);
+            FileOpen = new RibbonButton(ribbon, Cmd.cmdFileOpen);
             ButtonReset = new RibbonButton(ribbon, Cmd.cmdButtonReset);
             ButtonClearBarrier = new RibbonButton(ribbon, Cmd.cmdButtonClearBarrier);
+            CheckDrawBarrier = new RibbonToggleButton(ribbon, Cmd.cmdCheckDrawBarrier);
+            Menu2 = new RibbonGroup(ribbon, Cmd.cmdMenu2);
+            CheckShowTracer = new RibbonToggleButton(ribbon, Cmd.cmdCheckShowTracer);
         }
 
     }

@@ -31,7 +31,7 @@ namespace Model {
             public showingPeriod = false,
             public lastBarrierFy = 1,			// for determining when F_y oscillation begins
             public lastFyOscTime = 0,			// for calculating F_y oscillation period
-            public nTracers = 144,
+            public nTracers = 900,
             public nColors = 400,
 
             public sensorX: number = -1,		// coordinates of "sensor" to measure local fluid properties	

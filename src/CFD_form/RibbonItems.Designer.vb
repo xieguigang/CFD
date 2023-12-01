@@ -11,15 +11,18 @@
 Imports System
 Imports RibbonLib
 Imports RibbonLib.Controls
-Imports RibbonLib.Interop
 
 Namespace RibbonLib.Controls
     Partial Class RibbonItems
         Private Class Cmd
             Public Const cmdTabPage As UInteger = 3
             Public Const cmdCommandGroup As UInteger = 4
+            Public Const cmdFileOpen As UInteger = 8
             Public Const cmdButtonReset As UInteger = 2
             Public Const cmdButtonClearBarrier As UInteger = 6
+            Public Const cmdCheckDrawBarrier As UInteger = 7
+            Public Const cmdMenu2 As UInteger = 10
+            Public Const cmdCheckShowTracer As UInteger = 9
         End Class
 
         ' ContextPopup CommandName
@@ -42,6 +45,12 @@ Namespace RibbonLib.Controls
                 Return _CommandGroup
             End Get
         End Property
+        Private _FileOpen As RibbonButton
+        Public ReadOnly Property FileOpen As RibbonButton
+            Get
+                Return _FileOpen
+            End Get
+        End Property
         Private _ButtonReset As RibbonButton
         Public ReadOnly Property ButtonReset As RibbonButton
             Get
@@ -54,6 +63,24 @@ Namespace RibbonLib.Controls
                 Return _ButtonClearBarrier
             End Get
         End Property
+        Private _CheckDrawBarrier As RibbonToggleButton
+        Public ReadOnly Property CheckDrawBarrier As RibbonToggleButton
+            Get
+                Return _CheckDrawBarrier
+            End Get
+        End Property
+        Private _Menu2 As RibbonGroup
+        Public ReadOnly Property Menu2 As RibbonGroup
+            Get
+                Return _Menu2
+            End Get
+        End Property
+        Private _CheckShowTracer As RibbonToggleButton
+        Public ReadOnly Property CheckShowTracer As RibbonToggleButton
+            Get
+                Return _CheckShowTracer
+            End Get
+        End Property
 
         Public Sub New(ByVal ribbon As Ribbon)
             If ribbon Is Nothing Then
@@ -62,8 +89,12 @@ Namespace RibbonLib.Controls
             _ribbon = ribbon
             _TabPage = New RibbonTab(_ribbon, Cmd.cmdTabPage)
             _CommandGroup = New RibbonGroup(_ribbon, Cmd.cmdCommandGroup)
+            _FileOpen = New RibbonButton(_ribbon, Cmd.cmdFileOpen)
             _ButtonReset = New RibbonButton(_ribbon, Cmd.cmdButtonReset)
             _ButtonClearBarrier = New RibbonButton(_ribbon, Cmd.cmdButtonClearBarrier)
+            _CheckDrawBarrier = New RibbonToggleButton(_ribbon, Cmd.cmdCheckDrawBarrier)
+            _Menu2 = New RibbonGroup(_ribbon, Cmd.cmdMenu2)
+            _CheckShowTracer = New RibbonToggleButton(_ribbon, Cmd.cmdCheckShowTracer)
         End Sub
 
     End Class

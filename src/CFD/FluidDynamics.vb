@@ -1,9 +1,7 @@
 ﻿Imports System.Drawing
 Imports Microsoft.VisualBasic.ComponentModel.Collection
-Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
-Imports Microsoft.VisualBasic.Imaging
-Imports Microsoft.VisualBasic.Linq
 Imports std = System.Math
+Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 
 ''' <summary>
 ''' *****************************************************************************
@@ -86,8 +84,41 @@ Public Class FluidDynamics : Inherits Simulation
     ''' </summary>
     Friend barrier As Boolean()() = RectangularArray.Matrix(Of Boolean)(xdim, ydim)
 
-    Sub New(width As Integer, height As Integer)
+    Friend tracer As PointF()
+
+    Sub New(width As Integer, height As Integer, Optional nTracers As Integer = 900)
         Call MyBase.New(width, height)
+
+        Dim nrows As Integer = std.Sqrt(nTracers)
+        Dim dx = xdim / nrows
+        Dim dy = ydim / nrows
+        Dim netX = dx / 2
+        Dim netY = dy / 2
+
+        tracer = New PointF(nTracers - 1) {}
+
+        For i As Integer = 0 To nTracers - 1
+            tracer(i) = New PointF(netX, netY)
+            netX += dx
+
+            If netX > xdim Then
+                netX = dx / 2
+                netY += dy
+            End If
+        Next
+    End Sub
+
+    Public Sub moveTracers()
+        For t As Integer = 0 To tracer.Length - 1
+            Dim rx As Integer = std.Ceiling(tracer(t).X)
+            Dim ry As Integer = std.Ceiling(tracer(t).Y)
+
+            tracer(t) = New PointF(tracer(t).X + xvel(rx)(ry), tracer(t).Y + yvel(rx)(ry))
+
+            If tracer(t).X > xdim - 1 Then
+                tracer(t) = New PointF(0, ydim * randf.NextDouble)
+            End If
+        Next
     End Sub
 
     Public Sub clearBarrier()

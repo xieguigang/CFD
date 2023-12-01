@@ -20,6 +20,31 @@
         <Image MinDPI="192">Resources/icons8-erase-96.png</Image>
       </Command.LargeImages>
     </Command>
+    <Command Name="cmdCheckDrawBarrier" Id="7" LabelTitle="Draw Barrier" LabelDescription="Draw Barrier" TooltipTitle="Draw Barrier" TooltipDescription="Draw Barrier">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-edit-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-edit-96.png</Image>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="cmdFileOpen" Id="8" LabelTitle="Open" LabelDescription="Open" TooltipTitle="Open" TooltipDescription="Open">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-open-file-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-open-file-96.png</Image>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="cmdCheckShowTracer" Id="9" LabelTitle="Show Tracer" LabelDescription="Show Tracer" TooltipTitle="Show Tracer" TooltipDescription="Show Tracer">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-trace-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-trace-96.png</Image>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="cmdMenu2" Id="10" LabelTitle="Debugger" LabelDescription="Debugger" TooltipTitle="Debugger" TooltipDescription="Debugger" />
   </Application.Commands>
   <Application.Views>
     <Ribbon>
@@ -35,9 +60,14 @@
       </Ribbon.QuickAccessToolbar>
       <Ribbon.Tabs>
         <Tab CommandName="cmdTabPage">
-          <Group CommandName="cmdCommandGroup" SizeDefinition="TwoButtons">
+          <Group CommandName="cmdCommandGroup" SizeDefinition="FourButtons">
+            <Button CommandName="cmdFileOpen" />
             <Button CommandName="cmdButtonReset" />
             <Button CommandName="cmdButtonClearBarrier" />
+            <ToggleButton CommandName="cmdCheckDrawBarrier" />
+          </Group>
+          <Group CommandName="cmdMenu2" SizeDefinition="OneButton">
+            <ToggleButton CommandName="cmdCheckShowTracer" />
           </Group>
         </Tab>
       </Ribbon.Tabs>

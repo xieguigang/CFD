@@ -1594,7 +1594,7 @@ var Model;
             if (showingPeriod === void 0) { showingPeriod = false; }
             if (lastBarrierFy === void 0) { lastBarrierFy = 1; }
             if (lastFyOscTime === void 0) { lastFyOscTime = 0; }
-            if (nTracers === void 0) { nTracers = 144; }
+            if (nTracers === void 0) { nTracers = 900; }
             if (nColors === void 0) { nColors = 400; }
             if (sensorX === void 0) { sensorX = -1; }
             if (sensorY === void 0) { sensorY = -1; }

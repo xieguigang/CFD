@@ -66,12 +66,16 @@ Public Class frmCFDCanvas
 
     Private Sub PictureBox1_MouseDown(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseDown
         If e.Button = MouseButtons.Left Then
-            drawLine = True
+            drawLine = CheckDrawBarrier()
         End If
     End Sub
 
+    Private Function CheckDrawBarrier() As Boolean
+        Return ribbonItems.CheckDrawBarrier.BooleanValue
+    End Function
+
     Private Sub PictureBox1_MouseClick(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseClick
-        If e.Button = MouseButtons.Left Then
+        If e.Button = MouseButtons.Left AndAlso CheckDrawBarrier() Then
             Call reader.SetBarrierPoint(GetCFDPosition, 1)
         End If
     End Sub
@@ -94,7 +98,7 @@ Public Class frmCFDCanvas
         Dim xy = GetCFDPosition()
         Dim tooltip As New StringBuilder
 
-        If drawLine Then
+        If drawLine AndAlso CheckDrawBarrier() Then
             Call reader.SetBarrierPoint(xy, 1)
         End If
 
