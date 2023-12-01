@@ -7,9 +7,9 @@
     Public ReadOnly Property xdim As Integer = 1920
     Public ReadOnly Property ydim As Integer = 1080
 
-    Public Overridable Sub setDimentions(width As Integer, height As Integer)
-        _xdim = width
-        _ydim = height
+    Sub New(width As Integer, height As Integer)
+        xdim = width
+        ydim = height
     End Sub
 
     ''' <summary>

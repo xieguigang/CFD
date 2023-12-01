@@ -86,6 +86,10 @@ Public Class FluidDynamics : Inherits Simulation
     ''' </summary>
     Friend barrier As Boolean()() = RectangularArray.Matrix(Of Boolean)(xdim, ydim)
 
+    Sub New(width As Integer, height As Integer)
+        Call MyBase.New(width, height)
+    End Sub
+
     ''' <summary>
     ''' *************************************************************************
     '''                            - RESET SIMULATION -                          *

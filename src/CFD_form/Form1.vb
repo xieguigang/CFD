@@ -5,7 +5,7 @@ Imports Microsoft.VisualBasic.Linq
 
 Public Class Form1
 
-    Dim CFD As New FluidDynamics
+    Dim CFD As New FluidDynamics(240, 150)
     Dim reader As New DataReader(CFD)
     Dim colors As SolidBrush()
     Dim offset As New DoubleRange(0, 255)
@@ -31,6 +31,6 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
         colors = Designer.GetColors(ScalerPalette.Jet.Description, 256).Select(Function(c) New SolidBrush(c)).ToArray
-        CFD.setDimentions(240, 150)
+        CFD.reset()
     End Sub
 End Class

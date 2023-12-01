@@ -4,14 +4,13 @@ Imports CFD.Storage
 Public Class Session
 
     ReadOnly storage As FrameWriter
-    ReadOnly CFD As FluidDynamics
 
+    Dim CFD As FluidDynamics
     Dim snapshotInterval As Integer = 30
     Dim max_time As Integer = 10 ^ 6
     Dim dimension As New Size(1280, 720)
 
-    Public Sub New(file As FrameWriter, fluid As FluidDynamics)
-        CFD = fluid
+    Public Sub New(file As FrameWriter)
         storage = file
     End Sub
 
@@ -36,8 +35,8 @@ Public Class Session
         Dim d As Integer = max_time / 50
         Dim t0 As Date = Now
 
-        Call CFD.reset()
-        Call CFD.setDimentions(dimension.Width, dimension.Height)
+        CFD = New FluidDynamics(dimension.Width, dimension.Height)
+        CFD.reset()
 
         For time As Integer = 0 To max_time
             If time Mod snapshotInterval = 0 Then

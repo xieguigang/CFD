@@ -59,7 +59,7 @@ Module Rscript
                            Optional env As Environment = Nothing) As Object
 
         Dim size = InteropArgumentHelper.getSize(dims, env, [default]:="1920,1080")
-        Dim session As New Session(storage, New FluidDynamics)
+        Dim session As New Session(storage)
 
         Return session.dims(size.SizeParser).interval(interval)
     End Function
