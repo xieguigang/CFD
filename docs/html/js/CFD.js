@@ -1717,7 +1717,7 @@ var Model;
             this.dataButton = document.getElementById(dataButton);
             this.periodButton = document.getElementById(periodButton);
             this.sizeSelect = document.getElementById(sizeSelect);
-            this.sizeSelect.selectedIndex = 5;
+            this.sizeSelect.selectedIndex = 7;
             // smaller works better on mobile platforms
             if (Global.mobile) {
                 this.sizeSelect.selectedIndex = 1;

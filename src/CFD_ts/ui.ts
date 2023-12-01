@@ -124,7 +124,7 @@ namespace Model {
             this.periodButton = <any>document.getElementById(periodButton);
 
             this.sizeSelect = <any>document.getElementById(sizeSelect);
-            this.sizeSelect.selectedIndex = 5;
+            this.sizeSelect.selectedIndex = 7;
 
             // smaller works better on mobile platforms
             if (Global.mobile) {
