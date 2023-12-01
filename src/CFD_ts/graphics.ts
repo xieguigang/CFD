@@ -42,6 +42,7 @@ export class graphics {
         var redList = new Array(nColors + 2);
         var greenList = new Array(nColors + 2);
         var blueList = new Array(nColors + 2);
+
         for (var c = 0; c <= nColors; c++) {
             var r, g, b;
             if (c < nColors / 8) {
@@ -58,6 +59,7 @@ export class graphics {
             redList[c] = r; greenList[c] = g; blueList[c] = b;
             hexColorList[c] = rgbToHex(r, g, b);
         }
+
         redList[nColors + 1] = 0; greenList[nColors + 1] = 0; blueList[nColors + 1] = 0;	// barriers are black
         hexColorList[nColors + 1] = rgbToHex(0, 0, 0);
 
@@ -100,11 +102,14 @@ export class graphics {
      * Draw the sensor and its associated data display
     */
     public drawSensor() {
-        var canvas = this.canvas;
-        var context = this.html.context;
-        var pxPerSquare = this.pars.pxPerSquare;
+        const canvas = this.canvas;
+        const context = this.html.context;
+        const pxPerSquare = this.pars.pxPerSquare;
+        const CFD = this.cfd;
+
         var canvasX = (this.opts.sensorX + 0.5) * pxPerSquare;
         var canvasY = canvas.height - (this.opts.sensorY + 0.5) * pxPerSquare;
+
         context.fillStyle = "rgba(180,180,180,0.7)";	// first draw gray filled circle
         context.beginPath();
         context.arc(canvasX, canvasY, 7, 0, 2 * Math.PI);
@@ -133,14 +138,14 @@ export class graphics {
         canvasY += 14;
         var rhoSymbol = String.fromCharCode(parseInt('03C1', 16));
         var index = this.opts.sensorX + this.opts.sensorY * this.html.xdim;
-        context.fillText(" " + rhoSymbol + " =  " + Number(rho[index]).toFixed(3), canvasX, canvasY);
+        context.fillText(" " + rhoSymbol + " =  " + Number(CFD.rho[index]).toFixed(3), canvasX, canvasY);
         canvasY += 14;
-        var digitString = Number(ux[index]).toFixed(3);
-        if (ux[index] >= 0) digitString = " " + digitString;
+        var digitString = Number(CFD.ux[index]).toFixed(3);
+        if (CFD.ux[index] >= 0) digitString = " " + digitString;
         context.fillText("ux = " + digitString, canvasX, canvasY);
         canvasY += 14;
-        digitString = Number(uy[index]).toFixed(3);
-        if (uy[index] >= 0) digitString = " " + digitString;
+        digitString = Number(CFD.uy[index]).toFixed(3);
+        if (CFD.uy[index] >= 0) digitString = " " + digitString;
         context.fillText("uy = " + digitString, canvasX, canvasY);
     }
 
@@ -189,6 +194,9 @@ export class graphics {
         var context = this.html.context;
         var transBlackArraySize = this.opts.transBlackArraySize;
         var transBlackArray = this.opts.transBlackArray;
+
+        const ux = this.cfd.ux;
+        const uy = this.cfd.uy;
 
         for (var yCount = 0; yCount < yLines; yCount++) {
             for (var xCount = 0; xCount < xLines; xCount++) {
@@ -256,20 +264,21 @@ export class graphics {
         const greenList = this.greenList;
         const blueList = this.blueList;
         const curl = this.curl;
+        const CFD = this.cfd;
 
         for (var y = 0; y < ydim; y++) {
             for (var x = 0; x < xdim; x++) {
-                if (barrier[x + y * xdim]) {
+                if (CFD.barrier[x + y * xdim]) {
                     cIndex = nColors + 1;	// kludge for barrier color which isn't really part of color map
                 } else {
                     if (plotType == 0) {
-                        cIndex = Math.round(nColors * ((rho[x + y * xdim] - 1) * 6 * contrast + 0.5));
+                        cIndex = Math.round(nColors * ((CFD.rho[x + y * xdim] - 1) * 6 * contrast + 0.5));
                     } else if (plotType == 1) {
-                        cIndex = Math.round(nColors * (ux[x + y * xdim] * 2 * contrast + 0.5));
+                        cIndex = Math.round(nColors * (CFD.ux[x + y * xdim] * 2 * contrast + 0.5));
                     } else if (plotType == 2) {
-                        cIndex = Math.round(nColors * (uy[x + y * xdim] * 2 * contrast + 0.5));
+                        cIndex = Math.round(nColors * (CFD.uy[x + y * xdim] * 2 * contrast + 0.5));
                     } else if (plotType == 3) {
-                        var speed = Math.sqrt(ux[x + y * xdim] * ux[x + y * xdim] + uy[x + y * xdim] * uy[x + y * xdim]);
+                        var speed = Math.sqrt(CFD.ux[x + y * xdim] * CFD.ux[x + y * xdim] + CFD.uy[x + y * xdim] * CFD.uy[x + y * xdim]);
                         cIndex = Math.round(nColors * (speed * 4 * contrast));
                     } else {
                         cIndex = Math.round(nColors * (curl[x + y * xdim] * 5 * contrast + 0.5));
@@ -291,8 +300,13 @@ export class graphics {
         // Draw tracers, force vector, and/or sensor if appropriate:
         if (pars.drawTracers) this.drawTracers();
         if (pars.drawFlowlines) this.drawFlowlines();
-        if (pars.drawForceArrow) this.drawForceArrow(opts.barrierxSum / opts.barrierCount, opts.barrierySum / opts.barrierCount, opts.barrierFx, opts.barrierFy);
         if (pars.drawSensor) this.drawSensor();
+        if (pars.drawForceArrow) this.drawForceArrow(
+            opts.barrierxSum / opts.barrierCount,
+            opts.barrierySum / opts.barrierCount,
+            opts.barrierFx,
+            opts.barrierFy
+        );
     }
 
     /**
@@ -325,6 +339,9 @@ export class graphics {
         const ydim = this.html.ydim;
         const xdim = this.html.xdim;
         const curl = this.curl;
+
+        const ux = this.cfd.ux;
+        const uy = this.cfd.uy;
 
         for (var y = 1; y < ydim - 1; y++) {			// interior sites only; leave edges set to zero
             for (var x = 1; x < xdim - 1; x++) {
