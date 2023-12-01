@@ -28,7 +28,7 @@ for (var barrierIndex = 0; barrierIndex < barrierList.length; barrierIndex++) {
 var CFD_app = new CFD(html.xdim, html.ydim, html, opts);
 var gr = new graphics(html, CFD_app, opts);
 
-
+html.connectEngine(CFD_app);
 
 
 

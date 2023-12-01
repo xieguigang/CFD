@@ -87,9 +87,6 @@ export class CFD {
     // (If density is omitted, it's left unchanged.)
     setEquil(x: number, y: number, newux: number, newuy: number, newrho?: number) {
         var i = x + y * this.xdim;
-        if (typeof newrho == 'undefined') {
-            newrho = this.rho[i];
-        }
         var ux3 = 3 * newux;
         var uy3 = 3 * newuy;
         var ux2 = newux * newux;
@@ -97,6 +94,10 @@ export class CFD {
         var uxuy2 = 2 * newux * newuy;
         var u2 = ux2 + uy2;
         var u215 = 1.5 * u2;
+
+        if (typeof newrho == 'undefined') {
+            newrho = this.rho[i];
+        }
 
         this.n0[i] = four9ths * newrho * (1 - u215);
         this.nE[i] = one9th * newrho * (1 + ux3 + 4.5 * ux2 - u215);

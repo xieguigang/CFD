@@ -1,3 +1,4 @@
+import { CFD } from "./CFD";
 import { mobile } from "./global";
 import { four9ths, one36th, one9th, options, uiAdapter } from "./options";
 
@@ -37,6 +38,7 @@ export class ui implements uiAdapter {
 
     private draggingSensor = false;
     private mouseIsDown = false;
+    private CFD: CFD;
 
     public get pxPerSquare(): number {
         var i = this.sizeSelect.selectedIndex;
@@ -125,6 +127,11 @@ export class ui implements uiAdapter {
 
         this.setEvents();
     }
+
+    public connectEngine(CFD: CFD) {
+        this.CFD = CFD;
+    }
+
     public get speed(): number {
         return Number(this.speedSlider.value);
     }
@@ -174,12 +181,12 @@ export class ui implements uiAdapter {
         const ydim = this.ydim;
 
         for (var x = 0; x < xdim; x++) {
-            setEquil(x, 0, u0, 0, 1);
-            setEquil(x, ydim - 1, u0, 0, 1);
+            this.CFD.setEquil(x, 0, u0, 0, 1);
+            this.CFD.setEquil(x, ydim - 1, u0, 0, 1);
         }
         for (var y = 1; y < ydim - 1; y++) {
-            setEquil(0, y, u0, 0, 1);
-            setEquil(xdim - 1, y, u0, 0, 1);
+            this.CFD.setEquil(0, y, u0, 0, 1);
+            this.CFD.setEquil(xdim - 1, y, u0, 0, 1);
         }
     }
 
@@ -189,6 +196,9 @@ export class ui implements uiAdapter {
         const ydim = this.ydim;
         const tracerX = this.opts.tracerX;
         const tracerY = this.opts.tracerY;
+
+        const ux = this.CFD.ux;
+        const uy = this.CFD.uy;
 
         for (var t = 0; t < this.opts.nTracers; t++) {
             var roundedX = Math.round(tracerX[t]);
@@ -210,12 +220,12 @@ export class ui implements uiAdapter {
         var margin = 3;
         if ((pushX > margin) && (pushX < this.xdim - 1 - margin) && (pushY > margin) && (pushY < this.ydim - 1 - margin)) {
             for (var dx = -1; dx <= 1; dx++) {
-                setEquil(pushX + dx, pushY + 2, pushUX, pushUY);
-                setEquil(pushX + dx, pushY - 2, pushUX, pushUY);
+                this.CFD.setEquil(pushX + dx, pushY + 2, pushUX, pushUY);
+                this.CFD.setEquil(pushX + dx, pushY - 2, pushUX, pushUY);
             }
             for (var dx = -2; dx <= 2; dx++) {
                 for (var dy = -1; dy <= 1; dy++) {
-                    setEquil(pushX + dx, pushY + dy, pushUX, pushUY);
+                    this.CFD.setEquil(pushX + dx, pushY + dy, pushUX, pushUY);
                 }
             }
         }
@@ -255,51 +265,57 @@ export class ui implements uiAdapter {
         e.preventDefault();
         this.mouseIsDown = true;
         var canvasLoc = pageToCanvas(e.pageX, e.pageY);
-        if (draggingSensor) {
+        if (this.draggingSensor) {
             var gridLoc = canvasToGrid(canvasLoc.x, canvasLoc.y);
             this.opts.sensorX = gridLoc.x;
             this.opts.sensorY = gridLoc.y;
             paintCanvas();
             return;
         }
-        if (mouseSelect.selectedIndex == 2) {
+        if (this.mouseSelect.selectedIndex == 2) {
             this.opts.mouseX = canvasLoc.x;
             this.opts.mouseY = canvasLoc.y;
             return;
         }
         var gridLoc = canvasToGrid(canvasLoc.x, canvasLoc.y);
         if (this.mouseSelect.selectedIndex == 0) {
-            addBarrier(gridLoc.x, gridLoc.y);
+            this.addBarrier(gridLoc.x, gridLoc.y);
             paintCanvas();
         } else {
-            removeBarrier(gridLoc.x, gridLoc.y);
+            this.removeBarrier(gridLoc.x, gridLoc.y);
         }
     }
 
     // Convert page coordinates to canvas coordinates:
     pageToCanvas(pageX, pageY) {
-        var canvasX = pageX - canvas.offsetLeft;
-        var canvasY = pageY - canvas.offsetTop;
+        var canvasX = pageX - this.canvas.offsetLeft;
+        var canvasY = pageY - this.canvas.offsetTop;
         // this simple subtraction may not work when the canvas is nested in other elements
         return { x: canvasX, y: canvasY };
     }
 
     // Convert canvas coordinates to grid coordinates:
     canvasToGrid(canvasX, canvasY) {
-        var gridX = Math.floor(canvasX / pxPerSquare);
-        var gridY = Math.floor((canvas.height - 1 - canvasY) / pxPerSquare); 	// off by 1?
+        var gridX = Math.floor(canvasX / this.pxPerSquare);
+        var gridY = Math.floor((this.canvas.height - 1 - canvasY) / this.pxPerSquare); 	// off by 1?
         return { x: gridX, y: gridY };
     }
 
     // Add a barrier at a given grid coordinate location:
     addBarrier(x, y) {
+        const xdim = this.xdim;
+        const ydim = this.ydim;
+
         if ((x > 1) && (x < xdim - 2) && (y > 1) && (y < ydim - 2)) {
-            barrier[x + y * xdim] = true;
+            this.CFD.barrier[x + y * xdim] = true;
         }
     }
 
     // Remove a barrier at a given grid coordinate location:
     removeBarrier(x, y) {
+        const xdim = this.xdim;
+        const barrier = this.CFD.barrier;
+
         if (barrier[x + y * xdim]) {
             barrier[x + y * xdim] = false;
             paintCanvas();
@@ -308,6 +324,10 @@ export class ui implements uiAdapter {
 
     // Clear all barriers:
     clearBarriers() {
+        const xdim = this.xdim;
+        const ydim = this.ydim;
+        const barrier = this.CFD.barrier;
+
         for (var x = 0; x < xdim; x++) {
             for (var y = 0; y < ydim; y++) {
                 barrier[x + y * xdim] = false;
@@ -320,11 +340,11 @@ export class ui implements uiAdapter {
     startStop() {
         running = !running;
         if (running) {
-            startButton.value = "Pause";
-            resetTimer();
-            CFD_app.simulate();
+          this.  startButton.value = "Pause";
+          this.  resetTimer();
+          this.  CFD.simulate();
         } else {
-            startButton.value = " Run ";
+            this.  startButton.value = " Run ";
         }
     }
 
@@ -336,12 +356,12 @@ export class ui implements uiAdapter {
 
     // Show value of flow speed setting:
     adjustSpeed() {
-        speedValue.innerHTML = Number(speedSlider.value).toFixed(3);
+        this.   speedValue.innerHTML = Number(  this. speedSlider.value).toFixed(3);
     }
 
     // Show value of viscosity:
     adjustViscosity() {
-        viscValue.innerHTML = Number(viscSlider.value).toFixed(3);
+        this.  viscValue.innerHTML = Number(  this. viscSlider.value).toFixed(3);
     }
 
     // Show or hide the data area:
@@ -373,7 +393,10 @@ export class ui implements uiAdapter {
         var timeString = String(this.opts.time);
         var xdim = this.xdim;
         while (timeString.length < 5) timeString = "0" + timeString;
-        var sIndex = this.opts.sensorX + this.opts.sensorY * xdim;
+        
+        const  sIndex = this.opts.sensorX + this.opts.sensorY * xdim;
+
+
         this.dataArea.innerHTML += timeString + "\t" + Number(rho[sIndex]).toFixed(4) + "\t"
             + Number(ux[sIndex]).toFixed(4) + "\t" + Number(uy[sIndex]).toFixed(4) + "\t"
             + Number(this.opts.barrierFx).toFixed(4) + "\t" + Number(this.opts.barrierFy).toFixed(4) + "\n";
