@@ -108,15 +108,22 @@ Public Class FluidDynamics : Inherits Simulation
         Next
     End Sub
 
-    Public Function moveTracers() As PointF()
+    Public Function moveTracers(factor As Double) As PointF()
         For t As Integer = 0 To tracer.Length - 1
             Dim rx As Integer = std.Ceiling(tracer(t).X)
             Dim ry As Integer = std.Ceiling(tracer(t).Y)
 
-            tracer(t) = New PointF(tracer(t).X + xvel(rx)(ry), tracer(t).Y + yvel(rx)(ry))
+            If rx = xdim Then
+                rx = xdim - 1
+            End If
+            If ry = ydim Then
+                ry = ydim - 1
+            End If
+
+            tracer(t) = New PointF(tracer(t).X + xvel(rx)(ry) * factor, tracer(t).Y + yvel(rx)(ry) * factor)
 
             If tracer(t).X > xdim - 1 Then
-                tracer(t) = New PointF(0, ydim * randf.NextDouble)
+                tracer(t) = New PointF(0, tracer(t).Y)
             End If
         Next
 

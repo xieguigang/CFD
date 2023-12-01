@@ -7,6 +7,8 @@ Public Class CFDHelper : Inherits DataAdapter
     Public Property Colors As ScalerPalette
     Public Property ColorLevels As Integer = 255
 
+    Public Property TracerSpeedLevel As Double = 25
+
     Public ReadOnly Property dimension As Size
         Get
             Return New Size(CFD.xdim, CFD.ydim)

@@ -10,7 +10,7 @@ Imports WeifenLuo.WinFormsUI.Docking
 
 Public Class frmCFDCanvas
 
-    Dim CFD As New FluidDynamics(600, 480)
+    Dim CFD As New FluidDynamics(600, 480, 2500)
     Dim reader As New CFDHelper(CFD)
     Dim colors As SolidBrush()
     Dim offset As New DoubleRange(0, 255)
@@ -46,7 +46,7 @@ Public Class frmCFDCanvas
         Next
 
         If ribbonItems.CheckShowTracer.BooleanValue Then
-            For Each pt As PointF In CFD.moveTracers()
+            For Each pt As PointF In CFD.moveTracers(reader.TracerSpeedLevel)
                 Call g.FillRectangle(Brushes.Black, New RectangleF(pt, New Size(2, 2)))
             Next
         End If
