@@ -6,7 +6,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Linq
 Imports WeifenLuo.WinFormsUI.Docking
-
+Imports std = System.Math
 
 Public Class frmCFDCanvas
 
@@ -16,6 +16,9 @@ Public Class frmCFDCanvas
     Dim offset As New DoubleRange(0, 255)
     Dim drawLine As Boolean = False
     Dim toolkit As New toolCFDParameters
+
+    ReadOnly grays As SolidBrush() = Designer.GetBrushes(ScalerPalette.Gray.Description, 30)
+    ReadOnly grayOffset As New DoubleRange(0, 29)
 
     Sub New()
 
@@ -58,9 +61,58 @@ Public Class frmCFDCanvas
             For Each pt As PointF In CFD.moveTracers(reader.TracerSpeedLevel)
                 Call g.FillRectangle(Brushes.Black, New RectangleF(pt, New Size(2, 2)))
             Next
+
+            Call drawFlowlines(g)
         End If
 
         PictureBox1.BackgroundImage = bitmap
+    End Sub
+
+    Private Sub drawFlowlines(g As Graphics)
+        Dim xdim = CFD.xdim
+        Dim ydim = CFD.ydim
+        Dim len As Single = 10
+        Dim xLines = xdim / len
+        Dim yLines = ydim / len
+
+        Dim ux = reader.GetXVel
+        Dim uy = reader.GetYVel
+        Dim speeds As New List(Of Double)
+
+        For yCount As Integer = 0 To yLines - 1
+            For xCount As Integer = 0 To xLines - 1
+                Dim x = xCount * len
+                Dim y = yCount * len
+                Dim vx = ux(x)(y)
+                Dim vy = uy(x)(y)
+                Dim speed As Double = std.Sqrt(vx ^ 2 + vy ^ 2)
+
+                speeds.Add(speed)
+            Next
+        Next
+
+        Dim speedRange As New DoubleRange(speeds)
+
+        For yCount As Integer = 0 To yLines - 1
+            For xCount As Integer = 0 To xLines - 1
+                Dim x = xCount * len
+                Dim y = yCount * len
+                Dim vx = ux(x)(y)
+                Dim vy = uy(x)(y)
+                Dim speed As Double = std.Sqrt(vx ^ 2 + vy ^ 2)
+
+                If speed > 0.0001 Then
+                    Dim scale = 200 * speed
+                    Dim p0 As New PointF(x - vx * scale, y + vy * scale)
+                    Dim p1 As New PointF(x + vx * scale, y - vy * scale)
+                    Dim offset As Integer = speedRange.ScaleMapping(speed, grayOffset)
+                    Dim color As SolidBrush = grays(offset)
+                    Dim line As New Pen(color, 1)
+
+                    g.DrawLine(line, p0, p1)
+                End If
+            Next
+        Next
     End Sub
 
     Private Sub resetCFD()
