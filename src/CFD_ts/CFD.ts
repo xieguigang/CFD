@@ -17,7 +17,7 @@ export class CFD {
     rho: number[];			// macroscopic density
     ux: number[];			// macroscopic velocity
     uy: number[];
-    curl: number[];
+
     barrier: boolean[];		// boolean array of barrier locations
 
     /**
@@ -41,7 +41,6 @@ export class CFD {
         this.rho = new Array(xdim * ydim);			// macroscopic density
         this.ux = new Array(xdim * ydim);			// macroscopic velocity
         this.uy = new Array(xdim * ydim);
-        this.curl = new Array(xdim * ydim);
         this.barrier = new Array(xdim * ydim);		// boolean array of barrier locations
 
         this.init();
@@ -63,32 +62,6 @@ export class CFD {
             this.barrier[x + y * this.xdim] = true;
         }
 
-        // Set up the array of colors for plotting (mimicks matplotlib "jet" colormap):
-        // (Kludge: Index nColors+1 labels the color used for drawing barriers.)
-        var nColors = 400;							// there are actually nColors+2 colors
-        var hexColorList = new Array(nColors + 2);
-        var redList = new Array(nColors + 2);
-        var greenList = new Array(nColors + 2);
-        var blueList = new Array(nColors + 2);
-        for (var c = 0; c <= nColors; c++) {
-            var r, g, b;
-            if (c < nColors / 8) {
-                r = 0; g = 0; b = Math.round(255 * (c + nColors / 8) / (nColors / 4));
-            } else if (c < 3 * nColors / 8) {
-                r = 0; g = Math.round(255 * (c - nColors / 8) / (nColors / 4)); b = 255;
-            } else if (c < 5 * nColors / 8) {
-                r = Math.round(255 * (c - 3 * nColors / 8) / (nColors / 4)); g = 255; b = 255 - r;
-            } else if (c < 7 * nColors / 8) {
-                r = 255; g = Math.round(255 * (7 * nColors / 8 - c) / (nColors / 4)); b = 0;
-            } else {
-                r = Math.round(255 * (9 * nColors / 8 - c) / (nColors / 4)); g = 0; b = 0;
-            }
-            redList[c] = r; greenList[c] = g; blueList[c] = b;
-            hexColorList[c] = rgbToHex(r, g, b);
-        }
-        redList[nColors + 1] = 0; greenList[nColors + 1] = 0; blueList[nColors + 1] = 0;	// barriers are black
-        hexColorList[nColors + 1] = rgbToHex(0, 0, 0);
-
         // initialize to steady rightward flow
         this.initFluid();
     }
@@ -102,12 +75,41 @@ export class CFD {
 
         for (var y = 0; y < ydim; y++) {
             for (var x = 0; x < xdim; x++) {
-                setEquil(x, y, u0, 0, 1);
-                this.curl[x + y * xdim] = 0.0;
+                this.setEquil(x, y, u0, 0, 1);
+                // this.curl[x + y * xdim] = 0.0;
             }
         }
 
         paintCanvas();
+    }
+
+    // Set all densities in a cell to their equilibrium values for a given velocity and density:
+    // (If density is omitted, it's left unchanged.)
+    setEquil(x: number, y: number, newux: number, newuy: number, newrho?: number) {
+        var i = x + y * this.xdim;
+        if (typeof newrho == 'undefined') {
+            newrho = this.rho[i];
+        }
+        var ux3 = 3 * newux;
+        var uy3 = 3 * newuy;
+        var ux2 = newux * newux;
+        var uy2 = newuy * newuy;
+        var uxuy2 = 2 * newux * newuy;
+        var u2 = ux2 + uy2;
+        var u215 = 1.5 * u2;
+
+        this.n0[i] = four9ths * newrho * (1 - u215);
+        this.nE[i] = one9th * newrho * (1 + ux3 + 4.5 * ux2 - u215);
+        this.nW[i] = one9th * newrho * (1 - ux3 + 4.5 * ux2 - u215);
+        this.nN[i] = one9th * newrho * (1 + uy3 + 4.5 * uy2 - u215);
+        this.nS[i] = one9th * newrho * (1 - uy3 + 4.5 * uy2 - u215);
+        this.nNE[i] = one36th * newrho * (1 + ux3 + uy3 + 4.5 * (u2 + uxuy2) - u215);
+        this.nSE[i] = one36th * newrho * (1 + ux3 - uy3 + 4.5 * (u2 - uxuy2) - u215);
+        this.nNW[i] = one36th * newrho * (1 - ux3 + uy3 + 4.5 * (u2 - uxuy2) - u215);
+        this.nSW[i] = one36th * newrho * (1 - ux3 - uy3 + 4.5 * (u2 + uxuy2) - u215);
+        this.rho[i] = newrho;
+        this.ux[i] = newux;
+        this.uy[i] = newuy;
     }
 
     /**
@@ -197,6 +199,19 @@ export class CFD {
         var xdim = this.xdim;
         var ydim = this.ydim;
 
+        const n0 = this.n0;
+        const nN = this.nN;
+        const nS = this.nS
+        const nE = this.nE;
+        const nW = this.nW;
+        const nNE = this.nNE;
+        const nSE = this.nSE;
+        const nNW = this.nNW;
+        const nSW = this.nSW;
+        const rho = this.rho;
+        const ux = this.ux;
+        const uy = this.uy;
+
         for (var y = 1; y < ydim - 1; y++) {
             for (var x = 1; x < xdim - 1; x++) {
                 var i = x + y * xdim;		// array index for this lattice site
@@ -241,6 +256,19 @@ export class CFD {
         const xdim = this.pars.xdim;
         const ydim = this.pars.ydim;
 
+        const n0 = this.n0;
+        const nN = this.nN;
+        const nS = this.nS
+        const nE = this.nE;
+        const nW = this.nW;
+        const nNE = this.nNE;
+        const nSE = this.nSE;
+        const nNW = this.nNW;
+        const nSW = this.nSW;
+        const rho = this.rho;
+        const ux = this.ux;
+        const uy = this.uy;
+
         opts.barrierCount = 0; opts.barrierxSum = 0; opts.barrierySum = 0;
         opts.barrierFx = 0.0; opts.barrierFy = 0.0;
 
@@ -268,6 +296,9 @@ export class CFD {
                 nSW[x + y * xdim] = nSW[x + 1 + (y + 1) * xdim];		// and the southwest-moving particles
             }
         }
+
+        const barrier = this.barrier;
+
         for (var y = 1; y < ydim - 1; y++) {				// Now handle bounce-back from barriers
             for (var x = 1; x < xdim - 1; x++) {
                 if (barrier[x + y * xdim]) {

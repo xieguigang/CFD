@@ -1,67 +1,105 @@
+Imports System.Drawing
 Imports System.IO
+Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.IO
+Imports Microsoft.VisualBasic.DataStorage.HDSPack
 Imports Microsoft.VisualBasic.DataStorage.HDSPack.FileSystem
+Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Serialization.JSON
+Imports Microsoft.VisualBasic.Text
 
-Public Class FrameWriter : Implements IDisposable
+Namespace Storage
 
-    ReadOnly buf As StreamPack
+    Public Class FrameWriter : Implements IDisposable
 
-    ''' <summary>
-    ''' total frame count
-    ''' </summary>
-    Dim total As Integer
-    Dim disposedValue As Boolean
+        ReadOnly buf As StreamPack
 
-    Sub New(file As Stream)
-        buf = New StreamPack(file)
-    End Sub
+        ''' <summary>
+        ''' total frame count
+        ''' </summary>
+        Dim total As Integer
+        Dim dims As Integer()
+        Dim dimensions As New Dictionary(Of String, DoubleRange)
 
-    Public Sub AddFrame(time As Integer, framedata As Double()())
-        Dim path As String = $"/frame_data/{time}.dat"
-        Dim file As StreamBuffer = buf.OpenBlock(path)
-        Dim wr As New BinaryDataWriter(file) With {
-            .ByteOrder = ByteOrder.BigEndian
-        }
+        Dim disposedValue As Boolean
 
-        For Each row As Double() In framedata
-            Call wr.Write(row)
-        Next
+        Sub New(file As Stream)
+            buf = New StreamPack(file)
+        End Sub
 
-        total += 1
+        Public Sub dimension(val As Size)
+            dims = {val.Width, val.Height}
+        End Sub
 
-        Call wr.Flush()
-        Call file.Flush()
-        Call file.Dispose()
-    End Sub
+        Public Sub addFrame(time As Integer, dimension As String, framedata As Double()())
+            Dim path As String = $"/framedata/{dimension}/{time}.dat"
+            Dim file As StreamBuffer = buf.OpenBlock(path)
+            Dim wr As New BinaryDataWriter(file) With {
+                .ByteOrder = ByteOrder.BigEndian
+            }
 
-    Private Sub save()
+            For Each row As Double() In framedata
+                Call wr.Write(row)
+            Next
 
-    End Sub
-
-    Protected Overridable Sub Dispose(disposing As Boolean)
-        If Not disposedValue Then
-            If disposing Then
-                ' TODO: 释放托管状态(托管对象)
-                Call save()
-                Call buf.Dispose()
+            If Not dimensions.ContainsKey(dimension) Then
+                dimensions.Add(dimension, New DoubleRange(0, 0))
             End If
 
-            ' TODO: 释放未托管的资源(未托管的对象)并重写终结器
-            ' TODO: 将大型字段设置为 null
-            disposedValue = True
-        End If
-    End Sub
+            Dim range As DoubleRange = (From row As Double() In framedata Select New DoubleRange(row)) _
+                .Select(Function(a) {a.Min, a.Max}) _
+                .IteratesALL _
+                .Range
 
-    ' ' TODO: 仅当“Dispose(disposing As Boolean)”拥有用于释放未托管资源的代码时才替代终结器
-    ' Protected Overrides Sub Finalize()
-    '     ' 不要更改此代码。请将清理代码放入“Dispose(disposing As Boolean)”方法中
-    '     Dispose(disposing:=False)
-    '     MyBase.Finalize()
-    ' End Sub
+            total += 1
 
-    Public Sub Dispose() Implements IDisposable.Dispose
-        ' 不要更改此代码。请将清理代码放入“Dispose(disposing As Boolean)”方法中
-        Dispose(disposing:=True)
-        GC.SuppressFinalize(Me)
-    End Sub
-End Class
+            If dimensions(dimension).Min > range.Min Then
+                dimensions(dimension).Min = range.Min
+            End If
+            If dimensions(dimension).Max < range.Max Then
+                dimensions(dimension).Max = range.Max
+            End If
+
+            Call wr.Flush()
+            Call file.Flush()
+            Call file.Dispose()
+        End Sub
+
+        Private Sub save()
+            Dim metadata As New Dictionary(Of String, Object) From {
+                {"total", total},
+                {"dims", dims},
+                {"dimensions", dimensions.Keys.ToArray}
+            }
+            Dim json As String = metadata.GetJson(knownTypes:={
+                GetType(Integer), GetType(Integer()),
+                GetType(String), GetType(String())
+            })
+            Dim ranges As Dictionary(Of String, Double()) = dimensions _
+                .ToDictionary(Function(d) d.Key,
+                              Function(d)
+                                  Return New Double() {d.Value.Min, d.Value.Max}
+                              End Function)
+
+            Call buf.WriteText(json, fileName:="/metadata.json", Encodings.ASCII)
+            Call buf.WriteText(ranges.GetJson, fileName:="/ranges.json", Encodings.ASCII)
+        End Sub
+
+        Protected Overridable Sub Dispose(disposing As Boolean)
+            If Not disposedValue Then
+                If disposing Then
+                    Call save()
+                    Call buf.Dispose()
+                End If
+
+                disposedValue = True
+            End If
+        End Sub
+
+        Public Sub Dispose() Implements IDisposable.Dispose
+            Dispose(disposing:=True)
+            GC.SuppressFinalize(Me)
+        End Sub
+    End Class
+End Namespace

@@ -1,4 +1,5 @@
 import { CFD } from "./CFD";
+import { rgbToHex } from "./global";
 import { options, uiAdapter } from "./options";
 import { ui } from "./ui";
 
@@ -8,10 +9,62 @@ export class graphics {
     private pars: uiAdapter;
     private image: ImageData;
 
+    public redList: number[];
+    public greenList: number[];
+    public blueList: number[];
+    public hexColorList: string[];
+
+    public curl: number[];
+
     constructor(private html: ui, private cfd: CFD, private opts: options) {
+        const ydim = html.ydim;
+        const xdim = html.xdim;
+
         this.canvas = html.canvas;
         this.pars = html;
         this.image = html.image;
+        this.curl = new Array(xdim * ydim);
+
+        for (var y = 0; y < ydim; y++) {
+            for (var x = 0; x < xdim; x++) {
+                this.curl[x + y * xdim] = 0.0;
+            }
+        }
+
+        this.initGraphicsColors();
+    }
+
+    private initGraphicsColors() {
+        // Set up the array of colors for plotting (mimicks matplotlib "jet" colormap):
+        // (Kludge: Index nColors+1 labels the color used for drawing barriers.)
+        var nColors = this.opts.nColors;							// there are actually nColors+2 colors
+        var hexColorList = new Array(nColors + 2);
+        var redList = new Array(nColors + 2);
+        var greenList = new Array(nColors + 2);
+        var blueList = new Array(nColors + 2);
+        for (var c = 0; c <= nColors; c++) {
+            var r, g, b;
+            if (c < nColors / 8) {
+                r = 0; g = 0; b = Math.round(255 * (c + nColors / 8) / (nColors / 4));
+            } else if (c < 3 * nColors / 8) {
+                r = 0; g = Math.round(255 * (c - nColors / 8) / (nColors / 4)); b = 255;
+            } else if (c < 5 * nColors / 8) {
+                r = Math.round(255 * (c - 3 * nColors / 8) / (nColors / 4)); g = 255; b = 255 - r;
+            } else if (c < 7 * nColors / 8) {
+                r = 255; g = Math.round(255 * (7 * nColors / 8 - c) / (nColors / 4)); b = 0;
+            } else {
+                r = Math.round(255 * (9 * nColors / 8 - c) / (nColors / 4)); g = 0; b = 0;
+            }
+            redList[c] = r; greenList[c] = g; blueList[c] = b;
+            hexColorList[c] = rgbToHex(r, g, b);
+        }
+        redList[nColors + 1] = 0; greenList[nColors + 1] = 0; blueList[nColors + 1] = 0;	// barriers are black
+        hexColorList[nColors + 1] = rgbToHex(0, 0, 0);
+
+        this.redList = redList;
+        this.greenList = greenList;
+        this.blueList = blueList;
+        this.hexColorList = hexColorList;
     }
 
     /**
@@ -168,11 +221,15 @@ export class graphics {
     public drawTracers() {
         const context = this.html.context;
         const pxPerSquare = this.html.pxPerSquare;
+        const tracerX = this.opts.tracerX;
+        const tracerY = this.opts.tracerY;
 
         context.fillStyle = "rgb(150,150,150)";
+
         for (var t = 0; t < this.opts.nTracers; t++) {
             var canvasX = (tracerX[t] + 0.5) * pxPerSquare;
             var canvasY = this.canvas.height - (tracerY[t] + 0.5) * pxPerSquare;
+
             context.fillRect(canvasX - 1, canvasY - 1, 2, 2);
         }
     }
@@ -187,9 +244,19 @@ export class graphics {
         var ydim = this.html.ydim;
         var xdim = this.html.xdim;
         var pars = this.pars;
+        var opts = this.opts;
+        var nColors = opts.nColors;
 
         //var pixelGraphics = pixelCheck.checked;
-        if (plotType == 4) this.computeCurl();
+        if (plotType == 4) {
+            this.computeCurl();
+        }
+
+        const redList = this.redList;
+        const greenList = this.greenList;
+        const blueList = this.blueList;
+        const curl = this.curl;
+
         for (var y = 0; y < ydim; y++) {
             for (var x = 0; x < xdim; x++) {
                 if (barrier[x + y * xdim]) {
@@ -224,7 +291,7 @@ export class graphics {
         // Draw tracers, force vector, and/or sensor if appropriate:
         if (pars.drawTracers) this.drawTracers();
         if (pars.drawFlowlines) this.drawFlowlines();
-        if (pars.drawForceArrow) this.drawForceArrow(barrierxSum / barrierCount, barrierySum / barrierCount, barrierFx, barrierFy);
+        if (pars.drawForceArrow) this.drawForceArrow(opts.barrierxSum / opts.barrierCount, opts.barrierySum / opts.barrierCount, opts.barrierFx, opts.barrierFy);
         if (pars.drawSensor) this.drawSensor();
     }
 
@@ -257,6 +324,7 @@ export class graphics {
     public computeCurl() {
         const ydim = this.html.ydim;
         const xdim = this.html.xdim;
+        const curl = this.curl;
 
         for (var y = 1; y < ydim - 1; y++) {			// interior sites only; leave edges set to zero
             for (var x = 1; x < xdim - 1; x++) {

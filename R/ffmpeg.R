@@ -1,0 +1,1 @@
+# ffmpeg -f image2  -r 25 -i "video/frame-%5d.png" -vcodec libx264 -crf 22 ./output.mp4

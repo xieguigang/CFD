@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>read a frame data as raster matrix</title>
+    <title>Create a new CFD session</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <style rel="stylesheet" type="text/css">
@@ -148,12 +148,12 @@
 
         <table style="width: 100%;">
             <tr>
-                <td>read.frameRaster {CFD}</td>
+                <td>session {CFD}</td>
                 <td style="text-align: right;">R Documentation</td>
             </tr>
         </table>
 
-        <h2>read a frame data as raster matrix</h2>
+        <h2>Create a new CFD session</h2>
 
         <h3>Description</h3>
 
@@ -162,21 +162,15 @@
         <h3>Usage</h3>
 
         <div style="width: 100%; padding-left: 3%; color: black;">
-            <pre><code class='language-R' style="color: black; font-weight:normal;"><strong>read.frameRaster</strong>(<i>pack</i>, <i>time</i>,
-    <i>dimension</i> = <span style='color: brown;'><strong>"speed2"</strong></span>);</code></pre>
+            <pre><code class='language-R' style="color: black; font-weight:normal;"><strong>session</strong>(<i>storage</i>,
+    <i>dims</i> = <span style='color: brown;'><strong>"1920,1080"</strong></span>,
+    <i>interval</i> = <span style='color: green;'>30</span>);</code></pre>
         </div>
 
         <h3>Arguments</h3>
 
         <table>
             
-<dt>pack</dt>
-<dd><p><p>-</p></p></dd>
-
-
-<dt>time</dt>
-<dd><p><p>-</p></p></dd>
-
         </table>
 
 
@@ -187,7 +181,7 @@
 
         <h3>Value</h3>
 
-        this function returns data object of type <a href="/clr/CFD_clr/RawRaster.html">RawRaster</a>.
+        this function returns data object of type <a href="/clr/CFD/Session.html">Session</a>.
 
         <h3 style="display: none;">Examples</h3>
 

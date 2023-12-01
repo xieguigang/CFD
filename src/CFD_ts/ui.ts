@@ -221,35 +221,6 @@ export class ui implements uiAdapter {
         }
     }
 
-    // Set all densities in a cell to their equilibrium values for a given velocity and density:
-    // (If density is omitted, it's left unchanged.)
-    setEquil(x: number, y: number, newux: number, newuy: number, newrho?: number) {
-        var i = x + y * this.xdim;
-        if (typeof newrho == 'undefined') {
-            newrho = rho[i];
-        }
-        var ux3 = 3 * newux;
-        var uy3 = 3 * newuy;
-        var ux2 = newux * newux;
-        var uy2 = newuy * newuy;
-        var uxuy2 = 2 * newux * newuy;
-        var u2 = ux2 + uy2;
-        var u215 = 1.5 * u2;
-
-        n0[i] = four9ths * newrho * (1 - u215);
-        nE[i] = one9th * newrho * (1 + ux3 + 4.5 * ux2 - u215);
-        nW[i] = one9th * newrho * (1 - ux3 + 4.5 * ux2 - u215);
-        nN[i] = one9th * newrho * (1 + uy3 + 4.5 * uy2 - u215);
-        nS[i] = one9th * newrho * (1 - uy3 + 4.5 * uy2 - u215);
-        nNE[i] = one36th * newrho * (1 + ux3 + uy3 + 4.5 * (u2 + uxuy2) - u215);
-        nSE[i] = one36th * newrho * (1 + ux3 - uy3 + 4.5 * (u2 - uxuy2) - u215);
-        nNW[i] = one36th * newrho * (1 - ux3 + uy3 + 4.5 * (u2 - uxuy2) - u215);
-        nSW[i] = one36th * newrho * (1 - ux3 - uy3 + 4.5 * (u2 + uxuy2) - u215);
-        rho[i] = newrho;
-        ux[i] = newux;
-        uy[i] = newuy;
-    }
-
     /**
      * Functions to handle mouse/touch interaction 
     */

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>read a frame data as raster matrix</title>
+    <title>start run the simulation</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <style rel="stylesheet" type="text/css">
@@ -148,12 +148,12 @@
 
         <table style="width: 100%;">
             <tr>
-                <td>read.frameRaster {CFD}</td>
+                <td>start {CFD}</td>
                 <td style="text-align: right;">R Documentation</td>
             </tr>
         </table>
 
-        <h2>read a frame data as raster matrix</h2>
+        <h2>start run the simulation</h2>
 
         <h3>Description</h3>
 
@@ -162,19 +162,19 @@
         <h3>Usage</h3>
 
         <div style="width: 100%; padding-left: 3%; color: black;">
-            <pre><code class='language-R' style="color: black; font-weight:normal;"><strong>read.frameRaster</strong>(<i>pack</i>, <i>time</i>,
-    <i>dimension</i> = <span style='color: brown;'><strong>"speed2"</strong></span>);</code></pre>
+            <pre><code class='language-R' style="color: black; font-weight:normal;"><strong>start</strong>(<i>ss</i>,
+    <i>max.time</i> = <span style='color: green;'>1000000</span>);</code></pre>
         </div>
 
         <h3>Arguments</h3>
 
         <table>
             
-<dt>pack</dt>
+<dt>ss</dt>
 <dd><p><p>-</p></p></dd>
 
 
-<dt>time</dt>
+<dt>max.time</dt>
 <dd><p><p>-</p></p></dd>
 
         </table>
@@ -187,7 +187,7 @@
 
         <h3>Value</h3>
 
-        this function returns data object of type <a href="/clr/CFD_clr/RawRaster.html">RawRaster</a>.
+        this function returns data object of type <a href="/clr/CFD/Session.html">Session</a>.
 
         <h3 style="display: none;">Examples</h3>
 
