@@ -35,26 +35,14 @@ Public Class FormMain
         ribbon1.Height = 100
         ribbon1.SendToBack()
         ribbonItems = New RibbonItems(ribbon1)
+
+        Globals.ribbonItems = ribbonItems
+        Globals.dockPanel = dockPanel
+        Globals.main = Me
     End Sub
-
-
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        PropertyGrid1.SelectedObject = reader
-        PropertyGrid1.Refresh()
-    End Sub
 
-
-
-    Private Sub PropertyGrid1_PropertyValueChanged(s As Object, e As PropertyValueChangedEventArgs) Handles PropertyGrid1.PropertyValueChanged
-        Select Case e.ChangedItem.Label
-            Case NameOf(CFDHelper.DrawFrameData)
-                ' do nothing
-            Case NameOf(CFDHelper.Colors), NameOf(CFDHelper.ColorLevels)
-                Call UpdatePalette()
-        End Select
-
-        e.ChangedItem.Select()
     End Sub
 
 End Class

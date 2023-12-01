@@ -5,7 +5,6 @@ Imports CFD_form.RibbonLib.Controls
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Linq
-Imports RibbonLib
 Imports WeifenLuo.WinFormsUI.Docking
 
 
@@ -54,7 +53,7 @@ Public Class frmCFDCanvas
     End Sub
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    Private Sub UpdatePalette()
+    Friend Sub UpdatePalette()
         offset = New DoubleRange(0, reader.ColorLevels)
         colors = GetColors(reader.Colors.Description, reader.ColorLevels + 1) _
             .Select(Function(c) New SolidBrush(c)) _
@@ -97,7 +96,7 @@ Public Class frmCFDCanvas
             Call reader.SetBarrierPoint(xy, 1)
         End If
 
-        ToolStripStatusLabel2.Text = $"[{xy.X},{xy.Y}]"
+        Call Message($"[{xy.X},{xy.Y}]")
 
         Dim speed As Double = reader.GetSpeed(xy)
         Dim density As Double = reader.GetDensity(xy)
@@ -120,6 +119,9 @@ Public Class frmCFDCanvas
         CFD.reset()
 
         AddHandler RibbonItems.ButtonReset.ExecuteEvent, Sub() Call resetCFD()
-        AddHandler RibbonItems.ButtonClearBarrier.ExecuteEvent, Sub() Call CFD.clearBarrier()
+        AddHandler ribbonItems.ButtonClearBarrier.ExecuteEvent, Sub() Call CFD.clearBarrier()
+
+        toolkit.Show(dockPanel)
+        toolkit.DockState = DockState.DockLeft
     End Sub
 End Class
