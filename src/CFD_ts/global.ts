@@ -18,6 +18,11 @@ export interface IrequestAnimFrame {
 }
 
 /**
+ * request canvas refresh a frame drawing;
+*/
+export interface IrequestPaintCanvas { (): void; }
+
+/**
  * Mysterious gymnastics that are apparently useful 
  * for better cross-browser animation timing:
 */

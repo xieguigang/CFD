@@ -1,4 +1,7 @@
-import { mobile } from "./global";
+import { barrierList } from "./barrier";
+import { CFD } from "./CFD";
+import { IrequestPaintCanvas, mobile } from "./global";
+import { graphics } from "./graphics";
 import { four9ths, one36th, one9th, options, uiAdapter } from "./options";
 
 /**
@@ -32,11 +35,15 @@ export class ui implements uiAdapter {
     public readonly dataSection: HTMLElement;
     public readonly dataArea: HTMLElement;
     public readonly dataButton: HTMLInputElement;
+    public readonly periodButton: HTMLInputElement;
 
     public readonly sizeSelect: HTMLSelectElement;
+    public readonly barrierSelect: HTMLSelectElement;
 
     private draggingSensor = false;
     private mouseIsDown = false;
+    private CFD: CFD;
+    private paintCanvas: IrequestPaintCanvas;
 
     public get pxPerSquare(): number {
         var i = this.sizeSelect.selectedIndex;
@@ -77,7 +84,9 @@ export class ui implements uiAdapter {
         dataSection: string = "dataSection",
         dataArea: string = "dataArea",
         dataButton: string = "dataButton",
-        sizeSelect: string = "sizeSelect") {
+        sizeSelect: string = "sizeSelect",
+        barrierSelect: string = 'barrierSelect',
+        periodButton: string = 'periodButton') {
 
         const canvas: HTMLCanvasElement = <any>document.getElementById(canvas_id);
         const context: CanvasRenderingContext2D = <any>canvas.getContext('2d');
@@ -114,6 +123,7 @@ export class ui implements uiAdapter {
         this.dataSection = <any>document.getElementById(dataSection);
         this.dataArea = <any>document.getElementById(dataArea);
         this.dataButton = <any>document.getElementById(dataButton);
+        this.periodButton = <any>document.getElementById(periodButton);
 
         this.sizeSelect = <any>document.getElementById(sizeSelect);
         this.sizeSelect.selectedIndex = 5;
@@ -123,8 +133,29 @@ export class ui implements uiAdapter {
             this.sizeSelect.selectedIndex = 1;
         }
 
+        this.barrierSelect = <any>document.getElementById(barrierSelect);
+
+        for (let barrier of barrierList) {
+            const shape = document.createElement("option");
+            shape.text = barrier.name;
+            this.barrierSelect.add(shape, null);
+        }
+
         this.setEvents();
     }
+
+    public connectEngine(CFD: CFD) {
+        this.CFD = CFD;
+    }
+
+    public connectGraphicsDevice(g: graphics) {
+        this.paintCanvas = g.requestPaintCanvas;
+    }
+
+    public get steps(): number {
+        return Number(this.stepsSlider.value);
+    };
+
     public get speed(): number {
         return Number(this.speedSlider.value);
     }
@@ -167,28 +198,15 @@ export class ui implements uiAdapter {
         document.body.addEventListener('touchend', (e) => this.mouseUp(e), false);
     }
 
-    // Set the fluid variables at the boundaries, according to the current slider value:
-    setBoundaries() {
-        const u0 = Number(this.speedSlider.value);
-        const xdim = this.xdim;
-        const ydim = this.ydim;
-
-        for (var x = 0; x < xdim; x++) {
-            setEquil(x, 0, u0, 0, 1);
-            setEquil(x, ydim - 1, u0, 0, 1);
-        }
-        for (var y = 1; y < ydim - 1; y++) {
-            setEquil(0, y, u0, 0, 1);
-            setEquil(xdim - 1, y, u0, 0, 1);
-        }
-    }
-
     // Move the tracer particles:
     moveTracers() {
         const xdim = this.xdim;
         const ydim = this.ydim;
         const tracerX = this.opts.tracerX;
         const tracerY = this.opts.tracerY;
+
+        const ux = this.CFD.ux;
+        const uy = this.CFD.uy;
 
         for (var t = 0; t < this.opts.nTracers; t++) {
             var roundedX = Math.round(tracerX[t]);
@@ -210,12 +228,12 @@ export class ui implements uiAdapter {
         var margin = 3;
         if ((pushX > margin) && (pushX < this.xdim - 1 - margin) && (pushY > margin) && (pushY < this.ydim - 1 - margin)) {
             for (var dx = -1; dx <= 1; dx++) {
-                setEquil(pushX + dx, pushY + 2, pushUX, pushUY);
-                setEquil(pushX + dx, pushY - 2, pushUX, pushUY);
+                this.CFD.setEquil(pushX + dx, pushY + 2, pushUX, pushUY);
+                this.CFD.setEquil(pushX + dx, pushY - 2, pushUX, pushUY);
             }
             for (var dx = -2; dx <= 2; dx++) {
                 for (var dy = -1; dy <= 1; dy++) {
-                    setEquil(pushX + dx, pushY + dy, pushUX, pushUY);
+                    this.CFD.setEquil(pushX + dx, pushY + dy, pushUX, pushUY);
                 }
             }
         }
@@ -228,8 +246,8 @@ export class ui implements uiAdapter {
         if (this.sensorCheck.checked) {
             const pxPerSquare = this.pxPerSquare;
 
-            var canvasLoc = pageToCanvas(e.pageX, e.pageY);
-            var gridLoc = canvasToGrid(canvasLoc.x, canvasLoc.y);
+            var canvasLoc = this.pageToCanvas(e.pageX, e.pageY);
+            var gridLoc = this.canvasToGrid(canvasLoc.x, canvasLoc.y);
             var dx = (gridLoc.x - this.opts.sensorX) * pxPerSquare;
             var dy = (gridLoc.y - this.opts.sensorY) * pxPerSquare;
 
@@ -254,81 +272,95 @@ export class ui implements uiAdapter {
     mousePressDrag(e) {
         e.preventDefault();
         this.mouseIsDown = true;
-        var canvasLoc = pageToCanvas(e.pageX, e.pageY);
-        if (draggingSensor) {
-            var gridLoc = canvasToGrid(canvasLoc.x, canvasLoc.y);
+        var canvasLoc = this.pageToCanvas(e.pageX, e.pageY);
+        if (this.draggingSensor) {
+            var gridLoc = this.canvasToGrid(canvasLoc.x, canvasLoc.y);
             this.opts.sensorX = gridLoc.x;
             this.opts.sensorY = gridLoc.y;
-            paintCanvas();
+            this.paintCanvas();
             return;
         }
-        if (mouseSelect.selectedIndex == 2) {
+        if (this.mouseSelect.selectedIndex == 2) {
             this.opts.mouseX = canvasLoc.x;
             this.opts.mouseY = canvasLoc.y;
             return;
         }
-        var gridLoc = canvasToGrid(canvasLoc.x, canvasLoc.y);
+        var gridLoc = this.canvasToGrid(canvasLoc.x, canvasLoc.y);
         if (this.mouseSelect.selectedIndex == 0) {
-            addBarrier(gridLoc.x, gridLoc.y);
-            paintCanvas();
+            this.addBarrier(gridLoc.x, gridLoc.y);
+            this.paintCanvas();
         } else {
-            removeBarrier(gridLoc.x, gridLoc.y);
+            this.removeBarrier(gridLoc.x, gridLoc.y);
         }
     }
 
     // Convert page coordinates to canvas coordinates:
     pageToCanvas(pageX, pageY) {
-        var canvasX = pageX - canvas.offsetLeft;
-        var canvasY = pageY - canvas.offsetTop;
+        var canvasX = pageX - this.canvas.offsetLeft;
+        var canvasY = pageY - this.canvas.offsetTop;
         // this simple subtraction may not work when the canvas is nested in other elements
         return { x: canvasX, y: canvasY };
     }
 
     // Convert canvas coordinates to grid coordinates:
-    canvasToGrid(canvasX, canvasY) {
-        var gridX = Math.floor(canvasX / pxPerSquare);
-        var gridY = Math.floor((canvas.height - 1 - canvasY) / pxPerSquare); 	// off by 1?
+    canvasToGrid(canvasX: number, canvasY: number) {
+        var gridX = Math.floor(canvasX / this.pxPerSquare);
+        var gridY = Math.floor((this.canvas.height - 1 - canvasY) / this.pxPerSquare); 	// off by 1?
         return { x: gridX, y: gridY };
     }
 
     // Add a barrier at a given grid coordinate location:
     addBarrier(x, y) {
+        const xdim = this.xdim;
+        const ydim = this.ydim;
+
         if ((x > 1) && (x < xdim - 2) && (y > 1) && (y < ydim - 2)) {
-            barrier[x + y * xdim] = true;
+            this.CFD.barrier[x + y * xdim] = true;
         }
     }
 
     // Remove a barrier at a given grid coordinate location:
     removeBarrier(x, y) {
+        const xdim = this.xdim;
+        const barrier = this.CFD.barrier;
+
         if (barrier[x + y * xdim]) {
             barrier[x + y * xdim] = false;
-            paintCanvas();
+            this.paintCanvas();
         }
     }
 
     // Clear all barriers:
     clearBarriers() {
+        const xdim = this.xdim;
+        const ydim = this.ydim;
+        const barrier = this.CFD.barrier;
+
         for (var x = 0; x < xdim; x++) {
             for (var y = 0; y < ydim; y++) {
                 barrier[x + y * xdim] = false;
             }
         }
-        paintCanvas();
+
+        this.paintCanvas();
     }
 
     // Function to start or pause the simulation:
     startStop() {
-        running = !running;
-        if (running) {
-            startButton.value = "Pause";
-            resetTimer();
-            CFD_app.simulate();
+        this.CFD.running = !this.CFD.running;
+
+        if (this.CFD.running) {
+            this.startButton.value = "Pause";
+            this.resetTimer();
+            this.CFD.simulate();
         } else {
-            startButton.value = " Run ";
+            this.startButton.value = " Run ";
         }
     }
 
-    // Reset the timer that handles performance evaluation:
+    /**
+     * Reset the timer that handles performance evaluation 
+    */
     resetTimer() {
         this.opts.stepCount = 0;
         this.opts.startTime = (new Date()).getTime();
@@ -336,12 +368,12 @@ export class ui implements uiAdapter {
 
     // Show value of flow speed setting:
     adjustSpeed() {
-        speedValue.innerHTML = Number(speedSlider.value).toFixed(3);
+        this.speedValue.innerHTML = Number(this.speedSlider.value).toFixed(3);
     }
 
     // Show value of viscosity:
     adjustViscosity() {
-        viscValue.innerHTML = Number(viscSlider.value).toFixed(3);
+        this.viscValue.innerHTML = Number(this.viscSlider.value).toFixed(3);
     }
 
     // Show or hide the data area:
@@ -373,7 +405,12 @@ export class ui implements uiAdapter {
         var timeString = String(this.opts.time);
         var xdim = this.xdim;
         while (timeString.length < 5) timeString = "0" + timeString;
-        var sIndex = this.opts.sensorX + this.opts.sensorY * xdim;
+
+        const sIndex = this.opts.sensorX + this.opts.sensorY * xdim;
+        const ux = this.CFD.ux;
+        const uy = this.CFD.uy;
+        const rho = this.CFD.rho;
+
         this.dataArea.innerHTML += timeString + "\t" + Number(rho[sIndex]).toFixed(4) + "\t"
             + Number(ux[sIndex]).toFixed(4) + "\t" + Number(uy[sIndex]).toFixed(4) + "\t"
             + Number(this.opts.barrierFx).toFixed(4) + "\t" + Number(this.opts.barrierFy).toFixed(4) + "\n";
@@ -402,6 +439,7 @@ export class ui implements uiAdapter {
         const dataArea = this.dataArea;
         const xdim = this.xdim;
         const ydim = this.ydim;
+        const barrier = this.CFD.barrier;
 
         dataArea.innerHTML = '{name:"Barrier locations",\n';
         dataArea.innerHTML += 'locations:[\n';
@@ -416,7 +454,7 @@ export class ui implements uiAdapter {
 
     // Place a preset barrier:
     placePresetBarrier() {
-        var index = barrierSelect.selectedIndex;
+        var index = this.barrierSelect.selectedIndex;
         if (index == 0) return;
         this.clearBarriers();
         var bCount = barrierList[index - 1].locations.length / 2;	// number of barrier sites
@@ -435,15 +473,19 @@ export class ui implements uiAdapter {
                 yMax = barrierList[index - 1].locations[siteIndex + 1];
             }
         }
-        var yAverage = Math.round((yMin + yMax) / 2);
+
+        const yAverage = Math.round((yMin + yMax) / 2);
+        const xdim = this.xdim;
+        const ydim = this.ydim;
+
         // Now place the barriers:
         for (var siteIndex = 0; siteIndex < 2 * bCount; siteIndex += 2) {
             var x = barrierList[index - 1].locations[siteIndex] - xMin + Math.round(ydim / 3);
             var y = barrierList[index - 1].locations[siteIndex + 1] - yAverage + Math.round(ydim / 2);
-            addBarrier(x, y);
+            this.addBarrier(x, y);
         }
-        paintCanvas();
-        barrierSelect.selectedIndex = 0;	// A choice on this menu is a one-time action, not an ongoing setting
+        this.paintCanvas();
+        this.barrierSelect.selectedIndex = 0;	// A choice on this menu is a one-time action, not an ongoing setting
     }
 
     // Print debugging data:

@@ -1,4 +1,4 @@
-import { mobile, rgbToHex } from './global';
+import { IrequestPaintCanvas, mobile, rgbToHex } from './global';
 import { four9ths, one36th, one9th, options, uiAdapter } from './options';
 
 export class CFD {
@@ -19,6 +19,8 @@ export class CFD {
     uy: number[];
 
     barrier: boolean[];		// boolean array of barrier locations
+
+    paintCanvas: IrequestPaintCanvas;
 
     /**
      * will be true when running
@@ -44,6 +46,10 @@ export class CFD {
         this.barrier = new Array(xdim * ydim);		// boolean array of barrier locations
 
         this.init();
+    }
+
+    public setupGraphicsDevice(gr: IrequestPaintCanvas) {
+        this.paintCanvas = gr;
     }
 
     private init(): void {
@@ -80,16 +86,32 @@ export class CFD {
             }
         }
 
-        paintCanvas();
+        this.paintCanvas();
+    }
+
+    /**
+     * Set the fluid variables at the boundaries, 
+     * according to the current slider value 
+    */
+    setBoundaries() {
+        const u0 = this.pars.speed;
+        const xdim = this.xdim;
+        const ydim = this.ydim;
+
+        for (var x = 0; x < xdim; x++) {
+            this.setEquil(x, 0, u0, 0, 1);
+            this.setEquil(x, ydim - 1, u0, 0, 1);
+        }
+        for (var y = 1; y < ydim - 1; y++) {
+            this.setEquil(0, y, u0, 0, 1);
+            this.setEquil(xdim - 1, y, u0, 0, 1);
+        }
     }
 
     // Set all densities in a cell to their equilibrium values for a given velocity and density:
     // (If density is omitted, it's left unchanged.)
     setEquil(x: number, y: number, newux: number, newuy: number, newrho?: number) {
         var i = x + y * this.xdim;
-        if (typeof newrho == 'undefined') {
-            newrho = this.rho[i];
-        }
         var ux3 = 3 * newux;
         var uy3 = 3 * newuy;
         var ux2 = newux * newux;
@@ -97,6 +119,10 @@ export class CFD {
         var uxuy2 = 2 * newux * newuy;
         var u2 = ux2 + uy2;
         var u215 = 1.5 * u2;
+
+        if (typeof newrho == 'undefined') {
+            newrho = this.rho[i];
+        }
 
         this.n0[i] = four9ths * newrho * (1 - u215);
         this.nE[i] = one9th * newrho * (1 + ux3 + 4.5 * ux2 - u215);
@@ -110,84 +136,6 @@ export class CFD {
         this.rho[i] = newrho;
         this.ux[i] = newux;
         this.uy[i] = newuy;
-    }
-
-    /**
-     * Resize the grid
-    */
-    public resize() {
-        // First up-sample the macroscopic variables into temporary arrays at max resolution:
-        var tempRho = new Array(canvas.width * canvas.height);
-        var tempUx = new Array(canvas.width * canvas.height);
-        var tempUy = new Array(canvas.width * canvas.height);
-        var tempBarrier = new Array(canvas.width * canvas.height);
-        for (var y = 0; y < canvas.height; y++) {
-            for (var x = 0; x < canvas.width; x++) {
-                var tempIndex = x + y * canvas.width;
-                var xOld = Math.floor(x / pxPerSquare);
-                var yOld = Math.floor(y / pxPerSquare);
-                var oldIndex = xOld + yOld * xdim;
-                tempRho[tempIndex] = rho[oldIndex];
-                tempUx[tempIndex] = ux[oldIndex];
-                tempUy[tempIndex] = uy[oldIndex];
-                tempBarrier[tempIndex] = barrier[oldIndex];
-            }
-        }
-        // Get new size from GUI selector:
-        var pxPerSquare = this.pars.pxPerSquare;
-        var oldPxPerSquare = pxPerSquare;
-        pxPerSquare = Number(sizeSelect.options[sizeSelect.selectedIndex].value);
-        var growRatio = oldPxPerSquare / pxPerSquare;
-        xdim = canvas.width / pxPerSquare;
-        ydim = canvas.height / pxPerSquare;
-        // Create new arrays at the desired resolution:
-        n0 = new Array(xdim * ydim);
-        nN = new Array(xdim * ydim);
-        nS = new Array(xdim * ydim);
-        nE = new Array(xdim * ydim);
-        nW = new Array(xdim * ydim);
-        nNE = new Array(xdim * ydim);
-        nSE = new Array(xdim * ydim);
-        nNW = new Array(xdim * ydim);
-        nSW = new Array(xdim * ydim);
-        rho = new Array(xdim * ydim);
-        ux = new Array(xdim * ydim);
-        uy = new Array(xdim * ydim);
-        curl = new Array(xdim * ydim);
-        barrier = new Array(xdim * ydim);
-        // Down-sample the temporary arrays into the new arrays:
-        for (var yNew = 0; yNew < ydim; yNew++) {
-            for (var xNew = 0; xNew < xdim; xNew++) {
-                var rhoTotal = 0;
-                var uxTotal = 0;
-                var uyTotal = 0;
-                var barrierTotal = 0;
-                for (var y = yNew * pxPerSquare; y < (yNew + 1) * pxPerSquare; y++) {
-                    for (var x = xNew * pxPerSquare; x < (xNew + 1) * pxPerSquare; x++) {
-                        var index = x + y * canvas.width;
-                        rhoTotal += tempRho[index];
-                        uxTotal += tempUx[index];
-                        uyTotal += tempUy[index];
-                        if (tempBarrier[index]) barrierTotal++;
-                    }
-                }
-                setEquil(xNew, yNew, uxTotal / (pxPerSquare * pxPerSquare), uyTotal / (pxPerSquare * pxPerSquare), rhoTotal / (pxPerSquare * pxPerSquare))
-                curl[xNew + yNew * xdim] = 0.0;
-                barrier[xNew + yNew * xdim] = (barrierTotal >= pxPerSquare * pxPerSquare / 2);
-            }
-        }
-        setBoundaries();
-        if (tracerCheck.checked) {
-            for (var t = 0; t < nTracers; t++) {
-                tracerX[t] *= growRatio;
-                tracerY[t] *= growRatio;
-            }
-        }
-        this.opts.sensorX = Math.round(this.opts.sensorX * growRatio);
-        this.opts.sensorY = Math.round(this.opts.sensorY * growRatio);
-        //computeCurl();
-        paintCanvas();
-        resetTimer();
     }
 
     /**
@@ -326,55 +274,60 @@ export class CFD {
      * Simulate function executes a bunch of steps and then schedules another call to itself
     */
     public simulate() {
-        var stepsPerFrame = Number(stepsSlider.value);			// number of simulation steps per animation frame
-        setBoundaries();
+        var stepsPerFrame = this.pars.steps;			// number of simulation steps per animation frame
+        this.setBoundaries();
         // Test to see if we're dragging the fluid:
         var pushing = false;
         var pushX, pushY, pushUX, pushUY;
         if (mouseIsDown && mouseSelect.selectedIndex == 2) {
-            if (oldMouseX >= 0) {
-                var gridLoc = canvasToGrid(mouseX, mouseY);
+            if (this.opts.oldMouseX >= 0) {
+                var gridLoc = canvasToGrid(this.opts.mouseX, this.opts.mouseY);
                 pushX = gridLoc.x;
                 pushY = gridLoc.y;
-                pushUX = (mouseX - oldMouseX) / pxPerSquare / stepsPerFrame;
-                pushUY = -(mouseY - oldMouseY) / pxPerSquare / stepsPerFrame;	// y axis is flipped
+                pushUX = (this.opts.mouseX - this.opts.oldMouseX) / pxPerSquare / stepsPerFrame;
+                pushUY = -(this.opts.mouseY - this.opts.oldMouseY) / pxPerSquare / stepsPerFrame;	// y axis is flipped
                 if (Math.abs(pushUX) > 0.1) pushUX = 0.1 * Math.abs(pushUX) / pushUX;
                 if (Math.abs(pushUY) > 0.1) pushUY = 0.1 * Math.abs(pushUY) / pushUY;
                 pushing = true;
             }
-            oldMouseX = mouseX; oldMouseY = mouseY;
+            this.opts.oldMouseX = this.opts.mouseX; this.opts.oldMouseY = this.opts.mouseY;
         } else {
-            oldMouseX = -1; oldMouseY = -1;
+            this.opts.oldMouseX = -1; this.opts.oldMouseY = -1;
         }
         // Execute a bunch of time steps:
         for (var step = 0; step < stepsPerFrame; step++) {
-            collide();
-            stream();
+            this.collide();
+            this.stream();
             if (tracerCheck.checked) moveTracers();
             if (pushing) push(pushX, pushY, pushUX, pushUY);
-            time++;
-            if (showingPeriod && (barrierFy > 0) && (lastBarrierFy <= 0)) {
-                var thisFyOscTime = time - barrierFy / (barrierFy - lastBarrierFy);	// interpolate when Fy changed sign
-                if (lastFyOscTime > 0) {
-                    var period = thisFyOscTime - lastFyOscTime;
+            this.opts.time++;
+            if (this.opts.showingPeriod && (this.opts.barrierFy > 0) && (this.opts.lastBarrierFy <= 0)) {
+                var thisFyOscTime = this.opts.time - this.opts.barrierFy / (this.opts.barrierFy - this.opts.lastBarrierFy);	// interpolate when Fy changed sign
+                if (this.opts.lastFyOscTime > 0) {
+                    var period = thisFyOscTime - this.opts.lastFyOscTime;
                     dataArea.innerHTML += Number(period).toFixed(2) + "\n";
                     dataArea.scrollTop = dataArea.scrollHeight;
                 }
-                lastFyOscTime = thisFyOscTime;
+                this.opts.lastFyOscTime = thisFyOscTime;
             }
-            lastBarrierFy = barrierFy;
+            this.opts.lastBarrierFy = this.opts.barrierFy;
         }
         paintCanvas();
-        if (collectingData) {
+        if (this.opts.collectingData) {
             writeData();
-            if (time >= 10000) startOrStopData();
+            if (this.opts.time >= 10000) startOrStopData();
         }
         if (this.running) {
-            stepCount += stepsPerFrame;
-            var elapsedTime = ((new Date()).getTime() - startTime) / 1000;	// time in seconds
-            speedReadout.innerHTML = Number(stepCount / elapsedTime).toFixed(0);
+            this.opts.stepCount += stepsPerFrame;
+            var elapsedTime = ((new Date()).getTime() - this.opts.startTime) / 1000;	// time in seconds
+            speedReadout.innerHTML = Number(this.opts.stepCount / elapsedTime).toFixed(0);
         }
-        var stable = true;
+
+        let stable = true;
+        let xdim = this.pars.xdim;
+        let ydim = this.pars.ydim;
+        let rho = this.rho;
+
         for (var x = 0; x < xdim; x++) {
             var index = x + (ydim / 2) * xdim;	// look at middle row only
             if (rho[index] <= 0) stable = false;
@@ -386,9 +339,9 @@ export class CFD {
         }
         if (this.running) {
             if (rafCheck.checked) {
-                requestAnimFrame(function () { simulate(); });	// let browser schedule next frame
+                requestAnimFrame(() => this.simulate());	// let browser schedule next frame
             } else {
-                window.setTimeout(simulate, 1);	// schedule next frame asap (nominally 1 ms but always more)
+                window.setTimeout(() => this.simulate(), 1);	// schedule next frame asap (nominally 1 ms but always more)
             }
         }
     }

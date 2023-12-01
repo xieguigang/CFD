@@ -1,44 +1,527 @@
+define("global", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.mobile = navigator.userAgent.match(/iPhone|iPad|iPod|Android|BlackBerry|Opera Mini|IEMobile/i).length > 0;
+    function componentToHex(c) {
+        var hex = c.toString(16);
+        return hex.length == 1 ? "0" + hex : hex;
+    }
+    exports.componentToHex = componentToHex;
+    /**
+     * Functions to convert rgb to hex color string
+     * (from stackoverflow)
+    */
+    function rgbToHex(r, g, b) {
+        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+    }
+    exports.rgbToHex = rgbToHex;
+    /**
+     * Mysterious gymnastics that are apparently useful
+     * for better cross-browser animation timing:
+    */
+    exports.requestAnimFrame = (function (callback) {
+        var win = window;
+        return window.requestAnimationFrame ||
+            win.webkitRequestAnimationFrame ||
+            win.mozRequestAnimationFrame ||
+            win.oRequestAnimationFrame ||
+            win.msRequestAnimationFrame ||
+            function (callback) {
+                window.setTimeout(callback, 1); // second parameter is time in ms
+            };
+    })();
+});
+define("options", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    // abbreviations
+    exports.four9ths = 4.0 / 9.0;
+    exports.one9th = 1.0 / 9.0;
+    exports.one36th = 1.0 / 36.0;
+    /**
+     * the simulation options
+    */
+    var options = /** @class */ (function () {
+        /**
+         * create new simulation parameter set with default values
+        */
+        function options(stepCount, startTime, barrierCount, barrierxSum, barrierySum, barrierFx, // total force on all barrier sites
+        barrierFy, mouseX, mouseY, // mouse location in canvas coordinates
+        oldMouseX, oldMouseY, // mouse coordinates from previous simulation frame
+        collectingData, time, // time (in simulation step units) since data collection started
+        showingPeriod, lastBarrierFy, // for determining when F_y oscillation begins
+        lastFyOscTime, // for calculating F_y oscillation period
+        nTracers, nColors, sensorX, // coordinates of "sensor" to measure local fluid properties	
+        sensorY, tracerX, tracerY, transBlackArraySize, transBlackArray) {
+            if (stepCount === void 0) { stepCount = 0; }
+            if (startTime === void 0) { startTime = 0; }
+            if (barrierCount === void 0) { barrierCount = 0; }
+            if (barrierxSum === void 0) { barrierxSum = 0; }
+            if (barrierySum === void 0) { barrierySum = 0; }
+            if (barrierFx === void 0) { barrierFx = 0.0; }
+            if (barrierFy === void 0) { barrierFy = 0.0; }
+            if (mouseX === void 0) { mouseX = -1; }
+            if (mouseY === void 0) { mouseY = -1; }
+            if (oldMouseX === void 0) { oldMouseX = -1; }
+            if (oldMouseY === void 0) { oldMouseY = -1; }
+            if (collectingData === void 0) { collectingData = false; }
+            if (time === void 0) { time = 0; }
+            if (showingPeriod === void 0) { showingPeriod = false; }
+            if (lastBarrierFy === void 0) { lastBarrierFy = 1; }
+            if (lastFyOscTime === void 0) { lastFyOscTime = 0; }
+            if (nTracers === void 0) { nTracers = 144; }
+            if (nColors === void 0) { nColors = 400; }
+            if (sensorX === void 0) { sensorX = -1; }
+            if (sensorY === void 0) { sensorY = -1; }
+            if (tracerX === void 0) { tracerX = null; }
+            if (tracerY === void 0) { tracerY = null; }
+            if (transBlackArraySize === void 0) { transBlackArraySize = 50; }
+            if (transBlackArray === void 0) { transBlackArray = null; }
+            this.stepCount = stepCount;
+            this.startTime = startTime;
+            this.barrierCount = barrierCount;
+            this.barrierxSum = barrierxSum;
+            this.barrierySum = barrierySum;
+            this.barrierFx = barrierFx;
+            this.barrierFy = barrierFy;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+            this.oldMouseX = oldMouseX;
+            this.oldMouseY = oldMouseY;
+            this.collectingData = collectingData;
+            this.time = time;
+            this.showingPeriod = showingPeriod;
+            this.lastBarrierFy = lastBarrierFy;
+            this.lastFyOscTime = lastFyOscTime;
+            this.nTracers = nTracers;
+            this.nColors = nColors;
+            this.sensorX = sensorX;
+            this.sensorY = sensorY;
+            this.tracerX = tracerX;
+            this.tracerY = tracerY;
+            this.transBlackArraySize = transBlackArraySize;
+            this.transBlackArray = transBlackArray;
+        }
+        return options;
+    }());
+    exports.options = options;
+    get;
+    xdim();
+    number;
+    get;
+    ydim();
+    number;
+    get;
+    contrast();
+    number;
+    get;
+    pxPerSquare();
+    number;
+    get;
+    viscosity();
+    number;
+    get;
+    speed();
+    number;
+    get;
+    plotType();
+    number;
+    get;
+    steps();
+    number;
+    get;
+    drawTracers();
+    boolean;
+    get;
+    drawFlowlines();
+    boolean;
+    get;
+    drawForceArrow();
+    boolean;
+    get;
+    drawSensor();
+    boolean;
+    function init_options(opts) {
+        // Initialize tracers (but don't place them yet):
+        var nTracers = this.opts.nTracers;
+        var tracerX = new Array(nTracers);
+        var tracerY = new Array(nTracers);
+        for (var t = 0; t < nTracers; t++) {
+            tracerX[t] = 0.0;
+            tracerY[t] = 0.0;
+        }
+        opts.tracerX = tracerX;
+        opts.tracerY = tracerY;
+        // Initialize array of partially transparant blacks, for drawing flow lines:
+        var transBlackArray = new Array(opts.transBlackArraySize);
+        for (var i = 0; i < opts.transBlackArraySize; i++) {
+            transBlackArray[i] = "rgba(0,0,0," + Number(i / opts.transBlackArraySize).toFixed(2) + ")";
+        }
+        opts.transBlackArray = transBlackArray;
+    }
+    exports.init_options = init_options;
+});
+define("CFD", ["require", "exports", "global", "options"], function (require, exports, global_1, options_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var CFD = /** @class */ (function () {
+        function CFD(xdim, ydim, pars, opts) {
+            this.xdim = xdim;
+            this.ydim = ydim;
+            this.pars = pars;
+            this.opts = opts;
+            /**
+             * will be true when running
+            */
+            this.running = false;
+            this.n0 = new Array(xdim * ydim); // microscopic densities along each lattice direction
+            this.nN = new Array(xdim * ydim);
+            this.nS = new Array(xdim * ydim);
+            this.nE = new Array(xdim * ydim);
+            this.nW = new Array(xdim * ydim);
+            this.nNE = new Array(xdim * ydim);
+            this.nSE = new Array(xdim * ydim);
+            this.nNW = new Array(xdim * ydim);
+            this.nSW = new Array(xdim * ydim);
+            this.rho = new Array(xdim * ydim); // macroscopic density
+            this.ux = new Array(xdim * ydim); // macroscopic velocity
+            this.uy = new Array(xdim * ydim);
+            this.barrier = new Array(xdim * ydim); // boolean array of barrier locations
+            this.init();
+        }
+        CFD.prototype.setupGraphicsDevice = function (gr) {
+            this.paintCanvas = gr;
+        };
+        CFD.prototype.init = function () {
+            // Initialize to a steady rightward flow with no barriers:
+            for (var y = 0; y < this.ydim; y++) {
+                for (var x = 0; x < this.xdim; x++) {
+                    this.barrier[x + y * this.xdim] = false;
+                }
+            }
+            // Create a simple linear "wall" barrier (intentionally a little offset from center):
+            var barrierSize = global_1.mobile ? 4 : 8;
+            for (var y = (this.ydim / 2) - barrierSize; y <= (this.ydim / 2) + barrierSize; y++) {
+                var x = Math.round(this.ydim / 3);
+                this.barrier[x + y * this.xdim] = true;
+            }
+            // initialize to steady rightward flow
+            this.initFluid();
+        };
+        // Function to initialize or re-initialize the fluid, based on speed slider setting:
+        CFD.prototype.initFluid = function () {
+            // Amazingly, if I nest the y loop inside the x loop, Firefox slows down by a factor of 20
+            var u0 = this.pars.speed;
+            var ydim = this.pars.ydim;
+            var xdim = this.pars.xdim;
+            for (var y = 0; y < ydim; y++) {
+                for (var x = 0; x < xdim; x++) {
+                    this.setEquil(x, y, u0, 0, 1);
+                    // this.curl[x + y * xdim] = 0.0;
+                }
+            }
+            this.paintCanvas();
+        };
+        /**
+         * Set the fluid variables at the boundaries,
+         * according to the current slider value
+        */
+        CFD.prototype.setBoundaries = function () {
+            var u0 = this.pars.speed;
+            var xdim = this.xdim;
+            var ydim = this.ydim;
+            for (var x = 0; x < xdim; x++) {
+                this.setEquil(x, 0, u0, 0, 1);
+                this.setEquil(x, ydim - 1, u0, 0, 1);
+            }
+            for (var y = 1; y < ydim - 1; y++) {
+                this.setEquil(0, y, u0, 0, 1);
+                this.setEquil(xdim - 1, y, u0, 0, 1);
+            }
+        };
+        // Set all densities in a cell to their equilibrium values for a given velocity and density:
+        // (If density is omitted, it's left unchanged.)
+        CFD.prototype.setEquil = function (x, y, newux, newuy, newrho) {
+            var i = x + y * this.xdim;
+            var ux3 = 3 * newux;
+            var uy3 = 3 * newuy;
+            var ux2 = newux * newux;
+            var uy2 = newuy * newuy;
+            var uxuy2 = 2 * newux * newuy;
+            var u2 = ux2 + uy2;
+            var u215 = 1.5 * u2;
+            if (typeof newrho == 'undefined') {
+                newrho = this.rho[i];
+            }
+            this.n0[i] = options_1.four9ths * newrho * (1 - u215);
+            this.nE[i] = options_1.one9th * newrho * (1 + ux3 + 4.5 * ux2 - u215);
+            this.nW[i] = options_1.one9th * newrho * (1 - ux3 + 4.5 * ux2 - u215);
+            this.nN[i] = options_1.one9th * newrho * (1 + uy3 + 4.5 * uy2 - u215);
+            this.nS[i] = options_1.one9th * newrho * (1 - uy3 + 4.5 * uy2 - u215);
+            this.nNE[i] = options_1.one36th * newrho * (1 + ux3 + uy3 + 4.5 * (u2 + uxuy2) - u215);
+            this.nSE[i] = options_1.one36th * newrho * (1 + ux3 - uy3 + 4.5 * (u2 - uxuy2) - u215);
+            this.nNW[i] = options_1.one36th * newrho * (1 - ux3 + uy3 + 4.5 * (u2 - uxuy2) - u215);
+            this.nSW[i] = options_1.one36th * newrho * (1 - ux3 - uy3 + 4.5 * (u2 + uxuy2) - u215);
+            this.rho[i] = newrho;
+            this.ux[i] = newux;
+            this.uy[i] = newuy;
+        };
+        /**
+         * Collide particles within each cell (here's the physics!)
+        */
+        CFD.prototype.collide = function () {
+            var viscosity = this.pars.viscosity; // kinematic viscosity coefficient in natural units
+            var omega = 1 / (3 * viscosity + 0.5); // reciprocal of relaxation time
+            var xdim = this.xdim;
+            var ydim = this.ydim;
+            var n0 = this.n0;
+            var nN = this.nN;
+            var nS = this.nS;
+            var nE = this.nE;
+            var nW = this.nW;
+            var nNE = this.nNE;
+            var nSE = this.nSE;
+            var nNW = this.nNW;
+            var nSW = this.nSW;
+            var rho = this.rho;
+            var ux = this.ux;
+            var uy = this.uy;
+            for (var y = 1; y < ydim - 1; y++) {
+                for (var x = 1; x < xdim - 1; x++) {
+                    var i = x + y * xdim; // array index for this lattice site
+                    var thisrho = n0[i] + nN[i] + nS[i] + nE[i] + nW[i] + nNW[i] + nNE[i] + nSW[i] + nSE[i];
+                    rho[i] = thisrho;
+                    var thisux = (nE[i] + nNE[i] + nSE[i] - nW[i] - nNW[i] - nSW[i]) / thisrho;
+                    ux[i] = thisux;
+                    var thisuy = (nN[i] + nNE[i] + nNW[i] - nS[i] - nSE[i] - nSW[i]) / thisrho;
+                    uy[i] = thisuy;
+                    var one9thrho = options_1.one9th * thisrho; // pre-compute a bunch of stuff for optimization
+                    var one36thrho = options_1.one36th * thisrho;
+                    var ux3 = 3 * thisux;
+                    var uy3 = 3 * thisuy;
+                    var ux2 = thisux * thisux;
+                    var uy2 = thisuy * thisuy;
+                    var uxuy2 = 2 * thisux * thisuy;
+                    var u2 = ux2 + uy2;
+                    var u215 = 1.5 * u2;
+                    n0[i] += omega * (options_1.four9ths * thisrho * (1 - u215) - n0[i]);
+                    nE[i] += omega * (one9thrho * (1 + ux3 + 4.5 * ux2 - u215) - nE[i]);
+                    nW[i] += omega * (one9thrho * (1 - ux3 + 4.5 * ux2 - u215) - nW[i]);
+                    nN[i] += omega * (one9thrho * (1 + uy3 + 4.5 * uy2 - u215) - nN[i]);
+                    nS[i] += omega * (one9thrho * (1 - uy3 + 4.5 * uy2 - u215) - nS[i]);
+                    nNE[i] += omega * (one36thrho * (1 + ux3 + uy3 + 4.5 * (u2 + uxuy2) - u215) - nNE[i]);
+                    nSE[i] += omega * (one36thrho * (1 + ux3 - uy3 + 4.5 * (u2 - uxuy2) - u215) - nSE[i]);
+                    nNW[i] += omega * (one36thrho * (1 - ux3 + uy3 + 4.5 * (u2 - uxuy2) - u215) - nNW[i]);
+                    nSW[i] += omega * (one36thrho * (1 - ux3 - uy3 + 4.5 * (u2 + uxuy2) - u215) - nSW[i]);
+                }
+            }
+            for (var y = 1; y < ydim - 2; y++) {
+                nW[xdim - 1 + y * xdim] = nW[xdim - 2 + y * xdim]; // at right end, copy left-flowing densities from next row to the left
+                nNW[xdim - 1 + y * xdim] = nNW[xdim - 2 + y * xdim];
+                nSW[xdim - 1 + y * xdim] = nSW[xdim - 2 + y * xdim];
+            }
+        };
+        /**
+         * Move particles along their directions of motion
+        */
+        CFD.prototype.stream = function () {
+            var opts = this.opts;
+            var xdim = this.pars.xdim;
+            var ydim = this.pars.ydim;
+            var n0 = this.n0;
+            var nN = this.nN;
+            var nS = this.nS;
+            var nE = this.nE;
+            var nW = this.nW;
+            var nNE = this.nNE;
+            var nSE = this.nSE;
+            var nNW = this.nNW;
+            var nSW = this.nSW;
+            var rho = this.rho;
+            var ux = this.ux;
+            var uy = this.uy;
+            opts.barrierCount = 0;
+            opts.barrierxSum = 0;
+            opts.barrierySum = 0;
+            opts.barrierFx = 0.0;
+            opts.barrierFy = 0.0;
+            for (var y = ydim - 2; y > 0; y--) { // first start in NW corner...
+                for (var x = 1; x < xdim - 1; x++) {
+                    nN[x + y * xdim] = nN[x + (y - 1) * xdim]; // move the north-moving particles
+                    nNW[x + y * xdim] = nNW[x + 1 + (y - 1) * xdim]; // and the northwest-moving particles
+                }
+            }
+            for (var y = ydim - 2; y > 0; y--) { // now start in NE corner...
+                for (var x = xdim - 2; x > 0; x--) {
+                    nE[x + y * xdim] = nE[x - 1 + y * xdim]; // move the east-moving particles
+                    nNE[x + y * xdim] = nNE[x - 1 + (y - 1) * xdim]; // and the northeast-moving particles
+                }
+            }
+            for (var y = 1; y < ydim - 1; y++) { // now start in SE corner...
+                for (var x = xdim - 2; x > 0; x--) {
+                    nS[x + y * xdim] = nS[x + (y + 1) * xdim]; // move the south-moving particles
+                    nSE[x + y * xdim] = nSE[x - 1 + (y + 1) * xdim]; // and the southeast-moving particles
+                }
+            }
+            for (var y = 1; y < ydim - 1; y++) { // now start in the SW corner...
+                for (var x = 1; x < xdim - 1; x++) {
+                    nW[x + y * xdim] = nW[x + 1 + y * xdim]; // move the west-moving particles
+                    nSW[x + y * xdim] = nSW[x + 1 + (y + 1) * xdim]; // and the southwest-moving particles
+                }
+            }
+            var barrier = this.barrier;
+            for (var y = 1; y < ydim - 1; y++) { // Now handle bounce-back from barriers
+                for (var x = 1; x < xdim - 1; x++) {
+                    if (barrier[x + y * xdim]) {
+                        var index = x + y * xdim;
+                        nE[x + 1 + y * xdim] = nW[index];
+                        nW[x - 1 + y * xdim] = nE[index];
+                        nN[x + (y + 1) * xdim] = nS[index];
+                        nS[x + (y - 1) * xdim] = nN[index];
+                        nNE[x + 1 + (y + 1) * xdim] = nSW[index];
+                        nNW[x - 1 + (y + 1) * xdim] = nSE[index];
+                        nSE[x + 1 + (y - 1) * xdim] = nNW[index];
+                        nSW[x - 1 + (y - 1) * xdim] = nNE[index];
+                        // Keep track of stuff needed to plot force vector:
+                        opts.barrierCount++;
+                        opts.barrierxSum += x;
+                        opts.barrierySum += y;
+                        opts.barrierFx += nE[index] + nNE[index] + nSE[index] - nW[index] - nNW[index] - nSW[index];
+                        opts.barrierFy += nN[index] + nNE[index] + nNW[index] - nS[index] - nSE[index] - nSW[index];
+                    }
+                }
+            }
+        };
+        /**
+         * Simulate function executes a bunch of steps and then schedules another call to itself
+        */
+        CFD.prototype.simulate = function () {
+            var _this = this;
+            var stepsPerFrame = this.pars.steps; // number of simulation steps per animation frame
+            this.setBoundaries();
+            // Test to see if we're dragging the fluid:
+            var pushing = false;
+            var pushX, pushY, pushUX, pushUY;
+            if (mouseIsDown && mouseSelect.selectedIndex == 2) {
+                if (this.opts.oldMouseX >= 0) {
+                    var gridLoc = canvasToGrid(this.opts.mouseX, this.opts.mouseY);
+                    pushX = gridLoc.x;
+                    pushY = gridLoc.y;
+                    pushUX = (this.opts.mouseX - this.opts.oldMouseX) / pxPerSquare / stepsPerFrame;
+                    pushUY = -(this.opts.mouseY - this.opts.oldMouseY) / pxPerSquare / stepsPerFrame; // y axis is flipped
+                    if (Math.abs(pushUX) > 0.1)
+                        pushUX = 0.1 * Math.abs(pushUX) / pushUX;
+                    if (Math.abs(pushUY) > 0.1)
+                        pushUY = 0.1 * Math.abs(pushUY) / pushUY;
+                    pushing = true;
+                }
+                this.opts.oldMouseX = this.opts.mouseX;
+                this.opts.oldMouseY = this.opts.mouseY;
+            }
+            else {
+                this.opts.oldMouseX = -1;
+                this.opts.oldMouseY = -1;
+            }
+            // Execute a bunch of time steps:
+            for (var step = 0; step < stepsPerFrame; step++) {
+                this.collide();
+                this.stream();
+                if (tracerCheck.checked)
+                    moveTracers();
+                if (pushing)
+                    push(pushX, pushY, pushUX, pushUY);
+                this.opts.time++;
+                if (this.opts.showingPeriod && (this.opts.barrierFy > 0) && (this.opts.lastBarrierFy <= 0)) {
+                    var thisFyOscTime = this.opts.time - this.opts.barrierFy / (this.opts.barrierFy - this.opts.lastBarrierFy); // interpolate when Fy changed sign
+                    if (this.opts.lastFyOscTime > 0) {
+                        var period = thisFyOscTime - this.opts.lastFyOscTime;
+                        dataArea.innerHTML += Number(period).toFixed(2) + "\n";
+                        dataArea.scrollTop = dataArea.scrollHeight;
+                    }
+                    this.opts.lastFyOscTime = thisFyOscTime;
+                }
+                this.opts.lastBarrierFy = this.opts.barrierFy;
+            }
+            paintCanvas();
+            if (this.opts.collectingData) {
+                writeData();
+                if (this.opts.time >= 10000)
+                    startOrStopData();
+            }
+            if (this.running) {
+                this.opts.stepCount += stepsPerFrame;
+                var elapsedTime = ((new Date()).getTime() - this.opts.startTime) / 1000; // time in seconds
+                speedReadout.innerHTML = Number(this.opts.stepCount / elapsedTime).toFixed(0);
+            }
+            var stable = true;
+            var xdim = this.pars.xdim;
+            var ydim = this.pars.ydim;
+            var rho = this.rho;
+            for (var x = 0; x < xdim; x++) {
+                var index = x + (ydim / 2) * xdim; // look at middle row only
+                if (rho[index] <= 0)
+                    stable = false;
+            }
+            if (!stable) {
+                window.alert("The simulation has become unstable due to excessive fluid speeds.");
+                startStop();
+                initFluid();
+            }
+            if (this.running) {
+                if (rafCheck.checked) {
+                    requestAnimFrame(function () { return _this.simulate(); }); // let browser schedule next frame
+                }
+                else {
+                    window.setTimeout(function () { return _this.simulate(); }, 1); // schedule next frame asap (nominally 1 ms but always more)
+                }
+            }
+        };
+        return CFD;
+    }());
+    exports.CFD = CFD;
+});
 define("barrier", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    var short_line = {
+        name: "Short line",
+        locations: [
+            12, 15,
+            12, 16,
+            12, 17,
+            12, 18,
+            12, 19,
+            12, 20,
+            12, 21,
+            12, 22,
+            12, 23
+        ]
+    };
+    var long_line = {
+        name: "Long line",
+        locations: [
+            13, 11,
+            13, 12,
+            13, 13,
+            13, 14,
+            13, 15,
+            13, 16,
+            13, 17,
+            13, 18,
+            13, 19,
+            13, 20,
+            13, 21,
+            13, 22,
+            13, 23,
+            13, 24,
+            13, 25,
+            13, 26,
+            13, 27,
+            13, 28
+        ]
+    };
     exports.barrierList = [
-        {
-            name: "Short line",
-            locations: [
-                12, 15,
-                12, 16,
-                12, 17,
-                12, 18,
-                12, 19,
-                12, 20,
-                12, 21,
-                12, 22,
-                12, 23
-            ]
-        },
-        {
-            name: "Long line",
-            locations: [
-                13, 11,
-                13, 12,
-                13, 13,
-                13, 14,
-                13, 15,
-                13, 16,
-                13, 17,
-                13, 18,
-                13, 19,
-                13, 20,
-                13, 21,
-                13, 22,
-                13, 23,
-                13, 24,
-                13, 25,
-                13, 26,
-                13, 27,
-                13, 28
-            ]
-        },
+        short_line, long_line,
         {
             name: "Diagonal",
             locations: [
@@ -669,944 +1152,933 @@ define("barrier", ["require", "exports"], function (require, exports) {
         }
     ];
 });
-///<reference path="barrier.ts" />
-define("app", ["require", "exports", "barrier"], function (require, exports, barrier_1) {
+define("ui", ["require", "exports", "barrier", "global"], function (require, exports, barrier_1, global_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    // Global variables:	
-    var mobile = navigator.userAgent.match(/iPhone|iPad|iPod|Android|BlackBerry|Opera Mini|IEMobile/i);
-    var canvas = document.getElementById('theCanvas');
-    var context = canvas.getContext('2d');
-    var image = context.createImageData(canvas.width, canvas.height); // for direct pixel manipulation (faster than fillRect)
-    for (var i = 3; i < image.data.length; i += 4)
-        image.data[i] = 255; // set all alpha values to opaque
-    var sizeSelect = document.getElementById('sizeSelect');
-    sizeSelect.selectedIndex = 5;
-    if (mobile)
-        sizeSelect.selectedIndex = 1; // smaller works better on mobile platforms
-    var pxPerSquare = Number(sizeSelect.options[sizeSelect.selectedIndex].value);
-    // width of plotted grid site in pixels
-    var xdim = canvas.width / pxPerSquare; // grid dimensions for simulation
-    var ydim = canvas.height / pxPerSquare;
-    var stepsSlider = document.getElementById('stepsSlider');
-    var startButton = document.getElementById('startButton');
-    var speedSlider = document.getElementById('speedSlider');
-    var speedValue = document.getElementById('speedValue');
-    var viscSlider = document.getElementById('viscSlider');
-    var viscValue = document.getElementById('viscValue');
-    var mouseSelect = document.getElementById('mouseSelect');
-    var barrierSelect = document.getElementById('barrierSelect');
-    for (var barrierIndex = 0; barrierIndex < barrier_1.barrierList.length; barrierIndex++) {
-        var shape = document.createElement("option");
-        shape.text = barrier_1.barrierList[barrierIndex].name;
-        barrierSelect.add(shape, null);
-    }
-    var plotSelect = document.getElementById('plotSelect');
-    var contrastSlider = document.getElementById('contrastSlider');
-    //var pixelCheck = document.getElementById('pixelCheck');
-    var tracerCheck = document.getElementById('tracerCheck');
-    var flowlineCheck = document.getElementById('flowlineCheck');
-    var forceCheck = document.getElementById('forceCheck');
-    var sensorCheck = document.getElementById('sensorCheck');
-    var dataCheck = document.getElementById('dataCheck');
-    var rafCheck = document.getElementById('rafCheck');
-    var speedReadout = document.getElementById('speedReadout');
-    var dataSection = document.getElementById('dataSection');
-    var dataArea = document.getElementById('dataArea');
-    var dataButton = document.getElementById('dataButton');
-    var running = false; // will be true when running
-    var stepCount = 0;
-    var startTime = 0;
-    var four9ths = 4.0 / 9.0; // abbreviations
-    var one9th = 1.0 / 9.0;
-    var one36th = 1.0 / 36.0;
-    var barrierCount = 0;
-    var barrierxSum = 0;
-    var barrierySum = 0;
-    var barrierFx = 0.0; // total force on all barrier sites
-    var barrierFy = 0.0;
-    var sensorX = xdim / 2; // coordinates of "sensor" to measure local fluid properties	
-    var sensorY = ydim / 2;
-    var draggingSensor = false;
-    var mouseIsDown = false;
-    var mouseX, mouseY; // mouse location in canvas coordinates
-    var oldMouseX = -1, oldMouseY = -1; // mouse coordinates from previous simulation frame
-    var collectingData = false;
-    var time = 0; // time (in simulation step units) since data collection started
-    var showingPeriod = false;
-    var lastBarrierFy = 1; // for determining when F_y oscillation begins
-    var lastFyOscTime = 0; // for calculating F_y oscillation period
-    canvas.addEventListener('mousedown', mouseDown, false);
-    canvas.addEventListener('mousemove', mouseMove, false);
-    document.body.addEventListener('mouseup', mouseUp, false); // button release could occur outside canvas
-    canvas.addEventListener('touchstart', mouseDown, false);
-    canvas.addEventListener('touchmove', mouseMove, false);
-    document.body.addEventListener('touchend', mouseUp, false);
-    // Create the arrays of fluid particle densities, etc. (using 1D arrays for speed):
-    // To index into these arrays, use x + y*xdim, traversing rows first and then columns.
-    var n0 = new Array(xdim * ydim); // microscopic densities along each lattice direction
-    var nN = new Array(xdim * ydim);
-    var nS = new Array(xdim * ydim);
-    var nE = new Array(xdim * ydim);
-    var nW = new Array(xdim * ydim);
-    var nNE = new Array(xdim * ydim);
-    var nSE = new Array(xdim * ydim);
-    var nNW = new Array(xdim * ydim);
-    var nSW = new Array(xdim * ydim);
-    var rho = new Array(xdim * ydim); // macroscopic density
-    var ux = new Array(xdim * ydim); // macroscopic velocity
-    var uy = new Array(xdim * ydim);
-    var curl = new Array(xdim * ydim);
-    var barrier = new Array(xdim * ydim); // boolean array of barrier locations
-    // Initialize to a steady rightward flow with no barriers:
-    for (var y = 0; y < ydim; y++) {
-        for (var x = 0; x < xdim; x++) {
-            barrier[x + y * xdim] = false;
-        }
-    }
-    // Create a simple linear "wall" barrier (intentionally a little offset from center):
-    var barrierSize = 8;
-    if (mobile)
-        barrierSize = 4;
-    for (var y = (ydim / 2) - barrierSize; y <= (ydim / 2) + barrierSize; y++) {
-        var x = Math.round(ydim / 3);
-        barrier[x + y * xdim] = true;
-    }
-    // Set up the array of colors for plotting (mimicks matplotlib "jet" colormap):
-    // (Kludge: Index nColors+1 labels the color used for drawing barriers.)
-    var nColors = 400; // there are actually nColors+2 colors
-    var hexColorList = new Array(nColors + 2);
-    var redList = new Array(nColors + 2);
-    var greenList = new Array(nColors + 2);
-    var blueList = new Array(nColors + 2);
-    for (var c = 0; c <= nColors; c++) {
-        var r, g, b;
-        if (c < nColors / 8) {
-            r = 0;
-            g = 0;
-            b = Math.round(255 * (c + nColors / 8) / (nColors / 4));
-        }
-        else if (c < 3 * nColors / 8) {
-            r = 0;
-            g = Math.round(255 * (c - nColors / 8) / (nColors / 4));
-            b = 255;
-        }
-        else if (c < 5 * nColors / 8) {
-            r = Math.round(255 * (c - 3 * nColors / 8) / (nColors / 4));
-            g = 255;
-            b = 255 - r;
-        }
-        else if (c < 7 * nColors / 8) {
-            r = 255;
-            g = Math.round(255 * (7 * nColors / 8 - c) / (nColors / 4));
-            b = 0;
-        }
-        else {
-            r = Math.round(255 * (9 * nColors / 8 - c) / (nColors / 4));
-            g = 0;
-            b = 0;
-        }
-        redList[c] = r;
-        greenList[c] = g;
-        blueList[c] = b;
-        hexColorList[c] = rgbToHex(r, g, b);
-    }
-    redList[nColors + 1] = 0;
-    greenList[nColors + 1] = 0;
-    blueList[nColors + 1] = 0; // barriers are black
-    hexColorList[nColors + 1] = rgbToHex(0, 0, 0);
-    // Functions to convert rgb to hex color string (from stackoverflow):
-    function componentToHex(c) {
-        var hex = c.toString(16);
-        return hex.length == 1 ? "0" + hex : hex;
-    }
-    function rgbToHex(r, g, b) {
-        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-    }
-    // Initialize array of partially transparant blacks, for drawing flow lines:
-    var transBlackArraySize = 50;
-    var transBlackArray = new Array(transBlackArraySize);
-    for (var i = 0; i < transBlackArraySize; i++) {
-        transBlackArray[i] = "rgba(0,0,0," + Number(i / transBlackArraySize).toFixed(2) + ")";
-    }
-    // Initialize tracers (but don't place them yet):
-    var nTracers = 144;
-    var tracerX = new Array(nTracers);
-    var tracerY = new Array(nTracers);
-    for (var t = 0; t < nTracers; t++) {
-        tracerX[t] = 0.0;
-        tracerY[t] = 0.0;
-    }
-    initFluid(); // initialize to steady rightward flow
-    // Mysterious gymnastics that are apparently useful for better cross-browser animation timing:
-    var requestAnimFrame = (function (callback) {
-        return window.requestAnimationFrame ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame ||
-            window.oRequestAnimationFrame ||
-            window.msRequestAnimationFrame ||
-            function (callback) {
-                window.setTimeout(callback, 1); // second parameter is time in ms
-            };
-    })();
-    // Simulate function executes a bunch of steps and then schedules another call to itself:
-    function simulate() {
-        var stepsPerFrame = Number(stepsSlider.value); // number of simulation steps per animation frame
-        setBoundaries();
-        // Test to see if we're dragging the fluid:
-        var pushing = false;
-        var pushX, pushY, pushUX, pushUY;
-        if (mouseIsDown && mouseSelect.selectedIndex == 2) {
-            if (oldMouseX >= 0) {
-                var gridLoc = canvasToGrid(mouseX, mouseY);
-                pushX = gridLoc.x;
-                pushY = gridLoc.y;
-                pushUX = (mouseX - oldMouseX) / pxPerSquare / stepsPerFrame;
-                pushUY = -(mouseY - oldMouseY) / pxPerSquare / stepsPerFrame; // y axis is flipped
-                if (Math.abs(pushUX) > 0.1)
-                    pushUX = 0.1 * Math.abs(pushUX) / pushUX;
-                if (Math.abs(pushUY) > 0.1)
-                    pushUY = 0.1 * Math.abs(pushUY) / pushUY;
-                pushing = true;
+    /**
+     * this html user interface handler
+    */
+    var ui = /** @class */ (function () {
+        function ui(opts, canvas_id, speedSlider, stepsSlider, startButton, speedValue, viscSlider, viscValue, mouseSelect, plotSelect, contrastSlider, pixelCheck, tracerCheck, flowlineCheck, forceCheck, sensorCheck, dataCheck, rafCheck, speedReadout, dataSection, dataArea, dataButton, sizeSelect, barrierSelect, periodButton) {
+            if (canvas_id === void 0) { canvas_id = "theCanvas"; }
+            if (speedSlider === void 0) { speedSlider = "speedSlider"; }
+            if (stepsSlider === void 0) { stepsSlider = "stepsSlider"; }
+            if (startButton === void 0) { startButton = "startButton"; }
+            if (speedValue === void 0) { speedValue = "speedValue"; }
+            if (viscSlider === void 0) { viscSlider = "viscSlider"; }
+            if (viscValue === void 0) { viscValue = "viscValue"; }
+            if (mouseSelect === void 0) { mouseSelect = "mouseSelect"; }
+            if (plotSelect === void 0) { plotSelect = "plotSelect"; }
+            if (contrastSlider === void 0) { contrastSlider = "contrastSlider"; }
+            if (pixelCheck === void 0) { pixelCheck = "pixelCheck"; }
+            if (tracerCheck === void 0) { tracerCheck = "tracerCheck"; }
+            if (flowlineCheck === void 0) { flowlineCheck = "flowlineCheck"; }
+            if (forceCheck === void 0) { forceCheck = "forceCheck"; }
+            if (sensorCheck === void 0) { sensorCheck = "sensorCheck"; }
+            if (dataCheck === void 0) { dataCheck = "dataCheck"; }
+            if (rafCheck === void 0) { rafCheck = "rafCheck"; }
+            if (speedReadout === void 0) { speedReadout = "speedReadout"; }
+            if (dataSection === void 0) { dataSection = "dataSection"; }
+            if (dataArea === void 0) { dataArea = "dataArea"; }
+            if (dataButton === void 0) { dataButton = "dataButton"; }
+            if (sizeSelect === void 0) { sizeSelect = "sizeSelect"; }
+            if (barrierSelect === void 0) { barrierSelect = 'barrierSelect'; }
+            if (periodButton === void 0) { periodButton = 'periodButton'; }
+            this.opts = opts;
+            this.draggingSensor = false;
+            this.mouseIsDown = false;
+            var canvas = document.getElementById(canvas_id);
+            var context = canvas.getContext('2d');
+            // for direct pixel manipulation (faster than fillRect)
+            var image = context.createImageData(canvas.width, canvas.height);
+            // set all alpha values to opaque
+            for (var i = 3; i < image.data.length; i += 4) {
+                image.data[i] = 255;
             }
-            oldMouseX = mouseX;
-            oldMouseY = mouseY;
+            this.canvas = canvas;
+            this.context = context;
+            this.image = image;
+            this.speedSlider = document.getElementById(speedSlider);
+            this.stepsSlider = document.getElementById(stepsSlider);
+            this.startButton = document.getElementById(startButton);
+            this.speedValue = document.getElementById(speedValue);
+            this.viscSlider = document.getElementById(viscSlider);
+            this.viscValue = document.getElementById(viscValue);
+            this.mouseSelect = document.getElementById(mouseSelect);
+            this.plotSelect = document.getElementById(plotSelect);
+            this.contrastSlider = document.getElementById(contrastSlider);
+            this.pixelCheck = document.getElementById(pixelCheck);
+            this.tracerCheck = document.getElementById(tracerCheck);
+            this.flowlineCheck = document.getElementById(flowlineCheck);
+            this.forceCheck = document.getElementById(forceCheck);
+            this.sensorCheck = document.getElementById(sensorCheck);
+            this.dataCheck = document.getElementById(dataCheck);
+            this.rafCheck = document.getElementById(rafCheck);
+            this.speedReadout = document.getElementById(speedReadout);
+            this.dataSection = document.getElementById(dataSection);
+            this.dataArea = document.getElementById(dataArea);
+            this.dataButton = document.getElementById(dataButton);
+            this.periodButton = document.getElementById(periodButton);
+            this.sizeSelect = document.getElementById(sizeSelect);
+            this.sizeSelect.selectedIndex = 5;
+            // smaller works better on mobile platforms
+            if (global_2.mobile) {
+                this.sizeSelect.selectedIndex = 1;
+            }
+            this.barrierSelect = document.getElementById(barrierSelect);
+            for (var _i = 0, barrierList_1 = barrier_1.barrierList; _i < barrierList_1.length; _i++) {
+                var barrier = barrierList_1[_i];
+                var shape = document.createElement("option");
+                shape.text = barrier.name;
+                this.barrierSelect.add(shape, null);
+            }
+            this.setEvents();
         }
-        else {
-            oldMouseX = -1;
-            oldMouseY = -1;
-        }
-        // Execute a bunch of time steps:
-        for (var step = 0; step < stepsPerFrame; step++) {
-            collide();
-            stream();
-            if (tracerCheck.checked)
-                moveTracers();
-            if (pushing)
-                push(pushX, pushY, pushUX, pushUY);
-            time++;
-            if (showingPeriod && (barrierFy > 0) && (lastBarrierFy <= 0)) {
-                var thisFyOscTime = time - barrierFy / (barrierFy - lastBarrierFy); // interpolate when Fy changed sign
-                if (lastFyOscTime > 0) {
-                    var period = thisFyOscTime - lastFyOscTime;
-                    dataArea.innerHTML += Number(period).toFixed(2) + "\n";
-                    dataArea.scrollTop = dataArea.scrollHeight;
+        Object.defineProperty(ui.prototype, "pxPerSquare", {
+            get: function () {
+                var i = this.sizeSelect.selectedIndex;
+                var size = this.sizeSelect.options[i].value;
+                return Number(size);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        ;
+        Object.defineProperty(ui.prototype, "xdim", {
+            // width of plotted grid site in pixels
+            // grid dimensions for simulation
+            get: function () {
+                return this.canvas.width / this.pxPerSquare;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(ui.prototype, "ydim", {
+            get: function () {
+                return this.canvas.height / this.pxPerSquare;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        ui.prototype.connectEngine = function (CFD) {
+            this.CFD = CFD;
+        };
+        ui.prototype.connectGraphicsDevice = function (g) {
+            this.paintCanvas = g.requestPaintCanvas;
+        };
+        Object.defineProperty(ui.prototype, "steps", {
+            get: function () {
+                return Number(this.stepsSlider.value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        ;
+        Object.defineProperty(ui.prototype, "speed", {
+            get: function () {
+                return Number(this.speedSlider.value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(ui.prototype, "drawTracers", {
+            get: function () {
+                return (this.tracerCheck.checked);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(ui.prototype, "drawFlowlines", {
+            get: function () {
+                return (this.flowlineCheck.checked);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(ui.prototype, "drawForceArrow", {
+            get: function () {
+                return (this.forceCheck.checked);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(ui.prototype, "drawSensor", {
+            get: function () {
+                return (this.sensorCheck.checked);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(ui.prototype, "plotType", {
+            get: function () {
+                return this.plotSelect.selectedIndex;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(ui.prototype, "viscosity", {
+            get: function () {
+                return Number(this.viscSlider.value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(ui.prototype, "contrast", {
+            get: function () {
+                return Number(this.contrastSlider.value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        ui.prototype.setEvents = function () {
+            var _this = this;
+            this.canvas.addEventListener('mousedown', function (e) { return _this.mouseDown(e); }, false);
+            this.canvas.addEventListener('mousemove', function (e) { return _this.mouseMove(e); }, false);
+            this.canvas.addEventListener('touchstart', function (e) { return _this.mouseDown(e); }, false);
+            this.canvas.addEventListener('touchmove', function (e) { return _this.mouseMove(e); }, false);
+            document.body.addEventListener('mouseup', function (e) { return _this.mouseUp(e); }, false); // button release could occur outside canvas
+            document.body.addEventListener('touchend', function (e) { return _this.mouseUp(e); }, false);
+        };
+        // Move the tracer particles:
+        ui.prototype.moveTracers = function () {
+            var xdim = this.xdim;
+            var ydim = this.ydim;
+            var tracerX = this.opts.tracerX;
+            var tracerY = this.opts.tracerY;
+            var ux = this.CFD.ux;
+            var uy = this.CFD.uy;
+            for (var t = 0; t < this.opts.nTracers; t++) {
+                var roundedX = Math.round(tracerX[t]);
+                var roundedY = Math.round(tracerY[t]);
+                var index = roundedX + roundedY * xdim;
+                tracerX[t] += ux[index];
+                tracerY[t] += uy[index];
+                if (tracerX[t] > xdim - 1) {
+                    tracerX[t] = 0;
+                    tracerY[t] = Math.random() * ydim;
                 }
-                lastFyOscTime = thisFyOscTime;
             }
-            lastBarrierFy = barrierFy;
-        }
-        paintCanvas();
-        if (collectingData) {
-            writeData();
-            if (time >= 10000)
-                startOrStopData();
-        }
-        if (running) {
-            stepCount += stepsPerFrame;
-            var elapsedTime = ((new Date()).getTime() - startTime) / 1000; // time in seconds
-            speedReadout.innerHTML = Number(stepCount / elapsedTime).toFixed(0);
-        }
-        var stable = true;
-        for (var x = 0; x < xdim; x++) {
-            var index = x + (ydim / 2) * xdim; // look at middle row only
-            if (rho[index] <= 0)
-                stable = false;
-        }
-        if (!stable) {
-            window.alert("The simulation has become unstable due to excessive fluid speeds.");
-            startStop();
-            initFluid();
-        }
-        if (running) {
-            if (rafCheck.checked) {
-                requestAnimFrame(function () { simulate(); }); // let browser schedule next frame
+        };
+        // "Drag" the fluid in a direction determined by the mouse (or touch) motion:
+        // (The drag affects a "circle", 5 px in diameter, centered on the given coordinates.)
+        ui.prototype.push = function (pushX, pushY, pushUX, pushUY) {
+            // First make sure we're not too close to edge:
+            var margin = 3;
+            if ((pushX > margin) && (pushX < this.xdim - 1 - margin) && (pushY > margin) && (pushY < this.ydim - 1 - margin)) {
+                for (var dx = -1; dx <= 1; dx++) {
+                    this.CFD.setEquil(pushX + dx, pushY + 2, pushUX, pushUY);
+                    this.CFD.setEquil(pushX + dx, pushY - 2, pushUX, pushUY);
+                }
+                for (var dx = -2; dx <= 2; dx++) {
+                    for (var dy = -1; dy <= 1; dy++) {
+                        this.CFD.setEquil(pushX + dx, pushY + dy, pushUX, pushUY);
+                    }
+                }
+            }
+        };
+        /**
+         * Functions to handle mouse/touch interaction
+        */
+        ui.prototype.mouseDown = function (e) {
+            if (this.sensorCheck.checked) {
+                var pxPerSquare = this.pxPerSquare;
+                var canvasLoc = this.pageToCanvas(e.pageX, e.pageY);
+                var gridLoc = this.canvasToGrid(canvasLoc.x, canvasLoc.y);
+                var dx = (gridLoc.x - this.opts.sensorX) * pxPerSquare;
+                var dy = (gridLoc.y - this.opts.sensorY) * pxPerSquare;
+                if (Math.sqrt(dx * dx + dy * dy) <= 8) {
+                    this.draggingSensor = true;
+                }
+            }
+            this.mousePressDrag(e);
+        };
+        ;
+        ui.prototype.mouseMove = function (e) {
+            if (this.mouseIsDown) {
+                this.mousePressDrag(e);
+            }
+        };
+        ;
+        ui.prototype.mouseUp = function (e) {
+            this.mouseIsDown = false;
+            this.draggingSensor = false;
+        };
+        ;
+        // Handle mouse press or drag:
+        ui.prototype.mousePressDrag = function (e) {
+            e.preventDefault();
+            this.mouseIsDown = true;
+            var canvasLoc = this.pageToCanvas(e.pageX, e.pageY);
+            if (this.draggingSensor) {
+                var gridLoc = this.canvasToGrid(canvasLoc.x, canvasLoc.y);
+                this.opts.sensorX = gridLoc.x;
+                this.opts.sensorY = gridLoc.y;
+                this.paintCanvas();
+                return;
+            }
+            if (this.mouseSelect.selectedIndex == 2) {
+                this.opts.mouseX = canvasLoc.x;
+                this.opts.mouseY = canvasLoc.y;
+                return;
+            }
+            var gridLoc = this.canvasToGrid(canvasLoc.x, canvasLoc.y);
+            if (this.mouseSelect.selectedIndex == 0) {
+                this.addBarrier(gridLoc.x, gridLoc.y);
+                this.paintCanvas();
             }
             else {
-                window.setTimeout(simulate, 1); // schedule next frame asap (nominally 1 ms but always more)
+                this.removeBarrier(gridLoc.x, gridLoc.y);
             }
-        }
-    }
-    // Set the fluid variables at the boundaries, according to the current slider value:
-    function setBoundaries() {
-        var u0 = Number(speedSlider.value);
-        for (var x = 0; x < xdim; x++) {
-            setEquil(x, 0, u0, 0, 1);
-            setEquil(x, ydim - 1, u0, 0, 1);
-        }
-        for (var y = 1; y < ydim - 1; y++) {
-            setEquil(0, y, u0, 0, 1);
-            setEquil(xdim - 1, y, u0, 0, 1);
-        }
-    }
-    // Collide particles within each cell (here's the physics!):
-    function collide() {
-        var viscosity = Number(viscSlider.value); // kinematic viscosity coefficient in natural units
-        var omega = 1 / (3 * viscosity + 0.5); // reciprocal of relaxation time
-        for (var y = 1; y < ydim - 1; y++) {
-            for (var x = 1; x < xdim - 1; x++) {
-                var i = x + y * xdim; // array index for this lattice site
-                var thisrho = n0[i] + nN[i] + nS[i] + nE[i] + nW[i] + nNW[i] + nNE[i] + nSW[i] + nSE[i];
-                rho[i] = thisrho;
-                var thisux = (nE[i] + nNE[i] + nSE[i] - nW[i] - nNW[i] - nSW[i]) / thisrho;
-                ux[i] = thisux;
-                var thisuy = (nN[i] + nNE[i] + nNW[i] - nS[i] - nSE[i] - nSW[i]) / thisrho;
-                uy[i] = thisuy;
-                var one9thrho = one9th * thisrho; // pre-compute a bunch of stuff for optimization
-                var one36thrho = one36th * thisrho;
-                var ux3 = 3 * thisux;
-                var uy3 = 3 * thisuy;
-                var ux2 = thisux * thisux;
-                var uy2 = thisuy * thisuy;
-                var uxuy2 = 2 * thisux * thisuy;
-                var u2 = ux2 + uy2;
-                var u215 = 1.5 * u2;
-                n0[i] += omega * (four9ths * thisrho * (1 - u215) - n0[i]);
-                nE[i] += omega * (one9thrho * (1 + ux3 + 4.5 * ux2 - u215) - nE[i]);
-                nW[i] += omega * (one9thrho * (1 - ux3 + 4.5 * ux2 - u215) - nW[i]);
-                nN[i] += omega * (one9thrho * (1 + uy3 + 4.5 * uy2 - u215) - nN[i]);
-                nS[i] += omega * (one9thrho * (1 - uy3 + 4.5 * uy2 - u215) - nS[i]);
-                nNE[i] += omega * (one36thrho * (1 + ux3 + uy3 + 4.5 * (u2 + uxuy2) - u215) - nNE[i]);
-                nSE[i] += omega * (one36thrho * (1 + ux3 - uy3 + 4.5 * (u2 - uxuy2) - u215) - nSE[i]);
-                nNW[i] += omega * (one36thrho * (1 - ux3 + uy3 + 4.5 * (u2 - uxuy2) - u215) - nNW[i]);
-                nSW[i] += omega * (one36thrho * (1 - ux3 - uy3 + 4.5 * (u2 + uxuy2) - u215) - nSW[i]);
+        };
+        // Convert page coordinates to canvas coordinates:
+        ui.prototype.pageToCanvas = function (pageX, pageY) {
+            var canvasX = pageX - this.canvas.offsetLeft;
+            var canvasY = pageY - this.canvas.offsetTop;
+            // this simple subtraction may not work when the canvas is nested in other elements
+            return { x: canvasX, y: canvasY };
+        };
+        // Convert canvas coordinates to grid coordinates:
+        ui.prototype.canvasToGrid = function (canvasX, canvasY) {
+            var gridX = Math.floor(canvasX / this.pxPerSquare);
+            var gridY = Math.floor((this.canvas.height - 1 - canvasY) / this.pxPerSquare); // off by 1?
+            return { x: gridX, y: gridY };
+        };
+        // Add a barrier at a given grid coordinate location:
+        ui.prototype.addBarrier = function (x, y) {
+            var xdim = this.xdim;
+            var ydim = this.ydim;
+            if ((x > 1) && (x < xdim - 2) && (y > 1) && (y < ydim - 2)) {
+                this.CFD.barrier[x + y * xdim] = true;
             }
-        }
-        for (var y = 1; y < ydim - 2; y++) {
-            nW[xdim - 1 + y * xdim] = nW[xdim - 2 + y * xdim]; // at right end, copy left-flowing densities from next row to the left
-            nNW[xdim - 1 + y * xdim] = nNW[xdim - 2 + y * xdim];
-            nSW[xdim - 1 + y * xdim] = nSW[xdim - 2 + y * xdim];
-        }
-    }
-    // Move particles along their directions of motion:
-    function stream() {
-        barrierCount = 0;
-        barrierxSum = 0;
-        barrierySum = 0;
-        barrierFx = 0.0;
-        barrierFy = 0.0;
-        for (var y = ydim - 2; y > 0; y--) { // first start in NW corner...
-            for (var x = 1; x < xdim - 1; x++) {
-                nN[x + y * xdim] = nN[x + (y - 1) * xdim]; // move the north-moving particles
-                nNW[x + y * xdim] = nNW[x + 1 + (y - 1) * xdim]; // and the northwest-moving particles
+        };
+        // Remove a barrier at a given grid coordinate location:
+        ui.prototype.removeBarrier = function (x, y) {
+            var xdim = this.xdim;
+            var barrier = this.CFD.barrier;
+            if (barrier[x + y * xdim]) {
+                barrier[x + y * xdim] = false;
+                this.paintCanvas();
             }
-        }
-        for (var y = ydim - 2; y > 0; y--) { // now start in NE corner...
-            for (var x = xdim - 2; x > 0; x--) {
-                nE[x + y * xdim] = nE[x - 1 + y * xdim]; // move the east-moving particles
-                nNE[x + y * xdim] = nNE[x - 1 + (y - 1) * xdim]; // and the northeast-moving particles
-            }
-        }
-        for (var y = 1; y < ydim - 1; y++) { // now start in SE corner...
-            for (var x = xdim - 2; x > 0; x--) {
-                nS[x + y * xdim] = nS[x + (y + 1) * xdim]; // move the south-moving particles
-                nSE[x + y * xdim] = nSE[x - 1 + (y + 1) * xdim]; // and the southeast-moving particles
-            }
-        }
-        for (var y = 1; y < ydim - 1; y++) { // now start in the SW corner...
-            for (var x = 1; x < xdim - 1; x++) {
-                nW[x + y * xdim] = nW[x + 1 + y * xdim]; // move the west-moving particles
-                nSW[x + y * xdim] = nSW[x + 1 + (y + 1) * xdim]; // and the southwest-moving particles
-            }
-        }
-        for (var y = 1; y < ydim - 1; y++) { // Now handle bounce-back from barriers
-            for (var x = 1; x < xdim - 1; x++) {
-                if (barrier[x + y * xdim]) {
-                    var index = x + y * xdim;
-                    nE[x + 1 + y * xdim] = nW[index];
-                    nW[x - 1 + y * xdim] = nE[index];
-                    nN[x + (y + 1) * xdim] = nS[index];
-                    nS[x + (y - 1) * xdim] = nN[index];
-                    nNE[x + 1 + (y + 1) * xdim] = nSW[index];
-                    nNW[x - 1 + (y + 1) * xdim] = nSE[index];
-                    nSE[x + 1 + (y - 1) * xdim] = nNW[index];
-                    nSW[x - 1 + (y - 1) * xdim] = nNE[index];
-                    // Keep track of stuff needed to plot force vector:
-                    barrierCount++;
-                    barrierxSum += x;
-                    barrierySum += y;
-                    barrierFx += nE[index] + nNE[index] + nSE[index] - nW[index] - nNW[index] - nSW[index];
-                    barrierFy += nN[index] + nNE[index] + nNW[index] - nS[index] - nSE[index] - nSW[index];
-                }
-            }
-        }
-    }
-    // Move the tracer particles:
-    function moveTracers() {
-        for (var t = 0; t < nTracers; t++) {
-            var roundedX = Math.round(tracerX[t]);
-            var roundedY = Math.round(tracerY[t]);
-            var index = roundedX + roundedY * xdim;
-            tracerX[t] += ux[index];
-            tracerY[t] += uy[index];
-            if (tracerX[t] > xdim - 1) {
-                tracerX[t] = 0;
-                tracerY[t] = Math.random() * ydim;
-            }
-        }
-    }
-    // "Drag" the fluid in a direction determined by the mouse (or touch) motion:
-    // (The drag affects a "circle", 5 px in diameter, centered on the given coordinates.)
-    function push(pushX, pushY, pushUX, pushUY) {
-        // First make sure we're not too close to edge:
-        var margin = 3;
-        if ((pushX > margin) && (pushX < xdim - 1 - margin) && (pushY > margin) && (pushY < ydim - 1 - margin)) {
-            for (var dx = -1; dx <= 1; dx++) {
-                setEquil(pushX + dx, pushY + 2, pushUX, pushUY);
-                setEquil(pushX + dx, pushY - 2, pushUX, pushUY);
-            }
-            for (var dx = -2; dx <= 2; dx++) {
-                for (var dy = -1; dy <= 1; dy++) {
-                    setEquil(pushX + dx, pushY + dy, pushUX, pushUY);
-                }
-            }
-        }
-    }
-    // Set all densities in a cell to their equilibrium values for a given velocity and density:
-    // (If density is omitted, it's left unchanged.)
-    function setEquil(x, y, newux, newuy, newrho) {
-        var i = x + y * xdim;
-        if (typeof newrho == 'undefined') {
-            newrho = rho[i];
-        }
-        var ux3 = 3 * newux;
-        var uy3 = 3 * newuy;
-        var ux2 = newux * newux;
-        var uy2 = newuy * newuy;
-        var uxuy2 = 2 * newux * newuy;
-        var u2 = ux2 + uy2;
-        var u215 = 1.5 * u2;
-        n0[i] = four9ths * newrho * (1 - u215);
-        nE[i] = one9th * newrho * (1 + ux3 + 4.5 * ux2 - u215);
-        nW[i] = one9th * newrho * (1 - ux3 + 4.5 * ux2 - u215);
-        nN[i] = one9th * newrho * (1 + uy3 + 4.5 * uy2 - u215);
-        nS[i] = one9th * newrho * (1 - uy3 + 4.5 * uy2 - u215);
-        nNE[i] = one36th * newrho * (1 + ux3 + uy3 + 4.5 * (u2 + uxuy2) - u215);
-        nSE[i] = one36th * newrho * (1 + ux3 - uy3 + 4.5 * (u2 - uxuy2) - u215);
-        nNW[i] = one36th * newrho * (1 - ux3 + uy3 + 4.5 * (u2 - uxuy2) - u215);
-        nSW[i] = one36th * newrho * (1 - ux3 - uy3 + 4.5 * (u2 + uxuy2) - u215);
-        rho[i] = newrho;
-        ux[i] = newux;
-        uy[i] = newuy;
-    }
-    // Initialize the tracer particles:
-    function initTracers() {
-        if (tracerCheck.checked) {
-            var nRows = Math.ceil(Math.sqrt(nTracers));
-            var dx = xdim / nRows;
-            var dy = ydim / nRows;
-            var nextX = dx / 2;
-            var nextY = dy / 2;
-            for (var t = 0; t < nTracers; t++) {
-                tracerX[t] = nextX;
-                tracerY[t] = nextY;
-                nextX += dx;
-                if (nextX > xdim) {
-                    nextX = dx / 2;
-                    nextY += dy;
-                }
-            }
-        }
-        paintCanvas();
-    }
-    // Paint the canvas:
-    function paintCanvas() {
-        var cIndex = 0;
-        var contrast = Math.pow(1.2, Number(contrastSlider.value));
-        var plotType = plotSelect.selectedIndex;
-        //var pixelGraphics = pixelCheck.checked;
-        if (plotType == 4)
-            computeCurl();
-        for (var y = 0; y < ydim; y++) {
+        };
+        // Clear all barriers:
+        ui.prototype.clearBarriers = function () {
+            var xdim = this.xdim;
+            var ydim = this.ydim;
+            var barrier = this.CFD.barrier;
             for (var x = 0; x < xdim; x++) {
-                if (barrier[x + y * xdim]) {
-                    cIndex = nColors + 1; // kludge for barrier color which isn't really part of color map
+                for (var y = 0; y < ydim; y++) {
+                    barrier[x + y * xdim] = false;
+                }
+            }
+            this.paintCanvas();
+        };
+        // Function to start or pause the simulation:
+        ui.prototype.startStop = function () {
+            this.CFD.running = !this.CFD.running;
+            if (this.CFD.running) {
+                this.startButton.value = "Pause";
+                this.resetTimer();
+                this.CFD.simulate();
+            }
+            else {
+                this.startButton.value = " Run ";
+            }
+        };
+        /**
+         * Reset the timer that handles performance evaluation
+        */
+        ui.prototype.resetTimer = function () {
+            this.opts.stepCount = 0;
+            this.opts.startTime = (new Date()).getTime();
+        };
+        // Show value of flow speed setting:
+        ui.prototype.adjustSpeed = function () {
+            this.speedValue.innerHTML = Number(this.speedSlider.value).toFixed(3);
+        };
+        // Show value of viscosity:
+        ui.prototype.adjustViscosity = function () {
+            this.viscValue.innerHTML = Number(this.viscSlider.value).toFixed(3);
+        };
+        // Show or hide the data area:
+        ui.prototype.showData = function () {
+            if (this.dataCheck.checked) {
+                this.dataSection.style.display = "block";
+            }
+            else {
+                this.dataSection.style.display = "none";
+            }
+        };
+        // Start or stop collecting data:
+        ui.prototype.startOrStopData = function () {
+            this.opts.collectingData = !this.opts.collectingData;
+            if (this.opts.collectingData) {
+                this.opts.time = 0;
+                this.dataArea.innerHTML = "Time \tDensity\tVel_x \tVel_y \tForce_x\tForce_y\n";
+                this.writeData();
+                this.dataButton.value = "Stop data collection";
+                this.opts.showingPeriod = false;
+                this.periodButton.value = "Show F_y period";
+            }
+            else {
+                this.dataButton.value = "Start data collection";
+            }
+        };
+        // Write one line of data to the data area:
+        ui.prototype.writeData = function () {
+            var timeString = String(this.opts.time);
+            var xdim = this.xdim;
+            while (timeString.length < 5)
+                timeString = "0" + timeString;
+            var sIndex = this.opts.sensorX + this.opts.sensorY * xdim;
+            var ux = this.CFD.ux;
+            var uy = this.CFD.uy;
+            var rho = this.CFD.rho;
+            this.dataArea.innerHTML += timeString + "\t" + Number(rho[sIndex]).toFixed(4) + "\t"
+                + Number(ux[sIndex]).toFixed(4) + "\t" + Number(uy[sIndex]).toFixed(4) + "\t"
+                + Number(this.opts.barrierFx).toFixed(4) + "\t" + Number(this.opts.barrierFy).toFixed(4) + "\n";
+            this.dataArea.scrollTop = this.dataArea.scrollHeight;
+        };
+        // Handle click to "show period" button
+        ui.prototype.showPeriod = function () {
+            this.opts.showingPeriod = !this.opts.showingPeriod;
+            if (this.opts.showingPeriod) {
+                this.opts.time = 0;
+                this.opts.lastBarrierFy = 1.0; // arbitrary positive value
+                this.opts.lastFyOscTime = -1.0; // arbitrary negative value
+                this.dataArea.innerHTML = "Period of F_y oscillation\n";
+                this.periodButton.value = "Stop data";
+                this.opts.collectingData = false;
+                this.dataButton.value = "Start data collection";
+            }
+            else {
+                this.periodButton.value = "Show F_y period";
+            }
+        };
+        // Write all the barrier locations to the data area:
+        ui.prototype.showBarrierLocations = function () {
+            var dataArea = this.dataArea;
+            var xdim = this.xdim;
+            var ydim = this.ydim;
+            var barrier = this.CFD.barrier;
+            dataArea.innerHTML = '{name:"Barrier locations",\n';
+            dataArea.innerHTML += 'locations:[\n';
+            for (var y = 1; y < ydim - 1; y++) {
+                for (var x = 1; x < xdim - 1; x++) {
+                    if (barrier[x + y * xdim])
+                        dataArea.innerHTML += x + ',' + y + ',\n';
+                }
+            }
+            dataArea.innerHTML = dataArea.innerHTML.substr(0, dataArea.innerHTML.length - 2); // remove final comma
+            dataArea.innerHTML += '\n]},\n';
+        };
+        // Place a preset barrier:
+        ui.prototype.placePresetBarrier = function () {
+            var index = this.barrierSelect.selectedIndex;
+            if (index == 0)
+                return;
+            this.clearBarriers();
+            var bCount = barrier_1.barrierList[index - 1].locations.length / 2; // number of barrier sites
+            // To decide where to place it, find minimum x and min/max y:
+            var xMin = barrier_1.barrierList[index - 1].locations[0];
+            var yMin = barrier_1.barrierList[index - 1].locations[1];
+            var yMax = yMin;
+            for (var siteIndex = 2; siteIndex < 2 * bCount; siteIndex += 2) {
+                if (barrier_1.barrierList[index - 1].locations[siteIndex] < xMin) {
+                    xMin = barrier_1.barrierList[index - 1].locations[siteIndex];
+                }
+                if (barrier_1.barrierList[index - 1].locations[siteIndex + 1] < yMin) {
+                    yMin = barrier_1.barrierList[index - 1].locations[siteIndex + 1];
+                }
+                if (barrier_1.barrierList[index - 1].locations[siteIndex + 1] > yMax) {
+                    yMax = barrier_1.barrierList[index - 1].locations[siteIndex + 1];
+                }
+            }
+            var yAverage = Math.round((yMin + yMax) / 2);
+            var xdim = this.xdim;
+            var ydim = this.ydim;
+            // Now place the barriers:
+            for (var siteIndex = 0; siteIndex < 2 * bCount; siteIndex += 2) {
+                var x = barrier_1.barrierList[index - 1].locations[siteIndex] - xMin + Math.round(ydim / 3);
+                var y = barrier_1.barrierList[index - 1].locations[siteIndex + 1] - yAverage + Math.round(ydim / 2);
+                this.addBarrier(x, y);
+            }
+            this.paintCanvas();
+            this.barrierSelect.selectedIndex = 0; // A choice on this menu is a one-time action, not an ongoing setting
+        };
+        // Print debugging data:
+        ui.prototype.debug = function () {
+            var tracerX = this.opts.tracerX;
+            var tracerY = this.opts.tracerY;
+            this.dataArea.innerHTML = "Tracer locations:\n";
+            for (var t = 0; t < this.opts.nTracers; t++) {
+                this.dataArea.innerHTML += tracerX[t] + ", " + tracerY[t] + "\n";
+            }
+        };
+        return ui;
+    }());
+    exports.ui = ui;
+});
+define("graphics", ["require", "exports", "global"], function (require, exports, global_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var graphics = /** @class */ (function () {
+        function graphics(html, cfd, opts) {
+            this.html = html;
+            this.cfd = cfd;
+            this.opts = opts;
+            var ydim = html.ydim;
+            var xdim = html.xdim;
+            this.canvas = html.canvas;
+            this.pars = html;
+            this.image = html.image;
+            this.curl = new Array(xdim * ydim);
+            for (var y = 0; y < ydim; y++) {
+                for (var x = 0; x < xdim; x++) {
+                    this.curl[x + y * xdim] = 0.0;
+                }
+            }
+            this.initGraphicsColors();
+        }
+        Object.defineProperty(graphics.prototype, "requestPaintCanvas", {
+            get: function () {
+                var _this = this;
+                return function () { return _this.paintCanvas(); };
+            },
+            enumerable: true,
+            configurable: true
+        });
+        graphics.prototype.initGraphicsColors = function () {
+            // Set up the array of colors for plotting (mimicks matplotlib "jet" colormap):
+            // (Kludge: Index nColors+1 labels the color used for drawing barriers.)
+            var nColors = this.opts.nColors; // there are actually nColors+2 colors
+            var hexColorList = new Array(nColors + 2);
+            var redList = new Array(nColors + 2);
+            var greenList = new Array(nColors + 2);
+            var blueList = new Array(nColors + 2);
+            for (var c = 0; c <= nColors; c++) {
+                var r, g, b;
+                if (c < nColors / 8) {
+                    r = 0;
+                    g = 0;
+                    b = Math.round(255 * (c + nColors / 8) / (nColors / 4));
+                }
+                else if (c < 3 * nColors / 8) {
+                    r = 0;
+                    g = Math.round(255 * (c - nColors / 8) / (nColors / 4));
+                    b = 255;
+                }
+                else if (c < 5 * nColors / 8) {
+                    r = Math.round(255 * (c - 3 * nColors / 8) / (nColors / 4));
+                    g = 255;
+                    b = 255 - r;
+                }
+                else if (c < 7 * nColors / 8) {
+                    r = 255;
+                    g = Math.round(255 * (7 * nColors / 8 - c) / (nColors / 4));
+                    b = 0;
                 }
                 else {
-                    if (plotType == 0) {
-                        cIndex = Math.round(nColors * ((rho[x + y * xdim] - 1) * 6 * contrast + 0.5));
+                    r = Math.round(255 * (9 * nColors / 8 - c) / (nColors / 4));
+                    g = 0;
+                    b = 0;
+                }
+                redList[c] = r;
+                greenList[c] = g;
+                blueList[c] = b;
+                hexColorList[c] = global_3.rgbToHex(r, g, b);
+            }
+            redList[nColors + 1] = 0;
+            greenList[nColors + 1] = 0;
+            blueList[nColors + 1] = 0; // barriers are black
+            hexColorList[nColors + 1] = global_3.rgbToHex(0, 0, 0);
+            this.redList = redList;
+            this.greenList = greenList;
+            this.blueList = blueList;
+            this.hexColorList = hexColorList;
+        };
+        /**
+         * Initialize the tracer particles
+        */
+        graphics.prototype.initTracers = function () {
+            if (this.pars.drawTracers) {
+                var nRows = Math.ceil(Math.sqrt(this.opts.nTracers));
+                var xdim = this.pars.xdim;
+                var ydim = this.pars.ydim;
+                var dx = xdim / nRows;
+                var dy = ydim / nRows;
+                var nextX = dx / 2;
+                var nextY = dy / 2;
+                var tracerX = this.opts.tracerX;
+                var tracerY = this.opts.tracerY;
+                for (var t = 0; t < this.opts.nTracers; t++) {
+                    tracerX[t] = nextX;
+                    tracerY[t] = nextY;
+                    nextX += dx;
+                    if (nextX > xdim) {
+                        nextX = dx / 2;
+                        nextY += dy;
                     }
-                    else if (plotType == 1) {
-                        cIndex = Math.round(nColors * (ux[x + y * xdim] * 2 * contrast + 0.5));
+                }
+            }
+            this.paintCanvas();
+        };
+        /**
+         * Draw the sensor and its associated data display
+        */
+        graphics.prototype.drawSensor = function () {
+            var canvas = this.canvas;
+            var context = this.html.context;
+            var pxPerSquare = this.pars.pxPerSquare;
+            var CFD = this.cfd;
+            var canvasX = (this.opts.sensorX + 0.5) * pxPerSquare;
+            var canvasY = canvas.height - (this.opts.sensorY + 0.5) * pxPerSquare;
+            context.fillStyle = "rgba(180,180,180,0.7)"; // first draw gray filled circle
+            context.beginPath();
+            context.arc(canvasX, canvasY, 7, 0, 2 * Math.PI);
+            context.fill();
+            context.strokeStyle = "#404040"; // next draw cross-hairs
+            context.lineWidth = 1;
+            context.beginPath();
+            context.moveTo(canvasX, canvasY - 10);
+            context.lineTo(canvasX, canvasY + 10);
+            context.moveTo(canvasX - 10, canvasY);
+            context.lineTo(canvasX + 10, canvasY);
+            context.stroke();
+            context.fillStyle = "rgba(255,255,255,0.5)"; // draw rectangle behind text
+            canvasX += 10;
+            context.font = "12px Monospace";
+            var rectWidth = context.measureText("00000000000").width + 6;
+            var rectHeight = 58;
+            if (canvasX + rectWidth > canvas.width)
+                canvasX -= (rectWidth + 20);
+            if (canvasY + rectHeight > canvas.height)
+                canvasY = canvas.height - rectHeight;
+            context.fillRect(canvasX, canvasY, rectWidth, rectHeight);
+            context.fillStyle = "#000000"; // finally draw the text
+            canvasX += 3;
+            canvasY += 12;
+            var coordinates = "  (" + this.opts.sensorX + "," + this.opts.sensorY + ")";
+            context.fillText(coordinates, canvasX, canvasY);
+            canvasY += 14;
+            var rhoSymbol = String.fromCharCode(parseInt('03C1', 16));
+            var index = this.opts.sensorX + this.opts.sensorY * this.html.xdim;
+            context.fillText(" " + rhoSymbol + " =  " + Number(CFD.rho[index]).toFixed(3), canvasX, canvasY);
+            canvasY += 14;
+            var digitString = Number(CFD.ux[index]).toFixed(3);
+            if (CFD.ux[index] >= 0)
+                digitString = " " + digitString;
+            context.fillText("ux = " + digitString, canvasX, canvasY);
+            canvasY += 14;
+            digitString = Number(CFD.uy[index]).toFixed(3);
+            if (CFD.uy[index] >= 0)
+                digitString = " " + digitString;
+            context.fillText("uy = " + digitString, canvasX, canvasY);
+        };
+        /**
+         * Draw an arrow to represent the total force on the barrier(s)
+        */
+        graphics.prototype.drawForceArrow = function (x, y, Fx, Fy) {
+            var pxPerSquare = this.html.pxPerSquare;
+            var context = this.html.context;
+            var magF = Math.sqrt(Fx * Fx + Fy * Fy);
+            context.fillStyle = "rgba(100,100,100,0.7)";
+            context.translate((x + 0.5) * pxPerSquare, this.canvas.height - (y + 0.5) * pxPerSquare);
+            context.scale(4 * magF, 4 * magF);
+            context.rotate(Math.atan2(-Fy, Fx));
+            context.beginPath();
+            context.moveTo(0, 3);
+            context.lineTo(100, 3);
+            context.lineTo(100, 12);
+            context.lineTo(130, 0);
+            context.lineTo(100, -12);
+            context.lineTo(100, -3);
+            context.lineTo(0, -3);
+            context.lineTo(0, 3);
+            context.fill();
+            context.setTransform(1, 0, 0, 1, 0, 0);
+        };
+        /**
+         * Draw a grid of short line segments along flow directions
+        */
+        graphics.prototype.drawFlowlines = function () {
+            var pxPerFlowline = 10;
+            var pxPerSquare = this.html.pxPerSquare;
+            var xdim = this.html.xdim;
+            if (pxPerSquare == 1)
+                pxPerFlowline = 6;
+            if (pxPerSquare == 2)
+                pxPerFlowline = 8;
+            if (pxPerSquare == 5)
+                pxPerFlowline = 12;
+            if ((pxPerSquare == 6) || (pxPerSquare == 8))
+                pxPerFlowline = 15;
+            if (pxPerSquare == 10)
+                pxPerFlowline = 20;
+            var sitesPerFlowline = pxPerFlowline / pxPerSquare;
+            var xLines = this.canvas.width / pxPerFlowline;
+            var yLines = this.canvas.height / pxPerFlowline;
+            var context = this.html.context;
+            var transBlackArraySize = this.opts.transBlackArraySize;
+            var transBlackArray = this.opts.transBlackArray;
+            var ux = this.cfd.ux;
+            var uy = this.cfd.uy;
+            for (var yCount = 0; yCount < yLines; yCount++) {
+                for (var xCount = 0; xCount < xLines; xCount++) {
+                    var x = Math.round((xCount + 0.5) * sitesPerFlowline);
+                    var y = Math.round((yCount + 0.5) * sitesPerFlowline);
+                    var thisUx = ux[x + y * xdim];
+                    var thisUy = uy[x + y * xdim];
+                    var speed = Math.sqrt(thisUx * thisUx + thisUy * thisUy);
+                    if (speed > 0.0001) {
+                        var px = (xCount + 0.5) * pxPerFlowline;
+                        var py = this.canvas.height - ((yCount + 0.5) * pxPerFlowline);
+                        var scale = 0.5 * pxPerFlowline / speed;
+                        context.beginPath();
+                        context.moveTo(px - thisUx * scale, py + thisUy * scale);
+                        context.lineTo(px + thisUx * scale, py - thisUy * scale);
+                        //context.lineWidth = speed * 5;
+                        var cIndex = Math.round(speed * transBlackArraySize / 0.3);
+                        if (cIndex >= transBlackArraySize)
+                            cIndex = transBlackArraySize - 1;
+                        context.strokeStyle = transBlackArray[cIndex];
+                        //context.strokeStyle = "rgba(0,0,0,0.1)";
+                        context.stroke();
                     }
-                    else if (plotType == 2) {
-                        cIndex = Math.round(nColors * (uy[x + y * xdim] * 2 * contrast + 0.5));
-                    }
-                    else if (plotType == 3) {
-                        var speed = Math.sqrt(ux[x + y * xdim] * ux[x + y * xdim] + uy[x + y * xdim] * uy[x + y * xdim]);
-                        cIndex = Math.round(nColors * (speed * 4 * contrast));
+                }
+            }
+        };
+        /**
+         * Draw the tracer particles
+        */
+        graphics.prototype.drawTracers = function () {
+            var context = this.html.context;
+            var pxPerSquare = this.html.pxPerSquare;
+            var tracerX = this.opts.tracerX;
+            var tracerY = this.opts.tracerY;
+            context.fillStyle = "rgb(150,150,150)";
+            for (var t = 0; t < this.opts.nTracers; t++) {
+                var canvasX = (tracerX[t] + 0.5) * pxPerSquare;
+                var canvasY = this.canvas.height - (tracerY[t] + 0.5) * pxPerSquare;
+                context.fillRect(canvasX - 1, canvasY - 1, 2, 2);
+            }
+        };
+        /**
+         * Paint the canvas
+        */
+        graphics.prototype.paintCanvas = function () {
+            var cIndex = 0;
+            var contrast = Math.pow(1.2, this.pars.contrast);
+            var plotType = this.pars.plotType;
+            var ydim = this.html.ydim;
+            var xdim = this.html.xdim;
+            var pars = this.pars;
+            var opts = this.opts;
+            var nColors = opts.nColors;
+            //var pixelGraphics = pixelCheck.checked;
+            if (plotType == 4) {
+                this.computeCurl();
+            }
+            var redList = this.redList;
+            var greenList = this.greenList;
+            var blueList = this.blueList;
+            var curl = this.curl;
+            var CFD = this.cfd;
+            for (var y = 0; y < ydim; y++) {
+                for (var x = 0; x < xdim; x++) {
+                    if (CFD.barrier[x + y * xdim]) {
+                        cIndex = nColors + 1; // kludge for barrier color which isn't really part of color map
                     }
                     else {
-                        cIndex = Math.round(nColors * (curl[x + y * xdim] * 5 * contrast + 0.5));
+                        if (plotType == 0) {
+                            cIndex = Math.round(nColors * ((CFD.rho[x + y * xdim] - 1) * 6 * contrast + 0.5));
+                        }
+                        else if (plotType == 1) {
+                            cIndex = Math.round(nColors * (CFD.ux[x + y * xdim] * 2 * contrast + 0.5));
+                        }
+                        else if (plotType == 2) {
+                            cIndex = Math.round(nColors * (CFD.uy[x + y * xdim] * 2 * contrast + 0.5));
+                        }
+                        else if (plotType == 3) {
+                            var speed = Math.sqrt(CFD.ux[x + y * xdim] * CFD.ux[x + y * xdim] + CFD.uy[x + y * xdim] * CFD.uy[x + y * xdim]);
+                            cIndex = Math.round(nColors * (speed * 4 * contrast));
+                        }
+                        else {
+                            cIndex = Math.round(nColors * (curl[x + y * xdim] * 5 * contrast + 0.5));
+                        }
+                        if (cIndex < 0)
+                            cIndex = 0;
+                        if (cIndex > nColors)
+                            cIndex = nColors;
                     }
-                    if (cIndex < 0)
-                        cIndex = 0;
-                    if (cIndex > nColors)
-                        cIndex = nColors;
-                }
-                //if (pixelGraphics) {
-                //colorSquare(x, y, cIndex);
-                colorSquare(x, y, redList[cIndex], greenList[cIndex], blueList[cIndex]);
-                //} else {
-                //	context.fillStyle = hexColorList[cIndex];
-                //	context.fillRect(x*pxPerSquare, (ydim-y-1)*pxPerSquare, pxPerSquare, pxPerSquare);
-                //}
-            }
-        }
-        //if (pixelGraphics) 
-        context.putImageData(image, 0, 0); // blast image to the screen
-        // Draw tracers, force vector, and/or sensor if appropriate:
-        if (tracerCheck.checked)
-            drawTracers();
-        if (flowlineCheck.checked)
-            drawFlowlines();
-        if (forceCheck.checked)
-            drawForceArrow(barrierxSum / barrierCount, barrierySum / barrierCount, barrierFx, barrierFy);
-        if (sensorCheck.checked)
-            drawSensor();
-    }
-    // Color a grid square in the image data array, one pixel at a time (rgb each in range 0 to 255):
-    function colorSquare(x, y, r, g, b) {
-        //function colorSquare(x, y, cIndex) {		// for some strange reason, this version is quite a bit slower on Chrome
-        //var r = redList[cIndex];
-        //var g = greenList[cIndex];
-        //var b = blueList[cIndex];
-        var flippedy = ydim - y - 1; // put y=0 at the bottom
-        for (var py = flippedy * pxPerSquare; py < (flippedy + 1) * pxPerSquare; py++) {
-            for (var px = x * pxPerSquare; px < (x + 1) * pxPerSquare; px++) {
-                var index = (px + py * image.width) * 4;
-                image.data[index + 0] = r;
-                image.data[index + 1] = g;
-                image.data[index + 2] = b;
-            }
-        }
-    }
-    // Compute the curl (actually times 2) of the macroscopic velocity field, for plotting:
-    function computeCurl() {
-        for (var y = 1; y < ydim - 1; y++) { // interior sites only; leave edges set to zero
-            for (var x = 1; x < xdim - 1; x++) {
-                curl[x + y * xdim] = uy[x + 1 + y * xdim] - uy[x - 1 + y * xdim] - ux[x + (y + 1) * xdim] + ux[x + (y - 1) * xdim];
-            }
-        }
-    }
-    // Draw the tracer particles:
-    function drawTracers() {
-        context.fillStyle = "rgb(150,150,150)";
-        for (var t = 0; t < nTracers; t++) {
-            var canvasX = (tracerX[t] + 0.5) * pxPerSquare;
-            var canvasY = canvas.height - (tracerY[t] + 0.5) * pxPerSquare;
-            context.fillRect(canvasX - 1, canvasY - 1, 2, 2);
-        }
-    }
-    // Draw a grid of short line segments along flow directions:
-    function drawFlowlines() {
-        var pxPerFlowline = 10;
-        if (pxPerSquare == 1)
-            pxPerFlowline = 6;
-        if (pxPerSquare == 2)
-            pxPerFlowline = 8;
-        if (pxPerSquare == 5)
-            pxPerFlowline = 12;
-        if ((pxPerSquare == 6) || (pxPerSquare == 8))
-            pxPerFlowline = 15;
-        if (pxPerSquare == 10)
-            pxPerFlowline = 20;
-        var sitesPerFlowline = pxPerFlowline / pxPerSquare;
-        var xLines = canvas.width / pxPerFlowline;
-        var yLines = canvas.height / pxPerFlowline;
-        for (var yCount = 0; yCount < yLines; yCount++) {
-            for (var xCount = 0; xCount < xLines; xCount++) {
-                var x = Math.round((xCount + 0.5) * sitesPerFlowline);
-                var y = Math.round((yCount + 0.5) * sitesPerFlowline);
-                var thisUx = ux[x + y * xdim];
-                var thisUy = uy[x + y * xdim];
-                var speed = Math.sqrt(thisUx * thisUx + thisUy * thisUy);
-                if (speed > 0.0001) {
-                    var px = (xCount + 0.5) * pxPerFlowline;
-                    var py = canvas.height - ((yCount + 0.5) * pxPerFlowline);
-                    var scale = 0.5 * pxPerFlowline / speed;
-                    context.beginPath();
-                    context.moveTo(px - thisUx * scale, py + thisUy * scale);
-                    context.lineTo(px + thisUx * scale, py - thisUy * scale);
-                    //context.lineWidth = speed * 5;
-                    var cIndex = Math.round(speed * transBlackArraySize / 0.3);
-                    if (cIndex >= transBlackArraySize)
-                        cIndex = transBlackArraySize - 1;
-                    context.strokeStyle = transBlackArray[cIndex];
-                    //context.strokeStyle = "rgba(0,0,0,0.1)";
-                    context.stroke();
+                    //if (pixelGraphics) {
+                    //colorSquare(x, y, cIndex);
+                    this.colorSquare(x, y, redList[cIndex], greenList[cIndex], blueList[cIndex]);
+                    //} else {
+                    //	context.fillStyle = hexColorList[cIndex];
+                    //	context.fillRect(x*pxPerSquare, (ydim-y-1)*pxPerSquare, pxPerSquare, pxPerSquare);
+                    //}
                 }
             }
-        }
-    }
-    // Draw an arrow to represent the total force on the barrier(s):
-    function drawForceArrow(x, y, Fx, Fy) {
-        context.fillStyle = "rgba(100,100,100,0.7)";
-        context.translate((x + 0.5) * pxPerSquare, canvas.height - (y + 0.5) * pxPerSquare);
-        var magF = Math.sqrt(Fx * Fx + Fy * Fy);
-        context.scale(4 * magF, 4 * magF);
-        context.rotate(Math.atan2(-Fy, Fx));
-        context.beginPath();
-        context.moveTo(0, 3);
-        context.lineTo(100, 3);
-        context.lineTo(100, 12);
-        context.lineTo(130, 0);
-        context.lineTo(100, -12);
-        context.lineTo(100, -3);
-        context.lineTo(0, -3);
-        context.lineTo(0, 3);
-        context.fill();
-        context.setTransform(1, 0, 0, 1, 0, 0);
-    }
-    // Draw the sensor and its associated data display:
-    function drawSensor() {
-        var canvasX = (sensorX + 0.5) * pxPerSquare;
-        var canvasY = canvas.height - (sensorY + 0.5) * pxPerSquare;
-        context.fillStyle = "rgba(180,180,180,0.7)"; // first draw gray filled circle
-        context.beginPath();
-        context.arc(canvasX, canvasY, 7, 0, 2 * Math.PI);
-        context.fill();
-        context.strokeStyle = "#404040"; // next draw cross-hairs
-        context.lineWidth = 1;
-        context.beginPath();
-        context.moveTo(canvasX, canvasY - 10);
-        context.lineTo(canvasX, canvasY + 10);
-        context.moveTo(canvasX - 10, canvasY);
-        context.lineTo(canvasX + 10, canvasY);
-        context.stroke();
-        context.fillStyle = "rgba(255,255,255,0.5)"; // draw rectangle behind text
-        canvasX += 10;
-        context.font = "12px Monospace";
-        var rectWidth = context.measureText("00000000000").width + 6;
-        var rectHeight = 58;
-        if (canvasX + rectWidth > canvas.width)
-            canvasX -= (rectWidth + 20);
-        if (canvasY + rectHeight > canvas.height)
-            canvasY = canvas.height - rectHeight;
-        context.fillRect(canvasX, canvasY, rectWidth, rectHeight);
-        context.fillStyle = "#000000"; // finally draw the text
-        canvasX += 3;
-        canvasY += 12;
-        var coordinates = "  (" + sensorX + "," + sensorY + ")";
-        context.fillText(coordinates, canvasX, canvasY);
-        canvasY += 14;
-        var rhoSymbol = String.fromCharCode(parseInt('03C1', 16));
-        var index = sensorX + sensorY * xdim;
-        context.fillText(" " + rhoSymbol + " =  " + Number(rho[index]).toFixed(3), canvasX, canvasY);
-        canvasY += 14;
-        var digitString = Number(ux[index]).toFixed(3);
-        if (ux[index] >= 0)
-            digitString = " " + digitString;
-        context.fillText("ux = " + digitString, canvasX, canvasY);
-        canvasY += 14;
-        digitString = Number(uy[index]).toFixed(3);
-        if (uy[index] >= 0)
-            digitString = " " + digitString;
-        context.fillText("uy = " + digitString, canvasX, canvasY);
-    }
-    // Functions to handle mouse/touch interaction:
-    function mouseDown(e) {
-        if (sensorCheck.checked) {
-            var canvasLoc = pageToCanvas(e.pageX, e.pageY);
-            var gridLoc = canvasToGrid(canvasLoc.x, canvasLoc.y);
-            var dx = (gridLoc.x - sensorX) * pxPerSquare;
-            var dy = (gridLoc.y - sensorY) * pxPerSquare;
-            if (Math.sqrt(dx * dx + dy * dy) <= 8) {
-                draggingSensor = true;
+            //if (pixelGraphics) 
+            this.html.context.putImageData(this.image, 0, 0); // blast image to the screen
+            // Draw tracers, force vector, and/or sensor if appropriate:
+            if (pars.drawTracers)
+                this.drawTracers();
+            if (pars.drawFlowlines)
+                this.drawFlowlines();
+            if (pars.drawSensor)
+                this.drawSensor();
+            if (pars.drawForceArrow)
+                this.drawForceArrow(opts.barrierxSum / opts.barrierCount, opts.barrierySum / opts.barrierCount, opts.barrierFx, opts.barrierFy);
+        };
+        /**
+         * Color a grid square in the image data array, one pixel at a time (rgb each in range 0 to 255)
+        */
+        graphics.prototype.colorSquare = function (x, y, r, g, b) {
+            //function colorSquare(x, y, cIndex) {		// for some strange reason, this version is quite a bit slower on Chrome
+            //var r = redList[cIndex];
+            //var g = greenList[cIndex];
+            //var b = blueList[cIndex];
+            var ydim = this.html.ydim;
+            var pxPerSquare = this.pars.pxPerSquare;
+            var flippedy = ydim - y - 1; // put y=0 at the bottom
+            var image = this.image;
+            for (var py = flippedy * pxPerSquare; py < (flippedy + 1) * pxPerSquare; py++) {
+                for (var px = x * pxPerSquare; px < (x + 1) * pxPerSquare; px++) {
+                    var index = (px + py * image.width) * 4;
+                    image.data[index + 0] = r;
+                    image.data[index + 1] = g;
+                    image.data[index + 2] = b;
+                }
             }
-        }
-        mousePressDrag(e);
-    }
-    ;
-    function mouseMove(e) {
-        if (mouseIsDown) {
-            mousePressDrag(e);
-        }
-    }
-    ;
-    function mouseUp(e) {
-        mouseIsDown = false;
-        draggingSensor = false;
-    }
-    ;
-    // Handle mouse press or drag:
-    function mousePressDrag(e) {
-        e.preventDefault();
-        mouseIsDown = true;
-        var canvasLoc = pageToCanvas(e.pageX, e.pageY);
-        if (draggingSensor) {
-            var gridLoc = canvasToGrid(canvasLoc.x, canvasLoc.y);
-            sensorX = gridLoc.x;
-            sensorY = gridLoc.y;
-            paintCanvas();
-            return;
-        }
-        if (mouseSelect.selectedIndex == 2) {
-            mouseX = canvasLoc.x;
-            mouseY = canvasLoc.y;
-            return;
-        }
-        var gridLoc = canvasToGrid(canvasLoc.x, canvasLoc.y);
-        if (mouseSelect.selectedIndex == 0) {
-            addBarrier(gridLoc.x, gridLoc.y);
-            paintCanvas();
-        }
-        else {
-            removeBarrier(gridLoc.x, gridLoc.y);
-        }
-    }
-    // Convert page coordinates to canvas coordinates:
-    function pageToCanvas(pageX, pageY) {
-        var canvasX = pageX - canvas.offsetLeft;
-        var canvasY = pageY - canvas.offsetTop;
-        // this simple subtraction may not work when the canvas is nested in other elements
-        return { x: canvasX, y: canvasY };
-    }
-    // Convert canvas coordinates to grid coordinates:
-    function canvasToGrid(canvasX, canvasY) {
-        var gridX = Math.floor(canvasX / pxPerSquare);
-        var gridY = Math.floor((canvas.height - 1 - canvasY) / pxPerSquare); // off by 1?
-        return { x: gridX, y: gridY };
-    }
-    // Add a barrier at a given grid coordinate location:
-    function addBarrier(x, y) {
-        if ((x > 1) && (x < xdim - 2) && (y > 1) && (y < ydim - 2)) {
-            barrier[x + y * xdim] = true;
-        }
-    }
-    // Remove a barrier at a given grid coordinate location:
-    function removeBarrier(x, y) {
-        if (barrier[x + y * xdim]) {
-            barrier[x + y * xdim] = false;
-            paintCanvas();
-        }
-    }
-    // Clear all barriers:
-    function clearBarriers() {
-        for (var x = 0; x < xdim; x++) {
-            for (var y = 0; y < ydim; y++) {
-                barrier[x + y * xdim] = false;
+        };
+        /**
+         * Compute the curl (actually times 2) of the macroscopic velocity field, for plotting
+        */
+        graphics.prototype.computeCurl = function () {
+            var ydim = this.html.ydim;
+            var xdim = this.html.xdim;
+            var curl = this.curl;
+            var ux = this.cfd.ux;
+            var uy = this.cfd.uy;
+            for (var y = 1; y < ydim - 1; y++) { // interior sites only; leave edges set to zero
+                for (var x = 1; x < xdim - 1; x++) {
+                    curl[x + y * xdim] = uy[x + 1 + y * xdim] - uy[x - 1 + y * xdim] - ux[x + (y + 1) * xdim] + ux[x + (y - 1) * xdim];
+                }
             }
+        };
+        return graphics;
+    }());
+    exports.graphics = graphics;
+});
+///<reference path="barrier.ts" />
+define("app", ["require", "exports", "CFD", "graphics", "options", "ui"], function (require, exports, CFD_1, graphics_1, options_2, ui_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var app = /** @class */ (function () {
+        function app(opts, html) {
+            if (opts === void 0) { opts = new options_2.options(); }
+            if (html === void 0) { html = new ui_1.ui(opts); }
+            this.opts = opts;
+            this.html = html;
+            // coordinates of "sensor" to measure local fluid properties	
+            opts.sensorX = html.xdim / 2;
+            opts.sensorY = html.ydim / 2;
+            options_2.init_options(opts);
+            this.engine = new CFD_1.CFD(html.xdim, html.ydim, html, opts);
+            this.graphics = new graphics_1.graphics(html, this.engine, opts);
+            html.connectEngine(this.engine);
+            html.connectGraphicsDevice(this.graphics);
+            this.engine.setupGraphicsDevice(this.graphics.requestPaintCanvas);
+            // document.getElementById("debugButton").onclick = debug;
+            // document.getElementById("barrierDataButton").onclick = showBarrierLocations;
+            // startButton.onclick = startStop;){
         }
-        paintCanvas();
-    }
-    // Resize the grid:
-    function resize() {
-        // First up-sample the macroscopic variables into temporary arrays at max resolution:
-        var tempRho = new Array(canvas.width * canvas.height);
-        var tempUx = new Array(canvas.width * canvas.height);
-        var tempUy = new Array(canvas.width * canvas.height);
-        var tempBarrier = new Array(canvas.width * canvas.height);
-        for (var y = 0; y < canvas.height; y++) {
-            for (var x = 0; x < canvas.width; x++) {
-                var tempIndex = x + y * canvas.width;
-                var xOld = Math.floor(x / pxPerSquare);
-                var yOld = Math.floor(y / pxPerSquare);
-                var oldIndex = xOld + yOld * xdim;
-                tempRho[tempIndex] = rho[oldIndex];
-                tempUx[tempIndex] = ux[oldIndex];
-                tempUy[tempIndex] = uy[oldIndex];
-                tempBarrier[tempIndex] = barrier[oldIndex];
+        /**
+         * Resize the grid
+        */
+        app.prototype.resize = function () {
+            var canvas = this.html.canvas;
+            var CFD = this.engine;
+            // First up-sample the macroscopic variables into temporary arrays at max resolution:
+            var tempRho = new Array(canvas.width * canvas.height);
+            var tempUx = new Array(canvas.width * canvas.height);
+            var tempUy = new Array(canvas.width * canvas.height);
+            var tempBarrier = new Array(canvas.width * canvas.height);
+            var old_xdim = this.html.xdim;
+            for (var y = 0; y < canvas.height; y++) {
+                for (var x = 0; x < canvas.width; x++) {
+                    var tempIndex = x + y * canvas.width;
+                    var xOld = Math.floor(x / pxPerSquare);
+                    var yOld = Math.floor(y / pxPerSquare);
+                    var oldIndex = xOld + yOld * old_xdim;
+                    tempRho[tempIndex] = CFD.rho[oldIndex];
+                    tempUx[tempIndex] = CFD.ux[oldIndex];
+                    tempUy[tempIndex] = CFD.uy[oldIndex];
+                    tempBarrier[tempIndex] = CFD.barrier[oldIndex];
+                }
             }
-        }
-        // Get new size from GUI selector:
-        var oldPxPerSquare = pxPerSquare;
-        pxPerSquare = Number(sizeSelect.options[sizeSelect.selectedIndex].value);
-        var growRatio = oldPxPerSquare / pxPerSquare;
-        xdim = canvas.width / pxPerSquare;
-        ydim = canvas.height / pxPerSquare;
-        // Create new arrays at the desired resolution:
-        n0 = new Array(xdim * ydim);
-        nN = new Array(xdim * ydim);
-        nS = new Array(xdim * ydim);
-        nE = new Array(xdim * ydim);
-        nW = new Array(xdim * ydim);
-        nNE = new Array(xdim * ydim);
-        nSE = new Array(xdim * ydim);
-        nNW = new Array(xdim * ydim);
-        nSW = new Array(xdim * ydim);
-        rho = new Array(xdim * ydim);
-        ux = new Array(xdim * ydim);
-        uy = new Array(xdim * ydim);
-        curl = new Array(xdim * ydim);
-        barrier = new Array(xdim * ydim);
-        // Down-sample the temporary arrays into the new arrays:
-        for (var yNew = 0; yNew < ydim; yNew++) {
-            for (var xNew = 0; xNew < xdim; xNew++) {
-                var rhoTotal = 0;
-                var uxTotal = 0;
-                var uyTotal = 0;
-                var barrierTotal = 0;
-                for (var y = yNew * pxPerSquare; y < (yNew + 1) * pxPerSquare; y++) {
-                    for (var x = xNew * pxPerSquare; x < (xNew + 1) * pxPerSquare; x++) {
-                        var index = x + y * canvas.width;
-                        rhoTotal += tempRho[index];
-                        uxTotal += tempUx[index];
-                        uyTotal += tempUy[index];
-                        if (tempBarrier[index])
-                            barrierTotal++;
+            // Get new size from GUI selector:
+            var pxPerSquare = this.html.pxPerSquare;
+            var oldPxPerSquare = pxPerSquare;
+            pxPerSquare = Number(this.html.sizeSelect.options[this.html.sizeSelect.selectedIndex].value);
+            var growRatio = oldPxPerSquare / pxPerSquare;
+            var xdim = canvas.width / pxPerSquare;
+            var ydim = canvas.height / pxPerSquare;
+            // Create new arrays at the desired resolution:
+            CFD.n0 = new Array(xdim * ydim);
+            CFD.nN = new Array(xdim * ydim);
+            CFD.nS = new Array(xdim * ydim);
+            CFD.nE = new Array(xdim * ydim);
+            CFD.nW = new Array(xdim * ydim);
+            CFD.nNE = new Array(xdim * ydim);
+            CFD.nSE = new Array(xdim * ydim);
+            CFD.nNW = new Array(xdim * ydim);
+            CFD.nSW = new Array(xdim * ydim);
+            CFD.rho = new Array(xdim * ydim);
+            CFD.ux = new Array(xdim * ydim);
+            CFD.uy = new Array(xdim * ydim);
+            CFD.barrier = new Array(xdim * ydim);
+            this.graphics.curl = new Array(xdim * ydim);
+            // Down-sample the temporary arrays into the new arrays:
+            for (var yNew = 0; yNew < ydim; yNew++) {
+                for (var xNew = 0; xNew < xdim; xNew++) {
+                    var rhoTotal = 0;
+                    var uxTotal = 0;
+                    var uyTotal = 0;
+                    var barrierTotal = 0;
+                    for (var y = yNew * pxPerSquare; y < (yNew + 1) * pxPerSquare; y++) {
+                        for (var x = xNew * pxPerSquare; x < (xNew + 1) * pxPerSquare; x++) {
+                            var index = x + y * canvas.width;
+                            rhoTotal += tempRho[index];
+                            uxTotal += tempUx[index];
+                            uyTotal += tempUy[index];
+                            if (tempBarrier[index])
+                                barrierTotal++;
+                        }
                     }
+                    CFD.setEquil(xNew, yNew, uxTotal / (pxPerSquare * pxPerSquare), uyTotal / (pxPerSquare * pxPerSquare), rhoTotal / (pxPerSquare * pxPerSquare));
+                    CFD.barrier[xNew + yNew * xdim] = (barrierTotal >= pxPerSquare * pxPerSquare / 2);
+                    this.graphics.curl[xNew + yNew * xdim] = 0.0;
                 }
-                setEquil(xNew, yNew, uxTotal / (pxPerSquare * pxPerSquare), uyTotal / (pxPerSquare * pxPerSquare), rhoTotal / (pxPerSquare * pxPerSquare));
-                curl[xNew + yNew * xdim] = 0.0;
-                barrier[xNew + yNew * xdim] = (barrierTotal >= pxPerSquare * pxPerSquare / 2);
             }
-        }
-        setBoundaries();
-        if (tracerCheck.checked) {
-            for (var t = 0; t < nTracers; t++) {
-                tracerX[t] *= growRatio;
-                tracerY[t] *= growRatio;
+            CFD.setBoundaries();
+            var tracerX = this.opts.tracerX;
+            var tracerY = this.opts.tracerY;
+            if (this.html.tracerCheck.checked) {
+                for (var t = 0; t < this.opts.nTracers; t++) {
+                    tracerX[t] *= growRatio;
+                    tracerY[t] *= growRatio;
+                }
             }
-        }
-        sensorX = Math.round(sensorX * growRatio);
-        sensorY = Math.round(sensorY * growRatio);
-        //computeCurl();
-        paintCanvas();
-        resetTimer();
-    }
-    // Function to initialize or re-initialize the fluid, based on speed slider setting:
-    function initFluid() {
-        // Amazingly, if I nest the y loop inside the x loop, Firefox slows down by a factor of 20
-        var u0 = Number(speedSlider.value);
-        for (var y = 0; y < ydim; y++) {
-            for (var x = 0; x < xdim; x++) {
-                setEquil(x, y, u0, 0, 1);
-                curl[x + y * xdim] = 0.0;
-            }
-        }
-        paintCanvas();
-    }
-    // Function to start or pause the simulation:
-    function startStop() {
-        running = !running;
-        if (running) {
-            startButton.value = "Pause";
-            resetTimer();
-            simulate();
-        }
-        else {
-            startButton.value = " Run ";
-        }
-    }
-    // Reset the timer that handles performance evaluation:
-    function resetTimer() {
-        stepCount = 0;
-        startTime = (new Date()).getTime();
-    }
-    // Show value of flow speed setting:
-    function adjustSpeed() {
-        speedValue.innerHTML = Number(speedSlider.value).toFixed(3);
-    }
-    // Show value of viscosity:
-    function adjustViscosity() {
-        viscValue.innerHTML = Number(viscSlider.value).toFixed(3);
-    }
-    // Show or hide the data area:
-    function showData() {
-        if (dataCheck.checked) {
-            dataSection.style.display = "block";
-        }
-        else {
-            dataSection.style.display = "none";
-        }
-    }
-    // Start or stop collecting data:
-    function startOrStopData() {
-        collectingData = !collectingData;
-        if (collectingData) {
-            time = 0;
-            dataArea.innerHTML = "Time \tDensity\tVel_x \tVel_y \tForce_x\tForce_y\n";
-            writeData();
-            dataButton.value = "Stop data collection";
-            showingPeriod = false;
-            periodButton.value = "Show F_y period";
-        }
-        else {
-            dataButton.value = "Start data collection";
-        }
-    }
-    // Write one line of data to the data area:
-    function writeData() {
-        var timeString = String(time);
-        while (timeString.length < 5)
-            timeString = "0" + timeString;
-        var sIndex = sensorX + sensorY * xdim;
-        dataArea.innerHTML += timeString + "\t" + Number(rho[sIndex]).toFixed(4) + "\t"
-            + Number(ux[sIndex]).toFixed(4) + "\t" + Number(uy[sIndex]).toFixed(4) + "\t"
-            + Number(barrierFx).toFixed(4) + "\t" + Number(barrierFy).toFixed(4) + "\n";
-        dataArea.scrollTop = dataArea.scrollHeight;
-    }
-    // Handle click to "show period" button
-    function showPeriod() {
-        showingPeriod = !showingPeriod;
-        if (showingPeriod) {
-            time = 0;
-            lastBarrierFy = 1.0; // arbitrary positive value
-            lastFyOscTime = -1.0; // arbitrary negative value
-            dataArea.innerHTML = "Period of F_y oscillation\n";
-            periodButton.value = "Stop data";
-            collectingData = false;
-            dataButton.value = "Start data collection";
-        }
-        else {
-            periodButton.value = "Show F_y period";
-        }
-    }
-    // Write all the barrier locations to the data area:
-    function showBarrierLocations() {
-        dataArea.innerHTML = '{name:"Barrier locations",\n';
-        dataArea.innerHTML += 'locations:[\n';
-        for (var y = 1; y < ydim - 1; y++) {
-            for (var x = 1; x < xdim - 1; x++) {
-                if (barrier[x + y * xdim])
-                    dataArea.innerHTML += x + ',' + y + ',\n';
-            }
-        }
-        dataArea.innerHTML = dataArea.innerHTML.substr(0, dataArea.innerHTML.length - 2); // remove final comma
-        dataArea.innerHTML += '\n]},\n';
-    }
-    // Place a preset barrier:
-    function placePresetBarrier() {
-        var index = barrierSelect.selectedIndex;
-        if (index == 0)
-            return;
-        clearBarriers();
-        var bCount = barrier_1.barrierList[index - 1].locations.length / 2; // number of barrier sites
-        // To decide where to place it, find minimum x and min/max y:
-        var xMin = barrier_1.barrierList[index - 1].locations[0];
-        var yMin = barrier_1.barrierList[index - 1].locations[1];
-        var yMax = yMin;
-        for (var siteIndex = 2; siteIndex < 2 * bCount; siteIndex += 2) {
-            if (barrier_1.barrierList[index - 1].locations[siteIndex] < xMin) {
-                xMin = barrier_1.barrierList[index - 1].locations[siteIndex];
-            }
-            if (barrier_1.barrierList[index - 1].locations[siteIndex + 1] < yMin) {
-                yMin = barrier_1.barrierList[index - 1].locations[siteIndex + 1];
-            }
-            if (barrier_1.barrierList[index - 1].locations[siteIndex + 1] > yMax) {
-                yMax = barrier_1.barrierList[index - 1].locations[siteIndex + 1];
-            }
-        }
-        var yAverage = Math.round((yMin + yMax) / 2);
-        // Now place the barriers:
-        for (var siteIndex = 0; siteIndex < 2 * bCount; siteIndex += 2) {
-            var x = barrier_1.barrierList[index - 1].locations[siteIndex] - xMin + Math.round(ydim / 3);
-            var y = barrier_1.barrierList[index - 1].locations[siteIndex + 1] - yAverage + Math.round(ydim / 2);
-            addBarrier(x, y);
-        }
-        paintCanvas();
-        barrierSelect.selectedIndex = 0; // A choice on this menu is a one-time action, not an ongoing setting
-    }
-    // Print debugging data:
-    function debug() {
-        dataArea.innerHTML = "Tracer locations:\n";
-        for (var t = 0; t < nTracers; t++) {
-            dataArea.innerHTML += tracerX[t] + ", " + tracerY[t] + "\n";
-        }
-    }
-    document.getElementById("debugButton").onclick = debug;
-    document.getElementById("barrierDataButton").onclick = showBarrierLocations;
-    startButton.onclick = startStop;
+            this.opts.sensorX = Math.round(this.opts.sensorX * growRatio);
+            this.opts.sensorY = Math.round(this.opts.sensorY * growRatio);
+            //computeCurl();
+            this.graphics.paintCanvas();
+            this.html.resetTimer();
+        };
+        return app;
+    }());
+    exports.app = app;
 });
 //# sourceMappingURL=CFD.js.map
