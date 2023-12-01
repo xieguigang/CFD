@@ -12,6 +12,14 @@
     <Command Name="cmdTabPage" Id="3" />
     <Command Name="cmdCommandGroup" Id="4" LabelTitle="Menu" LabelDescription="Menu" TooltipTitle="Menu" TooltipDescription="Menu" />
     <Command Name="cmdCommandPanel" Id="5" LabelTitle="Menu" LabelDescription="Menu" TooltipTitle="Menu" TooltipDescription="Menu" />
+    <Command Name="cmdButtonClearBarrier" Id="6" LabelTitle="Clear All Barrier" LabelDescription="Clear All Barrier" TooltipTitle="Clear All Barrier" TooltipDescription="Clear All Barrier">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-erase-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-erase-96.png</Image>
+      </Command.LargeImages>
+    </Command>
   </Application.Commands>
   <Application.Views>
     <Ribbon>
@@ -27,8 +35,9 @@
       </Ribbon.QuickAccessToolbar>
       <Ribbon.Tabs>
         <Tab CommandName="cmdTabPage">
-          <Group CommandName="cmdCommandGroup" SizeDefinition="OneButton">
+          <Group CommandName="cmdCommandGroup" SizeDefinition="TwoButtons">
             <Button CommandName="cmdButtonReset" />
+            <Button CommandName="cmdButtonClearBarrier" />
           </Group>
         </Tab>
       </Ribbon.Tabs>

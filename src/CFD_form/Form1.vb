@@ -47,6 +47,10 @@ Public Class Form1
         Dim g As Graphics = Graphics.FromImage(bitmap)
         Dim range As DoubleRange = frame.AsParallel.Select(Function(a) {a.Min, a.Max}).IteratesALL.Range
 
+        If range.Min.IsNaNImaginary OrElse range.Max.IsNaNImaginary Then
+            Return
+        End If
+
         For i As Integer = 0 To frame.Length - 1
             Dim row = frame(i)
 
@@ -65,6 +69,7 @@ Public Class Form1
         PropertyGrid1.Refresh()
 
         AddHandler ribbonItems.ButtonReset.ExecuteEvent, Sub() Call resetCFD()
+        AddHandler ribbonItems.ButtonClearBarrier.ExecuteEvent, Sub() Call CFD.clearBarrier()
     End Sub
 
     Private Sub resetCFD()
@@ -79,8 +84,10 @@ Public Class Form1
             .ToArray
     End Sub
 
-    Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
-        Call reader.SetBarrierPoint(GetCFDPosition, 1)
+    Private Sub PictureBox1_MouseClick(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseClick
+        If e.Button = MouseButtons.Left Then
+            Call reader.SetBarrierPoint(GetCFDPosition, 1)
+        End If
     End Sub
 
     Private Function GetCFDPosition() As Point
@@ -143,4 +150,5 @@ Public Class Form1
     Private Sub PictureBox1_MouseDown(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseDown
         drawLine = True
     End Sub
+
 End Class

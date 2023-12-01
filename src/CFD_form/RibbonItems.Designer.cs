@@ -22,6 +22,7 @@ namespace RibbonLib.Controls
             public const uint cmdTabPage = 3;
             public const uint cmdCommandGroup = 4;
             public const uint cmdButtonReset = 2;
+            public const uint cmdButtonClearBarrier = 6;
         }
 
         // ContextPopup CommandName
@@ -30,6 +31,7 @@ namespace RibbonLib.Controls
         public RibbonTab TabPage { get; private set; }
         public RibbonGroup CommandGroup { get; private set; }
         public RibbonButton ButtonReset { get; private set; }
+        public RibbonButton ButtonClearBarrier { get; private set; }
 
         public RibbonItems(Ribbon ribbon)
         {
@@ -39,6 +41,7 @@ namespace RibbonLib.Controls
             TabPage = new RibbonTab(ribbon, Cmd.cmdTabPage);
             CommandGroup = new RibbonGroup(ribbon, Cmd.cmdCommandGroup);
             ButtonReset = new RibbonButton(ribbon, Cmd.cmdButtonReset);
+            ButtonClearBarrier = new RibbonButton(ribbon, Cmd.cmdButtonClearBarrier);
         }
 
     }

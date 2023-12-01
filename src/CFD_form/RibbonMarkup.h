@@ -23,5 +23,12 @@
 #define cmdCommandPanel_LabelDescription_RESID 60012
 #define cmdCommandPanel_TooltipTitle_RESID 60013
 #define cmdCommandPanel_TooltipDescription_RESID 60014
-#define InternalCmd2_LabelTitle_RESID 60015
-#define InternalCmd4_LabelTitle_RESID 60016
+#define cmdButtonClearBarrier 6 
+#define cmdButtonClearBarrier_LabelTitle_RESID 60015
+#define cmdButtonClearBarrier_LabelDescription_RESID 60016
+#define cmdButtonClearBarrier_TooltipTitle_RESID 60017
+#define cmdButtonClearBarrier_TooltipDescription_RESID 60018
+#define cmdButtonClearBarrier_SmallImages_192__RESID 60019
+#define cmdButtonClearBarrier_LargeImages_192__RESID 60020
+#define InternalCmd2_LabelTitle_RESID 60021
+#define InternalCmd4_LabelTitle_RESID 60022

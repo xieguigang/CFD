@@ -90,6 +90,14 @@ Public Class FluidDynamics : Inherits Simulation
         Call MyBase.New(width, height)
     End Sub
 
+    Public Sub clearBarrier()
+        For x As Integer = 0 To xdim - 1
+            For y As Integer = 0 To ydim - 1
+                barrier(x)(y) = False
+            Next
+        Next
+    End Sub
+
     ''' <summary>
     ''' *************************************************************************
     '''                            - RESET SIMULATION -                          *

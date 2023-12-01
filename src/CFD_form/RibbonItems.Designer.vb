@@ -19,6 +19,7 @@ Namespace RibbonLib.Controls
             Public Const cmdTabPage As UInteger = 3
             Public Const cmdCommandGroup As UInteger = 4
             Public Const cmdButtonReset As UInteger = 2
+            Public Const cmdButtonClearBarrier As UInteger = 6
         End Class
 
         ' ContextPopup CommandName
@@ -47,6 +48,12 @@ Namespace RibbonLib.Controls
                 Return _ButtonReset
             End Get
         End Property
+        Private _ButtonClearBarrier As RibbonButton
+        Public ReadOnly Property ButtonClearBarrier As RibbonButton
+            Get
+                Return _ButtonClearBarrier
+            End Get
+        End Property
 
         Public Sub New(ByVal ribbon As Ribbon)
             If ribbon Is Nothing Then
@@ -56,6 +63,7 @@ Namespace RibbonLib.Controls
             _TabPage = New RibbonTab(_ribbon, Cmd.cmdTabPage)
             _CommandGroup = New RibbonGroup(_ribbon, Cmd.cmdCommandGroup)
             _ButtonReset = New RibbonButton(_ribbon, Cmd.cmdButtonReset)
+            _ButtonClearBarrier = New RibbonButton(_ribbon, Cmd.cmdButtonClearBarrier)
         End Sub
 
     End Class

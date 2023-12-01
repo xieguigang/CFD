@@ -23,6 +23,7 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         PictureBox1 = New PictureBox()
         Timer1 = New Timer(components)
         SplitContainer1 = New SplitContainer()
@@ -32,17 +33,21 @@ Partial Class Form1
         ToolStripStatusLabel2 = New ToolStripStatusLabel()
         ToolStripProgressBar1 = New ToolStripProgressBar()
         ToolTip1 = New ToolTip(components)
+        ContextMenuStrip1 = New ContextMenuStrip(components)
+        MarkPointToolStripMenuItem = New ToolStripMenuItem()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         CType(SplitContainer1, ComponentModel.ISupportInitialize).BeginInit()
         SplitContainer1.Panel1.SuspendLayout()
         SplitContainer1.Panel2.SuspendLayout()
         SplitContainer1.SuspendLayout()
         StatusStrip1.SuspendLayout()
+        ContextMenuStrip1.SuspendLayout()
         SuspendLayout()
         ' 
         ' PictureBox1
         ' 
         PictureBox1.BackgroundImageLayout = ImageLayout.Stretch
+        PictureBox1.ContextMenuStrip = ContextMenuStrip1
         PictureBox1.Cursor = Cursors.Cross
         PictureBox1.Dock = DockStyle.Fill
         PictureBox1.Location = New Point(0, 0)
@@ -113,6 +118,19 @@ Partial Class Form1
         ToolTip1.ToolTipIcon = ToolTipIcon.Info
         ToolTip1.ToolTipTitle = "Point Information"
         ' 
+        ' ContextMenuStrip1
+        ' 
+        ContextMenuStrip1.Items.AddRange(New ToolStripItem() {MarkPointToolStripMenuItem})
+        ContextMenuStrip1.Name = "ContextMenuStrip1"
+        ContextMenuStrip1.Size = New Size(133, 26)
+        ' 
+        ' MarkPointToolStripMenuItem
+        ' 
+        MarkPointToolStripMenuItem.Image = CType(resources.GetObject("MarkPointToolStripMenuItem.Image"), Image)
+        MarkPointToolStripMenuItem.Name = "MarkPointToolStripMenuItem"
+        MarkPointToolStripMenuItem.Size = New Size(132, 22)
+        MarkPointToolStripMenuItem.Text = "Mark Point"
+        ' 
         ' Form1
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -129,6 +147,7 @@ Partial Class Form1
         SplitContainer1.ResumeLayout(False)
         StatusStrip1.ResumeLayout(False)
         StatusStrip1.PerformLayout()
+        ContextMenuStrip1.ResumeLayout(False)
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -142,5 +161,7 @@ Partial Class Form1
     Friend WithEvents ToolStripProgressBar1 As ToolStripProgressBar
     Friend WithEvents ToolStripStatusLabel2 As ToolStripStatusLabel
     Friend WithEvents ToolTip1 As ToolTip
+    Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
+    Friend WithEvents MarkPointToolStripMenuItem As ToolStripMenuItem
 
 End Class
