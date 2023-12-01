@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports System.Text
 Imports CFD
 Imports CFD_form.RibbonLib.Controls
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
@@ -79,20 +80,43 @@ Public Class Form1
     End Sub
 
     Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
-        Call reader.SetBarrierPoint(GetCFDPosition, 2)
+        Call reader.SetBarrierPoint(GetCFDPosition, 1)
     End Sub
 
     Private Function GetCFDPosition() As Point
         Dim xy As Point = PictureBox1.PointToClient(Cursor.Position)
         Dim sizeView As Size = PictureBox1.Size
         Dim ratio As New SizeF(sizeView.Width / CFD.xdim, sizeView.Height / CFD.ydim)
+        Dim x As Integer = xy.X / ratio.Width, y As Integer = xy.Y / ratio.Height
 
-        Return New Point(xy.X / ratio.Width, xy.Y / ratio.Height)
+        If x < 0 Then x = 0
+        If y < 0 Then y = 0
+        If x >= CFD.xdim Then x = CFD.xdim - 1
+        If y >= CFD.ydim Then y = CFD.ydim - 1
+
+        Return New Point(x, y)
     End Function
 
     Private Sub PictureBox1_MouseMove(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseMove
         Dim xy = GetCFDPosition()
+        Dim tooltip As New StringBuilder
+
         ToolStripStatusLabel2.Text = $"[{xy.X},{xy.Y}]"
+
+        Dim speed As Double = reader.GetSpeed(xy)
+        Dim density As Double = reader.GetDensity(xy)
+        Dim xvel As Double = reader.GetXVel(xy)
+        Dim yvel As Double = reader.GetYVel(xy)
+
+        tooltip.AppendLine($"point xy: ({xy.X},{xy.Y})")
+        tooltip.AppendLine($"density: {density}")
+        tooltip.AppendLine($"velocity: [{xvel},{yvel}]")
+
+        If reader.GetBarrier(xy) Then
+            tooltip.AppendLine("current location is a barrier site")
+        End If
+
+        ToolTip1.SetToolTip(PictureBox1, tooltip.ToString)
     End Sub
 
     Private Sub PropertyGrid1_PropertyValueChanged(s As Object, e As PropertyValueChangedEventArgs) Handles PropertyGrid1.PropertyValueChanged

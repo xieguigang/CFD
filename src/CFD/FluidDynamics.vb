@@ -51,7 +51,7 @@ Public Class FluidDynamics : Inherits Simulation
     ' **************************************************************************
 
     ' Constants
-    Friend velocity As Double = 0.1
+    Friend velocity As Double = 0.12
     Friend viscocity As Double = 0.02
 
     ' Here are the arrays of densities by velocity, named by velocity directions with north up:

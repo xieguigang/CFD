@@ -31,6 +31,7 @@ Partial Class Form1
         ToolStripStatusLabel1 = New ToolStripStatusLabel()
         ToolStripStatusLabel2 = New ToolStripStatusLabel()
         ToolStripProgressBar1 = New ToolStripProgressBar()
+        ToolTip1 = New ToolTip(components)
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         CType(SplitContainer1, ComponentModel.ISupportInitialize).BeginInit()
         SplitContainer1.Panel1.SuspendLayout()
@@ -107,6 +108,11 @@ Partial Class Form1
         ToolStripProgressBar1.Name = "ToolStripProgressBar1"
         ToolStripProgressBar1.Size = New Size(100, 16)
         ' 
+        ' ToolTip1
+        ' 
+        ToolTip1.ToolTipIcon = ToolTipIcon.Info
+        ToolTip1.ToolTipTitle = "Point Information"
+        ' 
         ' Form1
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -115,7 +121,7 @@ Partial Class Form1
         Controls.Add(SplitContainer1)
         Controls.Add(StatusStrip1)
         Name = "Form1"
-        Text = "CFD Tools"
+        Text = "Computational Fluid Dynamics"
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
         SplitContainer1.Panel1.ResumeLayout(False)
         SplitContainer1.Panel2.ResumeLayout(False)
@@ -135,5 +141,6 @@ Partial Class Form1
     Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
     Friend WithEvents ToolStripProgressBar1 As ToolStripProgressBar
     Friend WithEvents ToolStripStatusLabel2 As ToolStripStatusLabel
+    Friend WithEvents ToolTip1 As ToolTip
 
 End Class

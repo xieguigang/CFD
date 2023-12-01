@@ -20,9 +20,19 @@ Namespace Tasks
                     If Not cfd.barrier(x)(y) Then
                         this_rho = cfd.n0(x)(y) + cfd.nN(x)(y) + cfd.nS(x)(y) + cfd.nE(x)(y) +
                             cfd.nW(x)(y) + cfd.nNW(x)(y) + cfd.nNE(x)(y) + cfd.nSW(x)(y) + cfd.nSE(x)(y)
-                        cfd.rho(x)(y) = this_rho ' macroscopic density may be needed for plotting
+
+                        If this_rho > 1 Then
+                            this_rho = 1
+                        ElseIf this_rho < -1 Then
+                            this_rho = -1
+                        End If
+
+                        ' macroscopic density may be needed for plotting
+                        cfd.rho(x)(y) = this_rho
+
                         one9thn = one9th * this_rho
                         one36thn = one36th * this_rho
+
                         If this_rho > 0 Then
                             vx = (cfd.nE(x)(y) + cfd.nNE(x)(y) + cfd.nSE(x)(y) - cfd.nW(x)(y) - cfd.nNW(x)(y) - cfd.nSW(x)(y)) / this_rho
                         Else
