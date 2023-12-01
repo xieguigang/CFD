@@ -11,6 +11,7 @@ var Model;
              * will be true when running
             */
             this.running = false;
+            console.log({ xdim: xdim, ydim: ydim });
             this.n0 = new Array(xdim * ydim); // microscopic densities along each lattice direction
             this.nN = new Array(xdim * ydim);
             this.nS = new Array(xdim * ydim);
@@ -1717,11 +1718,12 @@ var Model;
             this.dataButton = document.getElementById(dataButton);
             this.periodButton = document.getElementById(periodButton);
             this.sizeSelect = document.getElementById(sizeSelect);
-            this.sizeSelect.selectedIndex = 7;
+            this.sizeSelect.selectedIndex = 5;
             // smaller works better on mobile platforms
             if (Global.mobile) {
                 this.sizeSelect.selectedIndex = 1;
             }
+            console.log(this.sizeSelect.selectedIndex);
             this.barrierSelect = document.getElementById(barrierSelect);
             for (var _i = 0, barrierList_1 = Model.barrierList; _i < barrierList_1.length; _i++) {
                 var barrier = barrierList_1[_i];

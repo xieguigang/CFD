@@ -124,12 +124,14 @@ namespace Model {
             this.periodButton = <any>document.getElementById(periodButton);
 
             this.sizeSelect = <any>document.getElementById(sizeSelect);
-            this.sizeSelect.selectedIndex = 7;
+            this.sizeSelect.selectedIndex = 5;
 
             // smaller works better on mobile platforms
             if (Global.mobile) {
                 this.sizeSelect.selectedIndex = 1;
             }
+
+            console.log(this.sizeSelect.selectedIndex);
 
             this.barrierSelect = <any>document.getElementById(barrierSelect);
 

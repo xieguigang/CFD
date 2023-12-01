@@ -31,6 +31,8 @@ namespace Model {
             private opts: options,
             private debug: Idebugger) {
 
+            console.log({ xdim: xdim, ydim: ydim });
+
             this.n0 = new Array(xdim * ydim);			// microscopic densities along each lattice direction
             this.nN = new Array(xdim * ydim);
             this.nS = new Array(xdim * ydim);
