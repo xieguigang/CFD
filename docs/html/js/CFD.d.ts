@@ -1,35 +1,155 @@
-declare module "global" {
-    export const UA: RegExp;
-    export const mobile: boolean;
-    export function componentToHex(c: number): string;
+declare namespace Model {
+    class CFD {
+        xdim: number;
+        ydim: number;
+        private pars;
+        private opts;
+        private debug;
+        n0: number[];
+        nN: number[];
+        nS: number[];
+        nE: number[];
+        nW: number[];
+        nNE: number[];
+        nSE: number[];
+        nNW: number[];
+        nSW: number[];
+        rho: number[];
+        ux: number[];
+        uy: number[];
+        barrier: boolean[];
+        paintCanvas: Global.IrequestPaintCanvas;
+        /**
+         * will be true when running
+        */
+        running: boolean;
+        constructor(xdim: number, ydim: number, pars: uiAdapter, opts: options, debug: Idebugger);
+        setupGraphicsDevice(gr: Global.IrequestPaintCanvas): void;
+        private init;
+        initFluid(): void;
+        push(pushX: number, pushY: number, pushUX: number, pushUY: number): void;
+        /**
+         * Set the fluid variables at the boundaries,
+         * according to the current slider value
+        */
+        setBoundaries(): void;
+        setEquil(x: number, y: number, newux: number, newuy: number, newrho?: number): void;
+        /**
+         * Collide particles within each cell (here's the physics!)
+        */
+        collide(): void;
+        /**
+         * Move particles along their directions of motion
+        */
+        stream(): void;
+        /**
+         * Simulate function executes a bunch of steps and then schedules another call to itself
+        */
+        simulate(): void;
+    }
+}
+declare namespace Model {
+    interface barrier {
+        name: string;
+        locations: number[];
+    }
+    const barrierList: barrier[];
+}
+declare class app {
+    opts: Model.options;
+    html: Model.ui;
+    private engine;
+    private graphics;
+    constructor(opts?: Model.options, html?: Model.ui);
+    startStop(): void;
+    /**
+     * Resize the grid
+    */
+    resize(): void;
+}
+declare var App: app;
+declare module Global {
+    const UA: RegExp;
+    const mobile: boolean;
+    function componentToHex(c: number): string;
     /**
      * Functions to convert rgb to hex color string
      * (from stackoverflow)
     */
-    export function rgbToHex(r: number, g: number, b: number): string;
-    export interface IrequestAnimFrame {
+    function rgbToHex(r: number, g: number, b: number): string;
+    interface IrequestAnimFrame {
         (callback: () => void): void;
     }
     /**
      * request canvas refresh a frame drawing;
     */
-    export interface IrequestPaintCanvas {
+    interface IrequestPaintCanvas {
         (): void;
     }
     /**
      * Mysterious gymnastics that are apparently useful
      * for better cross-browser animation timing:
     */
-    export const requestAnimFrame: IrequestAnimFrame;
+    const requestAnimFrame: IrequestAnimFrame;
 }
-declare module "options" {
-    export const four9ths: number;
-    export const one9th: number;
-    export const one36th: number;
+declare namespace Model {
+    class graphics {
+        private html;
+        private cfd;
+        private opts;
+        private canvas;
+        private pars;
+        private image;
+        redList: number[];
+        greenList: number[];
+        blueList: number[];
+        hexColorList: string[];
+        curl: number[];
+        get requestPaintCanvas(): Global.IrequestPaintCanvas;
+        constructor(html: ui, cfd: CFD, opts: options);
+        private initGraphicsColors;
+        /**
+         * Initialize the tracer particles
+        */
+        initTracers(): void;
+        /**
+         * Draw the sensor and its associated data display
+        */
+        drawSensor(): void;
+        /**
+         * Draw an arrow to represent the total force on the barrier(s)
+        */
+        drawForceArrow(x: number, y: number, Fx: number, Fy: number): void;
+        /**
+         * Draw a grid of short line segments along flow directions
+        */
+        drawFlowlines(): void;
+        /**
+         * Draw the tracer particles
+        */
+        drawTracers(): void;
+        /**
+         * Paint the canvas
+        */
+        paintCanvas(): void;
+        /**
+         * Color a grid square in the image data array, one pixel at a time (rgb each in range 0 to 255)
+        */
+        colorSquare(x: any, y: any, r: any, g: any, b: any): void;
+        /**
+         * Compute the curl (actually times 2) of the macroscopic velocity field, for plotting
+        */
+        computeCurl(): void;
+    }
+}
+declare namespace Model {
+    const four9ths: number;
+    const one9th: number;
+    const one36th: number;
     /**
      * the simulation options
     */
-    export class options {
+    class options {
         stepCount: number;
         startTime: number;
         barrierCount: number;
@@ -66,7 +186,7 @@ declare module "options" {
         nTracers?: number, nColors?: number, sensorX?: number, // coordinates of "sensor" to measure local fluid properties	
         sensorY?: number, tracerX?: number[], tracerY?: number[], transBlackArraySize?: number, transBlackArray?: string[]);
     }
-    export interface uiAdapter {
+    interface uiAdapter {
         get xdim(): number;
         get ydim(): number;
         get contrast(): number;
@@ -90,82 +210,20 @@ declare module "options" {
             y: number;
         };
     }
-    export interface Idebugger {
+    interface Idebugger {
         writeData(): void;
         moveTracers(): void;
         dataAreaWriteLine(s: string): void;
         setSpeedReadout(s: string): void;
         startOrStopData(): void;
     }
-    export function init_options(opts: options): void;
+    function init_options(opts: options): void;
 }
-declare module "CFD" {
-    import { IrequestPaintCanvas } from "global";
-    import { Idebugger, options, uiAdapter } from "options";
-    export class CFD {
-        xdim: number;
-        ydim: number;
-        private pars;
-        private opts;
-        private debug;
-        n0: number[];
-        nN: number[];
-        nS: number[];
-        nE: number[];
-        nW: number[];
-        nNE: number[];
-        nSE: number[];
-        nNW: number[];
-        nSW: number[];
-        rho: number[];
-        ux: number[];
-        uy: number[];
-        barrier: boolean[];
-        paintCanvas: IrequestPaintCanvas;
-        /**
-         * will be true when running
-        */
-        running: boolean;
-        constructor(xdim: number, ydim: number, pars: uiAdapter, opts: options, debug: Idebugger);
-        setupGraphicsDevice(gr: IrequestPaintCanvas): void;
-        private init;
-        initFluid(): void;
-        push(pushX: number, pushY: number, pushUX: number, pushUY: number): void;
-        /**
-         * Set the fluid variables at the boundaries,
-         * according to the current slider value
-        */
-        setBoundaries(): void;
-        setEquil(x: number, y: number, newux: number, newuy: number, newrho?: number): void;
-        /**
-         * Collide particles within each cell (here's the physics!)
-        */
-        collide(): void;
-        /**
-         * Move particles along their directions of motion
-        */
-        stream(): void;
-        /**
-         * Simulate function executes a bunch of steps and then schedules another call to itself
-        */
-        simulate(): void;
-    }
-}
-declare module "barrier" {
-    export interface barrier {
-        name: string;
-        locations: number[];
-    }
-    export const barrierList: barrier[];
-}
-declare module "ui" {
-    import { CFD } from "CFD";
-    import { graphics } from "graphics";
-    import { Idebugger, options, uiAdapter } from "options";
+declare namespace Model {
     /**
      * this html user interface handler
     */
-    export class ui implements uiAdapter, Idebugger {
+    class ui implements uiAdapter, Idebugger {
         private opts;
         readonly canvas: HTMLCanvasElement;
         readonly context: CanvasRenderingContext2D;
@@ -250,74 +308,5 @@ declare module "ui" {
         showBarrierLocations(): void;
         placePresetBarrier(): void;
         debug(): void;
-    }
-}
-declare module "graphics" {
-    import { CFD } from "CFD";
-    import { IrequestPaintCanvas } from "global";
-    import { options } from "options";
-    import { ui } from "ui";
-    export class graphics {
-        private html;
-        private cfd;
-        private opts;
-        private canvas;
-        private pars;
-        private image;
-        redList: number[];
-        greenList: number[];
-        blueList: number[];
-        hexColorList: string[];
-        curl: number[];
-        get requestPaintCanvas(): IrequestPaintCanvas;
-        constructor(html: ui, cfd: CFD, opts: options);
-        private initGraphicsColors;
-        /**
-         * Initialize the tracer particles
-        */
-        initTracers(): void;
-        /**
-         * Draw the sensor and its associated data display
-        */
-        drawSensor(): void;
-        /**
-         * Draw an arrow to represent the total force on the barrier(s)
-        */
-        drawForceArrow(x: number, y: number, Fx: number, Fy: number): void;
-        /**
-         * Draw a grid of short line segments along flow directions
-        */
-        drawFlowlines(): void;
-        /**
-         * Draw the tracer particles
-        */
-        drawTracers(): void;
-        /**
-         * Paint the canvas
-        */
-        paintCanvas(): void;
-        /**
-         * Color a grid square in the image data array, one pixel at a time (rgb each in range 0 to 255)
-        */
-        colorSquare(x: any, y: any, r: any, g: any, b: any): void;
-        /**
-         * Compute the curl (actually times 2) of the macroscopic velocity field, for plotting
-        */
-        computeCurl(): void;
-    }
-}
-declare module "app" {
-    import { options } from "options";
-    import { ui } from "ui";
-    export class app {
-        opts: options;
-        html: ui;
-        private engine;
-        private graphics;
-        constructor(opts?: options, html?: ui);
-        /**
-         * Resize the grid
-        */
-        resize(): void;
     }
 }

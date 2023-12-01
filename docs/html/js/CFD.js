@@ -1,145 +1,5 @@
-define("global", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.requestAnimFrame = exports.rgbToHex = exports.componentToHex = exports.mobile = exports.UA = void 0;
-    exports.UA = /iPhone|iPad|iPod|Android|BlackBerry|Opera Mini|IEMobile/i;
-    exports.mobile = (function () {
-        var ua = navigator.userAgent.match(exports.UA);
-        if (!ua) {
-            return false;
-        }
-        else {
-            return true;
-        }
-    })();
-    function componentToHex(c) {
-        var hex = c.toString(16);
-        return hex.length == 1 ? "0" + hex : hex;
-    }
-    exports.componentToHex = componentToHex;
-    /**
-     * Functions to convert rgb to hex color string
-     * (from stackoverflow)
-    */
-    function rgbToHex(r, g, b) {
-        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-    }
-    exports.rgbToHex = rgbToHex;
-    /**
-     * Mysterious gymnastics that are apparently useful
-     * for better cross-browser animation timing:
-    */
-    exports.requestAnimFrame = (function (callback) {
-        var win = window;
-        return window.requestAnimationFrame ||
-            win.webkitRequestAnimationFrame ||
-            win.mozRequestAnimationFrame ||
-            win.oRequestAnimationFrame ||
-            win.msRequestAnimationFrame ||
-            function (callback) {
-                window.setTimeout(callback, 1); // second parameter is time in ms
-            };
-    })();
-});
-define("options", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.init_options = exports.options = exports.one36th = exports.one9th = exports.four9ths = void 0;
-    // abbreviations
-    exports.four9ths = 4.0 / 9.0;
-    exports.one9th = 1.0 / 9.0;
-    exports.one36th = 1.0 / 36.0;
-    /**
-     * the simulation options
-    */
-    var options = /** @class */ (function () {
-        /**
-         * create new simulation parameter set with default values
-        */
-        function options(stepCount, startTime, barrierCount, barrierxSum, barrierySum, barrierFx, // total force on all barrier sites
-        barrierFy, mouseX, mouseY, // mouse location in canvas coordinates
-        oldMouseX, oldMouseY, // mouse coordinates from previous simulation frame
-        collectingData, time, // time (in simulation step units) since data collection started
-        showingPeriod, lastBarrierFy, // for determining when F_y oscillation begins
-        lastFyOscTime, // for calculating F_y oscillation period
-        nTracers, nColors, sensorX, // coordinates of "sensor" to measure local fluid properties	
-        sensorY, tracerX, tracerY, transBlackArraySize, transBlackArray) {
-            if (stepCount === void 0) { stepCount = 0; }
-            if (startTime === void 0) { startTime = 0; }
-            if (barrierCount === void 0) { barrierCount = 0; }
-            if (barrierxSum === void 0) { barrierxSum = 0; }
-            if (barrierySum === void 0) { barrierySum = 0; }
-            if (barrierFx === void 0) { barrierFx = 0.0; }
-            if (barrierFy === void 0) { barrierFy = 0.0; }
-            if (mouseX === void 0) { mouseX = -1; }
-            if (mouseY === void 0) { mouseY = -1; }
-            if (oldMouseX === void 0) { oldMouseX = -1; }
-            if (oldMouseY === void 0) { oldMouseY = -1; }
-            if (collectingData === void 0) { collectingData = false; }
-            if (time === void 0) { time = 0; }
-            if (showingPeriod === void 0) { showingPeriod = false; }
-            if (lastBarrierFy === void 0) { lastBarrierFy = 1; }
-            if (lastFyOscTime === void 0) { lastFyOscTime = 0; }
-            if (nTracers === void 0) { nTracers = 144; }
-            if (nColors === void 0) { nColors = 400; }
-            if (sensorX === void 0) { sensorX = -1; }
-            if (sensorY === void 0) { sensorY = -1; }
-            if (tracerX === void 0) { tracerX = null; }
-            if (tracerY === void 0) { tracerY = null; }
-            if (transBlackArraySize === void 0) { transBlackArraySize = 50; }
-            if (transBlackArray === void 0) { transBlackArray = null; }
-            this.stepCount = stepCount;
-            this.startTime = startTime;
-            this.barrierCount = barrierCount;
-            this.barrierxSum = barrierxSum;
-            this.barrierySum = barrierySum;
-            this.barrierFx = barrierFx;
-            this.barrierFy = barrierFy;
-            this.mouseX = mouseX;
-            this.mouseY = mouseY;
-            this.oldMouseX = oldMouseX;
-            this.oldMouseY = oldMouseY;
-            this.collectingData = collectingData;
-            this.time = time;
-            this.showingPeriod = showingPeriod;
-            this.lastBarrierFy = lastBarrierFy;
-            this.lastFyOscTime = lastFyOscTime;
-            this.nTracers = nTracers;
-            this.nColors = nColors;
-            this.sensorX = sensorX;
-            this.sensorY = sensorY;
-            this.tracerX = tracerX;
-            this.tracerY = tracerY;
-            this.transBlackArraySize = transBlackArraySize;
-            this.transBlackArray = transBlackArray;
-        }
-        return options;
-    }());
-    exports.options = options;
-    function init_options(opts) {
-        // Initialize tracers (but don't place them yet):
-        var nTracers = this.opts.nTracers;
-        var tracerX = new Array(nTracers);
-        var tracerY = new Array(nTracers);
-        for (var t = 0; t < nTracers; t++) {
-            tracerX[t] = 0.0;
-            tracerY[t] = 0.0;
-        }
-        opts.tracerX = tracerX;
-        opts.tracerY = tracerY;
-        // Initialize array of partially transparant blacks, for drawing flow lines:
-        var transBlackArray = new Array(opts.transBlackArraySize);
-        for (var i = 0; i < opts.transBlackArraySize; i++) {
-            transBlackArray[i] = "rgba(0,0,0," + Number(i / opts.transBlackArraySize).toFixed(2) + ")";
-        }
-        opts.transBlackArray = transBlackArray;
-    }
-    exports.init_options = init_options;
-});
-define("CFD", ["require", "exports", "global", "options"], function (require, exports, global_1, options_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.CFD = void 0;
+var Model;
+(function (Model) {
     var CFD = /** @class */ (function () {
         function CFD(xdim, ydim, pars, opts, debug) {
             this.xdim = xdim;
@@ -177,7 +37,7 @@ define("CFD", ["require", "exports", "global", "options"], function (require, ex
                 }
             }
             // Create a simple linear "wall" barrier (intentionally a little offset from center):
-            var barrierSize = global_1.mobile ? 4 : 8;
+            var barrierSize = Global.mobile ? 4 : 8;
             for (var y = (this.ydim / 2) - barrierSize; y <= (this.ydim / 2) + barrierSize; y++) {
                 var x = Math.round(this.ydim / 3);
                 this.barrier[x + y * this.xdim] = true;
@@ -249,15 +109,15 @@ define("CFD", ["require", "exports", "global", "options"], function (require, ex
             if (typeof newrho == 'undefined') {
                 newrho = this.rho[i];
             }
-            this.n0[i] = options_1.four9ths * newrho * (1 - u215);
-            this.nE[i] = options_1.one9th * newrho * (1 + ux3 + 4.5 * ux2 - u215);
-            this.nW[i] = options_1.one9th * newrho * (1 - ux3 + 4.5 * ux2 - u215);
-            this.nN[i] = options_1.one9th * newrho * (1 + uy3 + 4.5 * uy2 - u215);
-            this.nS[i] = options_1.one9th * newrho * (1 - uy3 + 4.5 * uy2 - u215);
-            this.nNE[i] = options_1.one36th * newrho * (1 + ux3 + uy3 + 4.5 * (u2 + uxuy2) - u215);
-            this.nSE[i] = options_1.one36th * newrho * (1 + ux3 - uy3 + 4.5 * (u2 - uxuy2) - u215);
-            this.nNW[i] = options_1.one36th * newrho * (1 - ux3 + uy3 + 4.5 * (u2 - uxuy2) - u215);
-            this.nSW[i] = options_1.one36th * newrho * (1 - ux3 - uy3 + 4.5 * (u2 + uxuy2) - u215);
+            this.n0[i] = Model.four9ths * newrho * (1 - u215);
+            this.nE[i] = Model.one9th * newrho * (1 + ux3 + 4.5 * ux2 - u215);
+            this.nW[i] = Model.one9th * newrho * (1 - ux3 + 4.5 * ux2 - u215);
+            this.nN[i] = Model.one9th * newrho * (1 + uy3 + 4.5 * uy2 - u215);
+            this.nS[i] = Model.one9th * newrho * (1 - uy3 + 4.5 * uy2 - u215);
+            this.nNE[i] = Model.one36th * newrho * (1 + ux3 + uy3 + 4.5 * (u2 + uxuy2) - u215);
+            this.nSE[i] = Model.one36th * newrho * (1 + ux3 - uy3 + 4.5 * (u2 - uxuy2) - u215);
+            this.nNW[i] = Model.one36th * newrho * (1 - ux3 + uy3 + 4.5 * (u2 - uxuy2) - u215);
+            this.nSW[i] = Model.one36th * newrho * (1 - ux3 - uy3 + 4.5 * (u2 + uxuy2) - u215);
             this.rho[i] = newrho;
             this.ux[i] = newux;
             this.uy[i] = newuy;
@@ -291,8 +151,8 @@ define("CFD", ["require", "exports", "global", "options"], function (require, ex
                     ux[i] = thisux;
                     var thisuy = (nN[i] + nNE[i] + nNW[i] - nS[i] - nSE[i] - nSW[i]) / thisrho;
                     uy[i] = thisuy;
-                    var one9thrho = options_1.one9th * thisrho; // pre-compute a bunch of stuff for optimization
-                    var one36thrho = options_1.one36th * thisrho;
+                    var one9thrho = Model.one9th * thisrho; // pre-compute a bunch of stuff for optimization
+                    var one36thrho = Model.one36th * thisrho;
                     var ux3 = 3 * thisux;
                     var uy3 = 3 * thisuy;
                     var ux2 = thisux * thisux;
@@ -300,7 +160,7 @@ define("CFD", ["require", "exports", "global", "options"], function (require, ex
                     var uxuy2 = 2 * thisux * thisuy;
                     var u2 = ux2 + uy2;
                     var u215 = 1.5 * u2;
-                    n0[i] += omega * (options_1.four9ths * thisrho * (1 - u215) - n0[i]);
+                    n0[i] += omega * (Model.four9ths * thisrho * (1 - u215) - n0[i]);
                     nE[i] += omega * (one9thrho * (1 + ux3 + 4.5 * ux2 - u215) - nE[i]);
                     nW[i] += omega * (one9thrho * (1 - ux3 + 4.5 * ux2 - u215) - nW[i]);
                     nN[i] += omega * (one9thrho * (1 + uy3 + 4.5 * uy2 - u215) - nN[i]);
@@ -465,7 +325,7 @@ define("CFD", ["require", "exports", "global", "options"], function (require, ex
             }
             if (this.running) {
                 if (this.pars.requestFrame) {
-                    (0, global_1.requestAnimFrame)(function () { return _this.simulate(); }); // let browser schedule next frame
+                    Global.requestAnimFrame(function () { return _this.simulate(); }); // let browser schedule next frame
                 }
                 else {
                     window.setTimeout(function () { return _this.simulate(); }, 1); // schedule next frame asap (nominally 1 ms but always more)
@@ -474,12 +334,10 @@ define("CFD", ["require", "exports", "global", "options"], function (require, ex
         };
         return CFD;
     }());
-    exports.CFD = CFD;
-});
-define("barrier", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.barrierList = void 0;
+    Model.CFD = CFD;
+})(Model || (Model = {}));
+var Model;
+(function (Model) {
     var short_line = {
         name: "Short line",
         locations: [
@@ -517,7 +375,7 @@ define("barrier", ["require", "exports"], function (require, exports) {
             13, 28
         ]
     };
-    exports.barrierList = [
+    Model.barrierList = [
         short_line, long_line,
         {
             name: "Diagonal",
@@ -1148,11 +1006,606 @@ define("barrier", ["require", "exports"], function (require, exports) {
             ]
         }
     ];
-});
-define("ui", ["require", "exports", "barrier", "global"], function (require, exports, barrier_1, global_2) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ui = void 0;
+})(Model || (Model = {}));
+///<reference path="barrier.ts" />
+var app = /** @class */ (function () {
+    function app(opts, html) {
+        if (opts === void 0) { opts = new Model.options(); }
+        if (html === void 0) { html = new Model.ui(opts); }
+        this.opts = opts;
+        this.html = html;
+        // coordinates of "sensor" to measure local fluid properties	
+        opts.sensorX = html.xdim / 2;
+        opts.sensorY = html.ydim / 2;
+        Model.init_options(opts);
+        this.engine = new Model.CFD(html.xdim, html.ydim, html, opts, html);
+        this.graphics = new Model.graphics(html, this.engine, opts);
+        html.connectEngine(this.engine);
+        html.connectGraphicsDevice(this.graphics);
+        this.engine.setupGraphicsDevice(this.graphics.requestPaintCanvas);
+        // document.getElementById("debugButton").onclick = debug;
+        // document.getElementById("barrierDataButton").onclick = showBarrierLocations;
+        // startButton.onclick = startStop;){
+    }
+    app.prototype.startStop = function () {
+        this.html.startStop();
+    };
+    /**
+     * Resize the grid
+    */
+    app.prototype.resize = function () {
+        var canvas = this.html.canvas;
+        var CFD = this.engine;
+        // First up-sample the macroscopic variables into temporary arrays at max resolution:
+        var tempRho = new Array(canvas.width * canvas.height);
+        var tempUx = new Array(canvas.width * canvas.height);
+        var tempUy = new Array(canvas.width * canvas.height);
+        var tempBarrier = new Array(canvas.width * canvas.height);
+        var old_xdim = this.html.xdim;
+        for (var y = 0; y < canvas.height; y++) {
+            for (var x = 0; x < canvas.width; x++) {
+                var tempIndex = x + y * canvas.width;
+                var xOld = Math.floor(x / pxPerSquare);
+                var yOld = Math.floor(y / pxPerSquare);
+                var oldIndex = xOld + yOld * old_xdim;
+                tempRho[tempIndex] = CFD.rho[oldIndex];
+                tempUx[tempIndex] = CFD.ux[oldIndex];
+                tempUy[tempIndex] = CFD.uy[oldIndex];
+                tempBarrier[tempIndex] = CFD.barrier[oldIndex];
+            }
+        }
+        // Get new size from GUI selector:
+        var pxPerSquare = this.html.pxPerSquare;
+        var oldPxPerSquare = pxPerSquare;
+        pxPerSquare = Number(this.html.sizeSelect.options[this.html.sizeSelect.selectedIndex].value);
+        var growRatio = oldPxPerSquare / pxPerSquare;
+        var xdim = canvas.width / pxPerSquare;
+        var ydim = canvas.height / pxPerSquare;
+        // Create new arrays at the desired resolution:
+        CFD.n0 = new Array(xdim * ydim);
+        CFD.nN = new Array(xdim * ydim);
+        CFD.nS = new Array(xdim * ydim);
+        CFD.nE = new Array(xdim * ydim);
+        CFD.nW = new Array(xdim * ydim);
+        CFD.nNE = new Array(xdim * ydim);
+        CFD.nSE = new Array(xdim * ydim);
+        CFD.nNW = new Array(xdim * ydim);
+        CFD.nSW = new Array(xdim * ydim);
+        CFD.rho = new Array(xdim * ydim);
+        CFD.ux = new Array(xdim * ydim);
+        CFD.uy = new Array(xdim * ydim);
+        CFD.barrier = new Array(xdim * ydim);
+        this.graphics.curl = new Array(xdim * ydim);
+        // Down-sample the temporary arrays into the new arrays:
+        for (var yNew = 0; yNew < ydim; yNew++) {
+            for (var xNew = 0; xNew < xdim; xNew++) {
+                var rhoTotal = 0;
+                var uxTotal = 0;
+                var uyTotal = 0;
+                var barrierTotal = 0;
+                for (var y = yNew * pxPerSquare; y < (yNew + 1) * pxPerSquare; y++) {
+                    for (var x = xNew * pxPerSquare; x < (xNew + 1) * pxPerSquare; x++) {
+                        var index = x + y * canvas.width;
+                        rhoTotal += tempRho[index];
+                        uxTotal += tempUx[index];
+                        uyTotal += tempUy[index];
+                        if (tempBarrier[index])
+                            barrierTotal++;
+                    }
+                }
+                CFD.setEquil(xNew, yNew, uxTotal / (pxPerSquare * pxPerSquare), uyTotal / (pxPerSquare * pxPerSquare), rhoTotal / (pxPerSquare * pxPerSquare));
+                CFD.barrier[xNew + yNew * xdim] = (barrierTotal >= pxPerSquare * pxPerSquare / 2);
+                this.graphics.curl[xNew + yNew * xdim] = 0.0;
+            }
+        }
+        CFD.setBoundaries();
+        var tracerX = this.opts.tracerX;
+        var tracerY = this.opts.tracerY;
+        if (this.html.tracerCheck.checked) {
+            for (var t = 0; t < this.opts.nTracers; t++) {
+                tracerX[t] *= growRatio;
+                tracerY[t] *= growRatio;
+            }
+        }
+        this.opts.sensorX = Math.round(this.opts.sensorX * growRatio);
+        this.opts.sensorY = Math.round(this.opts.sensorY * growRatio);
+        //computeCurl();
+        this.graphics.paintCanvas();
+        this.html.resetTimer();
+    };
+    return app;
+}());
+var App = new app();
+var Global;
+(function (Global) {
+    Global.UA = /iPhone|iPad|iPod|Android|BlackBerry|Opera Mini|IEMobile/i;
+    Global.mobile = (function () {
+        var ua = navigator.userAgent.match(Global.UA);
+        if (!ua) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    })();
+    function componentToHex(c) {
+        var hex = c.toString(16);
+        return hex.length == 1 ? "0" + hex : hex;
+    }
+    Global.componentToHex = componentToHex;
+    /**
+     * Functions to convert rgb to hex color string
+     * (from stackoverflow)
+    */
+    function rgbToHex(r, g, b) {
+        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+    }
+    Global.rgbToHex = rgbToHex;
+    /**
+     * Mysterious gymnastics that are apparently useful
+     * for better cross-browser animation timing:
+    */
+    Global.requestAnimFrame = (function (callback) {
+        var win = window;
+        return window.requestAnimationFrame ||
+            win.webkitRequestAnimationFrame ||
+            win.mozRequestAnimationFrame ||
+            win.oRequestAnimationFrame ||
+            win.msRequestAnimationFrame ||
+            function (callback) {
+                window.setTimeout(callback, 1); // second parameter is time in ms
+            };
+    })();
+})(Global || (Global = {}));
+var Model;
+(function (Model) {
+    var graphics = /** @class */ (function () {
+        function graphics(html, cfd, opts) {
+            this.html = html;
+            this.cfd = cfd;
+            this.opts = opts;
+            var ydim = html.ydim;
+            var xdim = html.xdim;
+            this.canvas = html.canvas;
+            this.pars = html;
+            this.image = html.image;
+            this.curl = new Array(xdim * ydim);
+            // initFluid() 
+            for (var y = 0; y < ydim; y++) {
+                for (var x = 0; x < xdim; x++) {
+                    this.curl[x + y * xdim] = 0.0;
+                }
+            }
+            this.initGraphicsColors();
+        }
+        Object.defineProperty(graphics.prototype, "requestPaintCanvas", {
+            get: function () {
+                var _this = this;
+                return function () { return _this.paintCanvas(); };
+            },
+            enumerable: false,
+            configurable: true
+        });
+        graphics.prototype.initGraphicsColors = function () {
+            // Set up the array of colors for plotting (mimicks matplotlib "jet" colormap):
+            // (Kludge: Index nColors+1 labels the color used for drawing barriers.)
+            var nColors = this.opts.nColors; // there are actually nColors+2 colors
+            var hexColorList = new Array(nColors + 2);
+            var redList = new Array(nColors + 2);
+            var greenList = new Array(nColors + 2);
+            var blueList = new Array(nColors + 2);
+            for (var c = 0; c <= nColors; c++) {
+                var r, g, b;
+                if (c < nColors / 8) {
+                    r = 0;
+                    g = 0;
+                    b = Math.round(255 * (c + nColors / 8) / (nColors / 4));
+                }
+                else if (c < 3 * nColors / 8) {
+                    r = 0;
+                    g = Math.round(255 * (c - nColors / 8) / (nColors / 4));
+                    b = 255;
+                }
+                else if (c < 5 * nColors / 8) {
+                    r = Math.round(255 * (c - 3 * nColors / 8) / (nColors / 4));
+                    g = 255;
+                    b = 255 - r;
+                }
+                else if (c < 7 * nColors / 8) {
+                    r = 255;
+                    g = Math.round(255 * (7 * nColors / 8 - c) / (nColors / 4));
+                    b = 0;
+                }
+                else {
+                    r = Math.round(255 * (9 * nColors / 8 - c) / (nColors / 4));
+                    g = 0;
+                    b = 0;
+                }
+                redList[c] = r;
+                greenList[c] = g;
+                blueList[c] = b;
+                hexColorList[c] = Global.rgbToHex(r, g, b);
+            }
+            redList[nColors + 1] = 0;
+            greenList[nColors + 1] = 0;
+            blueList[nColors + 1] = 0; // barriers are black
+            hexColorList[nColors + 1] = Global.rgbToHex(0, 0, 0);
+            this.redList = redList;
+            this.greenList = greenList;
+            this.blueList = blueList;
+            this.hexColorList = hexColorList;
+        };
+        /**
+         * Initialize the tracer particles
+        */
+        graphics.prototype.initTracers = function () {
+            if (this.pars.drawTracers) {
+                var nRows = Math.ceil(Math.sqrt(this.opts.nTracers));
+                var xdim = this.pars.xdim;
+                var ydim = this.pars.ydim;
+                var dx = xdim / nRows;
+                var dy = ydim / nRows;
+                var nextX = dx / 2;
+                var nextY = dy / 2;
+                var tracerX = this.opts.tracerX;
+                var tracerY = this.opts.tracerY;
+                for (var t = 0; t < this.opts.nTracers; t++) {
+                    tracerX[t] = nextX;
+                    tracerY[t] = nextY;
+                    nextX += dx;
+                    if (nextX > xdim) {
+                        nextX = dx / 2;
+                        nextY += dy;
+                    }
+                }
+            }
+            this.paintCanvas();
+        };
+        /**
+         * Draw the sensor and its associated data display
+        */
+        graphics.prototype.drawSensor = function () {
+            var canvas = this.canvas;
+            var context = this.html.context;
+            var pxPerSquare = this.pars.pxPerSquare;
+            var CFD = this.cfd;
+            var canvasX = (this.opts.sensorX + 0.5) * pxPerSquare;
+            var canvasY = canvas.height - (this.opts.sensorY + 0.5) * pxPerSquare;
+            context.fillStyle = "rgba(180,180,180,0.7)"; // first draw gray filled circle
+            context.beginPath();
+            context.arc(canvasX, canvasY, 7, 0, 2 * Math.PI);
+            context.fill();
+            context.strokeStyle = "#404040"; // next draw cross-hairs
+            context.lineWidth = 1;
+            context.beginPath();
+            context.moveTo(canvasX, canvasY - 10);
+            context.lineTo(canvasX, canvasY + 10);
+            context.moveTo(canvasX - 10, canvasY);
+            context.lineTo(canvasX + 10, canvasY);
+            context.stroke();
+            context.fillStyle = "rgba(255,255,255,0.5)"; // draw rectangle behind text
+            canvasX += 10;
+            context.font = "12px Monospace";
+            var rectWidth = context.measureText("00000000000").width + 6;
+            var rectHeight = 58;
+            if (canvasX + rectWidth > canvas.width)
+                canvasX -= (rectWidth + 20);
+            if (canvasY + rectHeight > canvas.height)
+                canvasY = canvas.height - rectHeight;
+            context.fillRect(canvasX, canvasY, rectWidth, rectHeight);
+            context.fillStyle = "#000000"; // finally draw the text
+            canvasX += 3;
+            canvasY += 12;
+            var coordinates = "  (" + this.opts.sensorX + "," + this.opts.sensorY + ")";
+            context.fillText(coordinates, canvasX, canvasY);
+            canvasY += 14;
+            var rhoSymbol = String.fromCharCode(parseInt('03C1', 16));
+            var index = this.opts.sensorX + this.opts.sensorY * this.html.xdim;
+            context.fillText(" " + rhoSymbol + " =  " + Number(CFD.rho[index]).toFixed(3), canvasX, canvasY);
+            canvasY += 14;
+            var digitString = Number(CFD.ux[index]).toFixed(3);
+            if (CFD.ux[index] >= 0)
+                digitString = " " + digitString;
+            context.fillText("ux = " + digitString, canvasX, canvasY);
+            canvasY += 14;
+            digitString = Number(CFD.uy[index]).toFixed(3);
+            if (CFD.uy[index] >= 0)
+                digitString = " " + digitString;
+            context.fillText("uy = " + digitString, canvasX, canvasY);
+        };
+        /**
+         * Draw an arrow to represent the total force on the barrier(s)
+        */
+        graphics.prototype.drawForceArrow = function (x, y, Fx, Fy) {
+            var pxPerSquare = this.html.pxPerSquare;
+            var context = this.html.context;
+            var magF = Math.sqrt(Fx * Fx + Fy * Fy);
+            context.fillStyle = "rgba(100,100,100,0.7)";
+            context.translate((x + 0.5) * pxPerSquare, this.canvas.height - (y + 0.5) * pxPerSquare);
+            context.scale(4 * magF, 4 * magF);
+            context.rotate(Math.atan2(-Fy, Fx));
+            context.beginPath();
+            context.moveTo(0, 3);
+            context.lineTo(100, 3);
+            context.lineTo(100, 12);
+            context.lineTo(130, 0);
+            context.lineTo(100, -12);
+            context.lineTo(100, -3);
+            context.lineTo(0, -3);
+            context.lineTo(0, 3);
+            context.fill();
+            context.setTransform(1, 0, 0, 1, 0, 0);
+        };
+        /**
+         * Draw a grid of short line segments along flow directions
+        */
+        graphics.prototype.drawFlowlines = function () {
+            var pxPerFlowline = 10;
+            var pxPerSquare = this.html.pxPerSquare;
+            var xdim = this.html.xdim;
+            if (pxPerSquare == 1)
+                pxPerFlowline = 6;
+            if (pxPerSquare == 2)
+                pxPerFlowline = 8;
+            if (pxPerSquare == 5)
+                pxPerFlowline = 12;
+            if ((pxPerSquare == 6) || (pxPerSquare == 8))
+                pxPerFlowline = 15;
+            if (pxPerSquare == 10)
+                pxPerFlowline = 20;
+            var sitesPerFlowline = pxPerFlowline / pxPerSquare;
+            var xLines = this.canvas.width / pxPerFlowline;
+            var yLines = this.canvas.height / pxPerFlowline;
+            var context = this.html.context;
+            var transBlackArraySize = this.opts.transBlackArraySize;
+            var transBlackArray = this.opts.transBlackArray;
+            var ux = this.cfd.ux;
+            var uy = this.cfd.uy;
+            for (var yCount = 0; yCount < yLines; yCount++) {
+                for (var xCount = 0; xCount < xLines; xCount++) {
+                    var x = Math.round((xCount + 0.5) * sitesPerFlowline);
+                    var y = Math.round((yCount + 0.5) * sitesPerFlowline);
+                    var thisUx = ux[x + y * xdim];
+                    var thisUy = uy[x + y * xdim];
+                    var speed = Math.sqrt(thisUx * thisUx + thisUy * thisUy);
+                    if (speed > 0.0001) {
+                        var px = (xCount + 0.5) * pxPerFlowline;
+                        var py = this.canvas.height - ((yCount + 0.5) * pxPerFlowline);
+                        var scale = 0.5 * pxPerFlowline / speed;
+                        context.beginPath();
+                        context.moveTo(px - thisUx * scale, py + thisUy * scale);
+                        context.lineTo(px + thisUx * scale, py - thisUy * scale);
+                        //context.lineWidth = speed * 5;
+                        var cIndex = Math.round(speed * transBlackArraySize / 0.3);
+                        if (cIndex >= transBlackArraySize)
+                            cIndex = transBlackArraySize - 1;
+                        context.strokeStyle = transBlackArray[cIndex];
+                        //context.strokeStyle = "rgba(0,0,0,0.1)";
+                        context.stroke();
+                    }
+                }
+            }
+        };
+        /**
+         * Draw the tracer particles
+        */
+        graphics.prototype.drawTracers = function () {
+            var context = this.html.context;
+            var pxPerSquare = this.html.pxPerSquare;
+            var tracerX = this.opts.tracerX;
+            var tracerY = this.opts.tracerY;
+            context.fillStyle = "rgb(150,150,150)";
+            for (var t = 0; t < this.opts.nTracers; t++) {
+                var canvasX = (tracerX[t] + 0.5) * pxPerSquare;
+                var canvasY = this.canvas.height - (tracerY[t] + 0.5) * pxPerSquare;
+                context.fillRect(canvasX - 1, canvasY - 1, 2, 2);
+            }
+        };
+        /**
+         * Paint the canvas
+        */
+        graphics.prototype.paintCanvas = function () {
+            var cIndex = 0;
+            var contrast = Math.pow(1.2, this.pars.contrast);
+            var plotType = this.pars.plotType;
+            var ydim = this.html.ydim;
+            var xdim = this.html.xdim;
+            var pars = this.pars;
+            var opts = this.opts;
+            var nColors = opts.nColors;
+            //var pixelGraphics = pixelCheck.checked;
+            if (plotType == 4) {
+                this.computeCurl();
+            }
+            var redList = this.redList;
+            var greenList = this.greenList;
+            var blueList = this.blueList;
+            var curl = this.curl;
+            var CFD = this.cfd;
+            for (var y = 0; y < ydim; y++) {
+                for (var x = 0; x < xdim; x++) {
+                    if (CFD.barrier[x + y * xdim]) {
+                        cIndex = nColors + 1; // kludge for barrier color which isn't really part of color map
+                    }
+                    else {
+                        if (plotType == 0) {
+                            cIndex = Math.round(nColors * ((CFD.rho[x + y * xdim] - 1) * 6 * contrast + 0.5));
+                        }
+                        else if (plotType == 1) {
+                            cIndex = Math.round(nColors * (CFD.ux[x + y * xdim] * 2 * contrast + 0.5));
+                        }
+                        else if (plotType == 2) {
+                            cIndex = Math.round(nColors * (CFD.uy[x + y * xdim] * 2 * contrast + 0.5));
+                        }
+                        else if (plotType == 3) {
+                            var speed = Math.sqrt(CFD.ux[x + y * xdim] * CFD.ux[x + y * xdim] + CFD.uy[x + y * xdim] * CFD.uy[x + y * xdim]);
+                            cIndex = Math.round(nColors * (speed * 4 * contrast));
+                        }
+                        else {
+                            cIndex = Math.round(nColors * (curl[x + y * xdim] * 5 * contrast + 0.5));
+                        }
+                        if (cIndex < 0)
+                            cIndex = 0;
+                        if (cIndex > nColors)
+                            cIndex = nColors;
+                    }
+                    //if (pixelGraphics) {
+                    //colorSquare(x, y, cIndex);
+                    this.colorSquare(x, y, redList[cIndex], greenList[cIndex], blueList[cIndex]);
+                    //} else {
+                    //	context.fillStyle = hexColorList[cIndex];
+                    //	context.fillRect(x*pxPerSquare, (ydim-y-1)*pxPerSquare, pxPerSquare, pxPerSquare);
+                    //}
+                }
+            }
+            //if (pixelGraphics) 
+            this.html.context.putImageData(this.image, 0, 0); // blast image to the screen
+            // Draw tracers, force vector, and/or sensor if appropriate:
+            if (pars.drawTracers)
+                this.drawTracers();
+            if (pars.drawFlowlines)
+                this.drawFlowlines();
+            if (pars.drawSensor)
+                this.drawSensor();
+            if (pars.drawForceArrow)
+                this.drawForceArrow(opts.barrierxSum / opts.barrierCount, opts.barrierySum / opts.barrierCount, opts.barrierFx, opts.barrierFy);
+        };
+        /**
+         * Color a grid square in the image data array, one pixel at a time (rgb each in range 0 to 255)
+        */
+        graphics.prototype.colorSquare = function (x, y, r, g, b) {
+            //function colorSquare(x, y, cIndex) {		// for some strange reason, this version is quite a bit slower on Chrome
+            //var r = redList[cIndex];
+            //var g = greenList[cIndex];
+            //var b = blueList[cIndex];
+            var ydim = this.html.ydim;
+            var pxPerSquare = this.pars.pxPerSquare;
+            var flippedy = ydim - y - 1; // put y=0 at the bottom
+            var image = this.image;
+            for (var py = flippedy * pxPerSquare; py < (flippedy + 1) * pxPerSquare; py++) {
+                for (var px = x * pxPerSquare; px < (x + 1) * pxPerSquare; px++) {
+                    var index = (px + py * image.width) * 4;
+                    image.data[index + 0] = r;
+                    image.data[index + 1] = g;
+                    image.data[index + 2] = b;
+                }
+            }
+        };
+        /**
+         * Compute the curl (actually times 2) of the macroscopic velocity field, for plotting
+        */
+        graphics.prototype.computeCurl = function () {
+            var ydim = this.html.ydim;
+            var xdim = this.html.xdim;
+            var curl = this.curl;
+            var ux = this.cfd.ux;
+            var uy = this.cfd.uy;
+            for (var y = 1; y < ydim - 1; y++) { // interior sites only; leave edges set to zero
+                for (var x = 1; x < xdim - 1; x++) {
+                    curl[x + y * xdim] = uy[x + 1 + y * xdim] - uy[x - 1 + y * xdim] - ux[x + (y + 1) * xdim] + ux[x + (y - 1) * xdim];
+                }
+            }
+        };
+        return graphics;
+    }());
+    Model.graphics = graphics;
+})(Model || (Model = {}));
+var Model;
+(function (Model) {
+    // abbreviations
+    Model.four9ths = 4.0 / 9.0;
+    Model.one9th = 1.0 / 9.0;
+    Model.one36th = 1.0 / 36.0;
+    /**
+     * the simulation options
+    */
+    var options = /** @class */ (function () {
+        /**
+         * create new simulation parameter set with default values
+        */
+        function options(stepCount, startTime, barrierCount, barrierxSum, barrierySum, barrierFx, // total force on all barrier sites
+        barrierFy, mouseX, mouseY, // mouse location in canvas coordinates
+        oldMouseX, oldMouseY, // mouse coordinates from previous simulation frame
+        collectingData, time, // time (in simulation step units) since data collection started
+        showingPeriod, lastBarrierFy, // for determining when F_y oscillation begins
+        lastFyOscTime, // for calculating F_y oscillation period
+        nTracers, nColors, sensorX, // coordinates of "sensor" to measure local fluid properties	
+        sensorY, tracerX, tracerY, transBlackArraySize, transBlackArray) {
+            if (stepCount === void 0) { stepCount = 0; }
+            if (startTime === void 0) { startTime = 0; }
+            if (barrierCount === void 0) { barrierCount = 0; }
+            if (barrierxSum === void 0) { barrierxSum = 0; }
+            if (barrierySum === void 0) { barrierySum = 0; }
+            if (barrierFx === void 0) { barrierFx = 0.0; }
+            if (barrierFy === void 0) { barrierFy = 0.0; }
+            if (mouseX === void 0) { mouseX = -1; }
+            if (mouseY === void 0) { mouseY = -1; }
+            if (oldMouseX === void 0) { oldMouseX = -1; }
+            if (oldMouseY === void 0) { oldMouseY = -1; }
+            if (collectingData === void 0) { collectingData = false; }
+            if (time === void 0) { time = 0; }
+            if (showingPeriod === void 0) { showingPeriod = false; }
+            if (lastBarrierFy === void 0) { lastBarrierFy = 1; }
+            if (lastFyOscTime === void 0) { lastFyOscTime = 0; }
+            if (nTracers === void 0) { nTracers = 144; }
+            if (nColors === void 0) { nColors = 400; }
+            if (sensorX === void 0) { sensorX = -1; }
+            if (sensorY === void 0) { sensorY = -1; }
+            if (tracerX === void 0) { tracerX = null; }
+            if (tracerY === void 0) { tracerY = null; }
+            if (transBlackArraySize === void 0) { transBlackArraySize = 50; }
+            if (transBlackArray === void 0) { transBlackArray = null; }
+            this.stepCount = stepCount;
+            this.startTime = startTime;
+            this.barrierCount = barrierCount;
+            this.barrierxSum = barrierxSum;
+            this.barrierySum = barrierySum;
+            this.barrierFx = barrierFx;
+            this.barrierFy = barrierFy;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
+            this.oldMouseX = oldMouseX;
+            this.oldMouseY = oldMouseY;
+            this.collectingData = collectingData;
+            this.time = time;
+            this.showingPeriod = showingPeriod;
+            this.lastBarrierFy = lastBarrierFy;
+            this.lastFyOscTime = lastFyOscTime;
+            this.nTracers = nTracers;
+            this.nColors = nColors;
+            this.sensorX = sensorX;
+            this.sensorY = sensorY;
+            this.tracerX = tracerX;
+            this.tracerY = tracerY;
+            this.transBlackArraySize = transBlackArraySize;
+            this.transBlackArray = transBlackArray;
+        }
+        return options;
+    }());
+    Model.options = options;
+    function init_options(opts) {
+        // Initialize tracers (but don't place them yet):
+        var nTracers = this.opts.nTracers;
+        var tracerX = new Array(nTracers);
+        var tracerY = new Array(nTracers);
+        for (var t = 0; t < nTracers; t++) {
+            tracerX[t] = 0.0;
+            tracerY[t] = 0.0;
+        }
+        opts.tracerX = tracerX;
+        opts.tracerY = tracerY;
+        // Initialize array of partially transparant blacks, for drawing flow lines:
+        var transBlackArray = new Array(opts.transBlackArraySize);
+        for (var i = 0; i < opts.transBlackArraySize; i++) {
+            transBlackArray[i] = "rgba(0,0,0," + Number(i / opts.transBlackArraySize).toFixed(2) + ")";
+        }
+        opts.transBlackArray = transBlackArray;
+    }
+    Model.init_options = init_options;
+})(Model || (Model = {}));
+///<reference path="barrier.ts" />
+var Model;
+(function (Model) {
     /**
      * this html user interface handler
     */
@@ -1220,11 +1673,11 @@ define("ui", ["require", "exports", "barrier", "global"], function (require, exp
             this.sizeSelect = document.getElementById(sizeSelect);
             this.sizeSelect.selectedIndex = 5;
             // smaller works better on mobile platforms
-            if (global_2.mobile) {
+            if (Global.mobile) {
                 this.sizeSelect.selectedIndex = 1;
             }
             this.barrierSelect = document.getElementById(barrierSelect);
-            for (var _i = 0, barrierList_1 = barrier_1.barrierList; _i < barrierList_1.length; _i++) {
+            for (var _i = 0, barrierList_1 = Model.barrierList; _i < barrierList_1.length; _i++) {
                 var barrier = barrierList_1[_i];
                 var shape = document.createElement("option");
                 shape.text = barrier.name;
@@ -1579,20 +2032,20 @@ define("ui", ["require", "exports", "barrier", "global"], function (require, exp
             if (index == 0)
                 return;
             this.clearBarriers();
-            var bCount = barrier_1.barrierList[index - 1].locations.length / 2; // number of barrier sites
+            var bCount = Model.barrierList[index - 1].locations.length / 2; // number of barrier sites
             // To decide where to place it, find minimum x and min/max y:
-            var xMin = barrier_1.barrierList[index - 1].locations[0];
-            var yMin = barrier_1.barrierList[index - 1].locations[1];
+            var xMin = Model.barrierList[index - 1].locations[0];
+            var yMin = Model.barrierList[index - 1].locations[1];
             var yMax = yMin;
             for (var siteIndex = 2; siteIndex < 2 * bCount; siteIndex += 2) {
-                if (barrier_1.barrierList[index - 1].locations[siteIndex] < xMin) {
-                    xMin = barrier_1.barrierList[index - 1].locations[siteIndex];
+                if (Model.barrierList[index - 1].locations[siteIndex] < xMin) {
+                    xMin = Model.barrierList[index - 1].locations[siteIndex];
                 }
-                if (barrier_1.barrierList[index - 1].locations[siteIndex + 1] < yMin) {
-                    yMin = barrier_1.barrierList[index - 1].locations[siteIndex + 1];
+                if (Model.barrierList[index - 1].locations[siteIndex + 1] < yMin) {
+                    yMin = Model.barrierList[index - 1].locations[siteIndex + 1];
                 }
-                if (barrier_1.barrierList[index - 1].locations[siteIndex + 1] > yMax) {
-                    yMax = barrier_1.barrierList[index - 1].locations[siteIndex + 1];
+                if (Model.barrierList[index - 1].locations[siteIndex + 1] > yMax) {
+                    yMax = Model.barrierList[index - 1].locations[siteIndex + 1];
                 }
             }
             var yAverage = Math.round((yMin + yMax) / 2);
@@ -1600,8 +2053,8 @@ define("ui", ["require", "exports", "barrier", "global"], function (require, exp
             var ydim = this.ydim;
             // Now place the barriers:
             for (var siteIndex = 0; siteIndex < 2 * bCount; siteIndex += 2) {
-                var x = barrier_1.barrierList[index - 1].locations[siteIndex] - xMin + Math.round(ydim / 3);
-                var y = barrier_1.barrierList[index - 1].locations[siteIndex + 1] - yAverage + Math.round(ydim / 2);
+                var x = Model.barrierList[index - 1].locations[siteIndex] - xMin + Math.round(ydim / 3);
+                var y = Model.barrierList[index - 1].locations[siteIndex + 1] - yAverage + Math.round(ydim / 2);
                 this.addBarrier(x, y);
             }
             this.paintCanvas();
@@ -1618,472 +2071,6 @@ define("ui", ["require", "exports", "barrier", "global"], function (require, exp
         };
         return ui;
     }());
-    exports.ui = ui;
-});
-define("graphics", ["require", "exports", "global"], function (require, exports, global_3) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.graphics = void 0;
-    var graphics = /** @class */ (function () {
-        function graphics(html, cfd, opts) {
-            this.html = html;
-            this.cfd = cfd;
-            this.opts = opts;
-            var ydim = html.ydim;
-            var xdim = html.xdim;
-            this.canvas = html.canvas;
-            this.pars = html;
-            this.image = html.image;
-            this.curl = new Array(xdim * ydim);
-            // initFluid() 
-            for (var y = 0; y < ydim; y++) {
-                for (var x = 0; x < xdim; x++) {
-                    this.curl[x + y * xdim] = 0.0;
-                }
-            }
-            this.initGraphicsColors();
-        }
-        Object.defineProperty(graphics.prototype, "requestPaintCanvas", {
-            get: function () {
-                var _this = this;
-                return function () { return _this.paintCanvas(); };
-            },
-            enumerable: false,
-            configurable: true
-        });
-        graphics.prototype.initGraphicsColors = function () {
-            // Set up the array of colors for plotting (mimicks matplotlib "jet" colormap):
-            // (Kludge: Index nColors+1 labels the color used for drawing barriers.)
-            var nColors = this.opts.nColors; // there are actually nColors+2 colors
-            var hexColorList = new Array(nColors + 2);
-            var redList = new Array(nColors + 2);
-            var greenList = new Array(nColors + 2);
-            var blueList = new Array(nColors + 2);
-            for (var c = 0; c <= nColors; c++) {
-                var r, g, b;
-                if (c < nColors / 8) {
-                    r = 0;
-                    g = 0;
-                    b = Math.round(255 * (c + nColors / 8) / (nColors / 4));
-                }
-                else if (c < 3 * nColors / 8) {
-                    r = 0;
-                    g = Math.round(255 * (c - nColors / 8) / (nColors / 4));
-                    b = 255;
-                }
-                else if (c < 5 * nColors / 8) {
-                    r = Math.round(255 * (c - 3 * nColors / 8) / (nColors / 4));
-                    g = 255;
-                    b = 255 - r;
-                }
-                else if (c < 7 * nColors / 8) {
-                    r = 255;
-                    g = Math.round(255 * (7 * nColors / 8 - c) / (nColors / 4));
-                    b = 0;
-                }
-                else {
-                    r = Math.round(255 * (9 * nColors / 8 - c) / (nColors / 4));
-                    g = 0;
-                    b = 0;
-                }
-                redList[c] = r;
-                greenList[c] = g;
-                blueList[c] = b;
-                hexColorList[c] = (0, global_3.rgbToHex)(r, g, b);
-            }
-            redList[nColors + 1] = 0;
-            greenList[nColors + 1] = 0;
-            blueList[nColors + 1] = 0; // barriers are black
-            hexColorList[nColors + 1] = (0, global_3.rgbToHex)(0, 0, 0);
-            this.redList = redList;
-            this.greenList = greenList;
-            this.blueList = blueList;
-            this.hexColorList = hexColorList;
-        };
-        /**
-         * Initialize the tracer particles
-        */
-        graphics.prototype.initTracers = function () {
-            if (this.pars.drawTracers) {
-                var nRows = Math.ceil(Math.sqrt(this.opts.nTracers));
-                var xdim = this.pars.xdim;
-                var ydim = this.pars.ydim;
-                var dx = xdim / nRows;
-                var dy = ydim / nRows;
-                var nextX = dx / 2;
-                var nextY = dy / 2;
-                var tracerX = this.opts.tracerX;
-                var tracerY = this.opts.tracerY;
-                for (var t = 0; t < this.opts.nTracers; t++) {
-                    tracerX[t] = nextX;
-                    tracerY[t] = nextY;
-                    nextX += dx;
-                    if (nextX > xdim) {
-                        nextX = dx / 2;
-                        nextY += dy;
-                    }
-                }
-            }
-            this.paintCanvas();
-        };
-        /**
-         * Draw the sensor and its associated data display
-        */
-        graphics.prototype.drawSensor = function () {
-            var canvas = this.canvas;
-            var context = this.html.context;
-            var pxPerSquare = this.pars.pxPerSquare;
-            var CFD = this.cfd;
-            var canvasX = (this.opts.sensorX + 0.5) * pxPerSquare;
-            var canvasY = canvas.height - (this.opts.sensorY + 0.5) * pxPerSquare;
-            context.fillStyle = "rgba(180,180,180,0.7)"; // first draw gray filled circle
-            context.beginPath();
-            context.arc(canvasX, canvasY, 7, 0, 2 * Math.PI);
-            context.fill();
-            context.strokeStyle = "#404040"; // next draw cross-hairs
-            context.lineWidth = 1;
-            context.beginPath();
-            context.moveTo(canvasX, canvasY - 10);
-            context.lineTo(canvasX, canvasY + 10);
-            context.moveTo(canvasX - 10, canvasY);
-            context.lineTo(canvasX + 10, canvasY);
-            context.stroke();
-            context.fillStyle = "rgba(255,255,255,0.5)"; // draw rectangle behind text
-            canvasX += 10;
-            context.font = "12px Monospace";
-            var rectWidth = context.measureText("00000000000").width + 6;
-            var rectHeight = 58;
-            if (canvasX + rectWidth > canvas.width)
-                canvasX -= (rectWidth + 20);
-            if (canvasY + rectHeight > canvas.height)
-                canvasY = canvas.height - rectHeight;
-            context.fillRect(canvasX, canvasY, rectWidth, rectHeight);
-            context.fillStyle = "#000000"; // finally draw the text
-            canvasX += 3;
-            canvasY += 12;
-            var coordinates = "  (" + this.opts.sensorX + "," + this.opts.sensorY + ")";
-            context.fillText(coordinates, canvasX, canvasY);
-            canvasY += 14;
-            var rhoSymbol = String.fromCharCode(parseInt('03C1', 16));
-            var index = this.opts.sensorX + this.opts.sensorY * this.html.xdim;
-            context.fillText(" " + rhoSymbol + " =  " + Number(CFD.rho[index]).toFixed(3), canvasX, canvasY);
-            canvasY += 14;
-            var digitString = Number(CFD.ux[index]).toFixed(3);
-            if (CFD.ux[index] >= 0)
-                digitString = " " + digitString;
-            context.fillText("ux = " + digitString, canvasX, canvasY);
-            canvasY += 14;
-            digitString = Number(CFD.uy[index]).toFixed(3);
-            if (CFD.uy[index] >= 0)
-                digitString = " " + digitString;
-            context.fillText("uy = " + digitString, canvasX, canvasY);
-        };
-        /**
-         * Draw an arrow to represent the total force on the barrier(s)
-        */
-        graphics.prototype.drawForceArrow = function (x, y, Fx, Fy) {
-            var pxPerSquare = this.html.pxPerSquare;
-            var context = this.html.context;
-            var magF = Math.sqrt(Fx * Fx + Fy * Fy);
-            context.fillStyle = "rgba(100,100,100,0.7)";
-            context.translate((x + 0.5) * pxPerSquare, this.canvas.height - (y + 0.5) * pxPerSquare);
-            context.scale(4 * magF, 4 * magF);
-            context.rotate(Math.atan2(-Fy, Fx));
-            context.beginPath();
-            context.moveTo(0, 3);
-            context.lineTo(100, 3);
-            context.lineTo(100, 12);
-            context.lineTo(130, 0);
-            context.lineTo(100, -12);
-            context.lineTo(100, -3);
-            context.lineTo(0, -3);
-            context.lineTo(0, 3);
-            context.fill();
-            context.setTransform(1, 0, 0, 1, 0, 0);
-        };
-        /**
-         * Draw a grid of short line segments along flow directions
-        */
-        graphics.prototype.drawFlowlines = function () {
-            var pxPerFlowline = 10;
-            var pxPerSquare = this.html.pxPerSquare;
-            var xdim = this.html.xdim;
-            if (pxPerSquare == 1)
-                pxPerFlowline = 6;
-            if (pxPerSquare == 2)
-                pxPerFlowline = 8;
-            if (pxPerSquare == 5)
-                pxPerFlowline = 12;
-            if ((pxPerSquare == 6) || (pxPerSquare == 8))
-                pxPerFlowline = 15;
-            if (pxPerSquare == 10)
-                pxPerFlowline = 20;
-            var sitesPerFlowline = pxPerFlowline / pxPerSquare;
-            var xLines = this.canvas.width / pxPerFlowline;
-            var yLines = this.canvas.height / pxPerFlowline;
-            var context = this.html.context;
-            var transBlackArraySize = this.opts.transBlackArraySize;
-            var transBlackArray = this.opts.transBlackArray;
-            var ux = this.cfd.ux;
-            var uy = this.cfd.uy;
-            for (var yCount = 0; yCount < yLines; yCount++) {
-                for (var xCount = 0; xCount < xLines; xCount++) {
-                    var x = Math.round((xCount + 0.5) * sitesPerFlowline);
-                    var y = Math.round((yCount + 0.5) * sitesPerFlowline);
-                    var thisUx = ux[x + y * xdim];
-                    var thisUy = uy[x + y * xdim];
-                    var speed = Math.sqrt(thisUx * thisUx + thisUy * thisUy);
-                    if (speed > 0.0001) {
-                        var px = (xCount + 0.5) * pxPerFlowline;
-                        var py = this.canvas.height - ((yCount + 0.5) * pxPerFlowline);
-                        var scale = 0.5 * pxPerFlowline / speed;
-                        context.beginPath();
-                        context.moveTo(px - thisUx * scale, py + thisUy * scale);
-                        context.lineTo(px + thisUx * scale, py - thisUy * scale);
-                        //context.lineWidth = speed * 5;
-                        var cIndex = Math.round(speed * transBlackArraySize / 0.3);
-                        if (cIndex >= transBlackArraySize)
-                            cIndex = transBlackArraySize - 1;
-                        context.strokeStyle = transBlackArray[cIndex];
-                        //context.strokeStyle = "rgba(0,0,0,0.1)";
-                        context.stroke();
-                    }
-                }
-            }
-        };
-        /**
-         * Draw the tracer particles
-        */
-        graphics.prototype.drawTracers = function () {
-            var context = this.html.context;
-            var pxPerSquare = this.html.pxPerSquare;
-            var tracerX = this.opts.tracerX;
-            var tracerY = this.opts.tracerY;
-            context.fillStyle = "rgb(150,150,150)";
-            for (var t = 0; t < this.opts.nTracers; t++) {
-                var canvasX = (tracerX[t] + 0.5) * pxPerSquare;
-                var canvasY = this.canvas.height - (tracerY[t] + 0.5) * pxPerSquare;
-                context.fillRect(canvasX - 1, canvasY - 1, 2, 2);
-            }
-        };
-        /**
-         * Paint the canvas
-        */
-        graphics.prototype.paintCanvas = function () {
-            var cIndex = 0;
-            var contrast = Math.pow(1.2, this.pars.contrast);
-            var plotType = this.pars.plotType;
-            var ydim = this.html.ydim;
-            var xdim = this.html.xdim;
-            var pars = this.pars;
-            var opts = this.opts;
-            var nColors = opts.nColors;
-            //var pixelGraphics = pixelCheck.checked;
-            if (plotType == 4) {
-                this.computeCurl();
-            }
-            var redList = this.redList;
-            var greenList = this.greenList;
-            var blueList = this.blueList;
-            var curl = this.curl;
-            var CFD = this.cfd;
-            for (var y = 0; y < ydim; y++) {
-                for (var x = 0; x < xdim; x++) {
-                    if (CFD.barrier[x + y * xdim]) {
-                        cIndex = nColors + 1; // kludge for barrier color which isn't really part of color map
-                    }
-                    else {
-                        if (plotType == 0) {
-                            cIndex = Math.round(nColors * ((CFD.rho[x + y * xdim] - 1) * 6 * contrast + 0.5));
-                        }
-                        else if (plotType == 1) {
-                            cIndex = Math.round(nColors * (CFD.ux[x + y * xdim] * 2 * contrast + 0.5));
-                        }
-                        else if (plotType == 2) {
-                            cIndex = Math.round(nColors * (CFD.uy[x + y * xdim] * 2 * contrast + 0.5));
-                        }
-                        else if (plotType == 3) {
-                            var speed = Math.sqrt(CFD.ux[x + y * xdim] * CFD.ux[x + y * xdim] + CFD.uy[x + y * xdim] * CFD.uy[x + y * xdim]);
-                            cIndex = Math.round(nColors * (speed * 4 * contrast));
-                        }
-                        else {
-                            cIndex = Math.round(nColors * (curl[x + y * xdim] * 5 * contrast + 0.5));
-                        }
-                        if (cIndex < 0)
-                            cIndex = 0;
-                        if (cIndex > nColors)
-                            cIndex = nColors;
-                    }
-                    //if (pixelGraphics) {
-                    //colorSquare(x, y, cIndex);
-                    this.colorSquare(x, y, redList[cIndex], greenList[cIndex], blueList[cIndex]);
-                    //} else {
-                    //	context.fillStyle = hexColorList[cIndex];
-                    //	context.fillRect(x*pxPerSquare, (ydim-y-1)*pxPerSquare, pxPerSquare, pxPerSquare);
-                    //}
-                }
-            }
-            //if (pixelGraphics) 
-            this.html.context.putImageData(this.image, 0, 0); // blast image to the screen
-            // Draw tracers, force vector, and/or sensor if appropriate:
-            if (pars.drawTracers)
-                this.drawTracers();
-            if (pars.drawFlowlines)
-                this.drawFlowlines();
-            if (pars.drawSensor)
-                this.drawSensor();
-            if (pars.drawForceArrow)
-                this.drawForceArrow(opts.barrierxSum / opts.barrierCount, opts.barrierySum / opts.barrierCount, opts.barrierFx, opts.barrierFy);
-        };
-        /**
-         * Color a grid square in the image data array, one pixel at a time (rgb each in range 0 to 255)
-        */
-        graphics.prototype.colorSquare = function (x, y, r, g, b) {
-            //function colorSquare(x, y, cIndex) {		// for some strange reason, this version is quite a bit slower on Chrome
-            //var r = redList[cIndex];
-            //var g = greenList[cIndex];
-            //var b = blueList[cIndex];
-            var ydim = this.html.ydim;
-            var pxPerSquare = this.pars.pxPerSquare;
-            var flippedy = ydim - y - 1; // put y=0 at the bottom
-            var image = this.image;
-            for (var py = flippedy * pxPerSquare; py < (flippedy + 1) * pxPerSquare; py++) {
-                for (var px = x * pxPerSquare; px < (x + 1) * pxPerSquare; px++) {
-                    var index = (px + py * image.width) * 4;
-                    image.data[index + 0] = r;
-                    image.data[index + 1] = g;
-                    image.data[index + 2] = b;
-                }
-            }
-        };
-        /**
-         * Compute the curl (actually times 2) of the macroscopic velocity field, for plotting
-        */
-        graphics.prototype.computeCurl = function () {
-            var ydim = this.html.ydim;
-            var xdim = this.html.xdim;
-            var curl = this.curl;
-            var ux = this.cfd.ux;
-            var uy = this.cfd.uy;
-            for (var y = 1; y < ydim - 1; y++) { // interior sites only; leave edges set to zero
-                for (var x = 1; x < xdim - 1; x++) {
-                    curl[x + y * xdim] = uy[x + 1 + y * xdim] - uy[x - 1 + y * xdim] - ux[x + (y + 1) * xdim] + ux[x + (y - 1) * xdim];
-                }
-            }
-        };
-        return graphics;
-    }());
-    exports.graphics = graphics;
-});
-///<reference path="barrier.ts" />
-define("app", ["require", "exports", "CFD", "graphics", "options", "ui"], function (require, exports, CFD_1, graphics_1, options_2, ui_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.app = void 0;
-    var app = /** @class */ (function () {
-        function app(opts, html) {
-            if (opts === void 0) { opts = new options_2.options(); }
-            if (html === void 0) { html = new ui_1.ui(opts); }
-            this.opts = opts;
-            this.html = html;
-            // coordinates of "sensor" to measure local fluid properties	
-            opts.sensorX = html.xdim / 2;
-            opts.sensorY = html.ydim / 2;
-            (0, options_2.init_options)(opts);
-            this.engine = new CFD_1.CFD(html.xdim, html.ydim, html, opts, html);
-            this.graphics = new graphics_1.graphics(html, this.engine, opts);
-            html.connectEngine(this.engine);
-            html.connectGraphicsDevice(this.graphics);
-            this.engine.setupGraphicsDevice(this.graphics.requestPaintCanvas);
-            // document.getElementById("debugButton").onclick = debug;
-            // document.getElementById("barrierDataButton").onclick = showBarrierLocations;
-            // startButton.onclick = startStop;){
-        }
-        /**
-         * Resize the grid
-        */
-        app.prototype.resize = function () {
-            var canvas = this.html.canvas;
-            var CFD = this.engine;
-            // First up-sample the macroscopic variables into temporary arrays at max resolution:
-            var tempRho = new Array(canvas.width * canvas.height);
-            var tempUx = new Array(canvas.width * canvas.height);
-            var tempUy = new Array(canvas.width * canvas.height);
-            var tempBarrier = new Array(canvas.width * canvas.height);
-            var old_xdim = this.html.xdim;
-            for (var y = 0; y < canvas.height; y++) {
-                for (var x = 0; x < canvas.width; x++) {
-                    var tempIndex = x + y * canvas.width;
-                    var xOld = Math.floor(x / pxPerSquare);
-                    var yOld = Math.floor(y / pxPerSquare);
-                    var oldIndex = xOld + yOld * old_xdim;
-                    tempRho[tempIndex] = CFD.rho[oldIndex];
-                    tempUx[tempIndex] = CFD.ux[oldIndex];
-                    tempUy[tempIndex] = CFD.uy[oldIndex];
-                    tempBarrier[tempIndex] = CFD.barrier[oldIndex];
-                }
-            }
-            // Get new size from GUI selector:
-            var pxPerSquare = this.html.pxPerSquare;
-            var oldPxPerSquare = pxPerSquare;
-            pxPerSquare = Number(this.html.sizeSelect.options[this.html.sizeSelect.selectedIndex].value);
-            var growRatio = oldPxPerSquare / pxPerSquare;
-            var xdim = canvas.width / pxPerSquare;
-            var ydim = canvas.height / pxPerSquare;
-            // Create new arrays at the desired resolution:
-            CFD.n0 = new Array(xdim * ydim);
-            CFD.nN = new Array(xdim * ydim);
-            CFD.nS = new Array(xdim * ydim);
-            CFD.nE = new Array(xdim * ydim);
-            CFD.nW = new Array(xdim * ydim);
-            CFD.nNE = new Array(xdim * ydim);
-            CFD.nSE = new Array(xdim * ydim);
-            CFD.nNW = new Array(xdim * ydim);
-            CFD.nSW = new Array(xdim * ydim);
-            CFD.rho = new Array(xdim * ydim);
-            CFD.ux = new Array(xdim * ydim);
-            CFD.uy = new Array(xdim * ydim);
-            CFD.barrier = new Array(xdim * ydim);
-            this.graphics.curl = new Array(xdim * ydim);
-            // Down-sample the temporary arrays into the new arrays:
-            for (var yNew = 0; yNew < ydim; yNew++) {
-                for (var xNew = 0; xNew < xdim; xNew++) {
-                    var rhoTotal = 0;
-                    var uxTotal = 0;
-                    var uyTotal = 0;
-                    var barrierTotal = 0;
-                    for (var y = yNew * pxPerSquare; y < (yNew + 1) * pxPerSquare; y++) {
-                        for (var x = xNew * pxPerSquare; x < (xNew + 1) * pxPerSquare; x++) {
-                            var index = x + y * canvas.width;
-                            rhoTotal += tempRho[index];
-                            uxTotal += tempUx[index];
-                            uyTotal += tempUy[index];
-                            if (tempBarrier[index])
-                                barrierTotal++;
-                        }
-                    }
-                    CFD.setEquil(xNew, yNew, uxTotal / (pxPerSquare * pxPerSquare), uyTotal / (pxPerSquare * pxPerSquare), rhoTotal / (pxPerSquare * pxPerSquare));
-                    CFD.barrier[xNew + yNew * xdim] = (barrierTotal >= pxPerSquare * pxPerSquare / 2);
-                    this.graphics.curl[xNew + yNew * xdim] = 0.0;
-                }
-            }
-            CFD.setBoundaries();
-            var tracerX = this.opts.tracerX;
-            var tracerY = this.opts.tracerY;
-            if (this.html.tracerCheck.checked) {
-                for (var t = 0; t < this.opts.nTracers; t++) {
-                    tracerX[t] *= growRatio;
-                    tracerY[t] *= growRatio;
-                }
-            }
-            this.opts.sensorX = Math.round(this.opts.sensorX * growRatio);
-            this.opts.sensorY = Math.round(this.opts.sensorY * growRatio);
-            //computeCurl();
-            this.graphics.paintCanvas();
-            this.html.resetTimer();
-        };
-        return app;
-    }());
-    exports.app = app;
-});
+    Model.ui = ui;
+})(Model || (Model = {}));
 //# sourceMappingURL=CFD.js.map

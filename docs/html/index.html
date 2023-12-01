@@ -12,8 +12,11 @@
 	<script type="text/javascript" src="./js/require.js"></script>
 	<script src="./js/CFD.js" type="text/javascript"></script>
 	<script type="text/javascript">
-		let app = requirejs(['app']);
+		let CFD_app = requirejs(['app']);
+		let app = new CFD_app();
 
+		console.log(app);
+		app.startStop();
 	</script>
 
 </head>

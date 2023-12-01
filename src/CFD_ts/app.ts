@@ -1,30 +1,23 @@
 ///<reference path="barrier.ts" />
 
-import { barrierList } from "./barrier";
-import { CFD } from './CFD';
-import { mobile, rgbToHex } from './global';
-import { graphics } from "./graphics";
-import { init_options, options } from "./options";
-import { ui } from "./ui";
+class app {
 
-export class app {
-
-    private engine: CFD;
-    private graphics: graphics;
+    private engine: Model.CFD;
+    private graphics: Model.graphics;
 
     public constructor(
-        public opts = new options(),
-        public html: ui = new ui(opts)
+        public opts = new Model.options(),
+        public html: Model.ui = new Model.ui(opts)
     ) {
 
         // coordinates of "sensor" to measure local fluid properties	
         opts.sensorX = html.xdim / 2;
         opts.sensorY = html.ydim / 2;
 
-        init_options(opts);
+        Model.init_options(opts);
 
-        this.engine = new CFD(html.xdim, html.ydim, html, opts, html);
-        this.graphics = new graphics(html, this.engine, opts);
+        this.engine = new Model.CFD(html.xdim, html.ydim, html, opts, html);
+        this.graphics = new Model.graphics(html, this.engine, opts);
 
         html.connectEngine(this.engine);
         html.connectGraphicsDevice(this.graphics);
@@ -39,7 +32,9 @@ export class app {
         // startButton.onclick = startStop;){
     }
 
-
+    public startStop() {
+        this.html.startStop();
+    }
 
     /**
      * Resize the grid
@@ -135,3 +130,5 @@ export class app {
         this.html.resetTimer();
     }
 }
+
+var App = new app();
