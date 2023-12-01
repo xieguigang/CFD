@@ -19,7 +19,7 @@ Namespace Tasks
                 For y As Integer = 0 To cfd.ydim - 1
                     If Not cfd.barrier(x)(y) Then
                         n = cfd.n0(x)(y) + cfd.nN(x)(y) + cfd.nS(x)(y) + cfd.nE(x)(y) + cfd.nW(x)(y) + cfd.nNW(x)(y) + cfd.nNE(x)(y) + cfd.nSW(x)(y) + cfd.nSE(x)(y)
-                        cfd.density(x)(y) = n ' macroscopic density may be needed for plotting
+                        cfd.rho(x)(y) = n ' macroscopic density may be needed for plotting
                         one9thn = one9th * n
                         one36thn = one36th * n
                         If n > 0 Then

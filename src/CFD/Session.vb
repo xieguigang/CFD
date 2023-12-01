@@ -42,7 +42,7 @@ Public Class Session
         For time As Integer = 0 To max_time
             If time Mod snapshotInterval = 0 Then
                 ' take snapshot
-                Call storage.addFrame(i, NameOf(FluidDynamics.density), CFD.density)
+                Call storage.addFrame(i, NameOf(FluidDynamics.rho), CFD.rho)
                 Call storage.addFrame(i, NameOf(FluidDynamics.xvel), CFD.xvel)
                 Call storage.addFrame(i, NameOf(FluidDynamics.yvel), CFD.yvel)
                 Call storage.addFrame(i, NameOf(FluidDynamics.speed2), CFD.speed2)

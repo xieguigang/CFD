@@ -51,7 +51,7 @@ Public Class FluidDynamics : Inherits Simulation
     ' **************************************************************************
 
     ' Constants
-    Friend velocity As Double = 0.07
+    Friend velocity As Double = 0.1
     Friend viscocity As Double = 0.02
 
     ' Here are the arrays of densities by velocity, named by velocity directions with north up:
@@ -66,13 +66,23 @@ Public Class FluidDynamics : Inherits Simulation
     Friend nSE As Double()() = RectangularArray.Matrix(Of Double)(xdim, ydim)
 
     ' Calculated variables
-    Friend density As Double()() = RectangularArray.Matrix(Of Double)(xdim, ydim)
+
+    ''' <summary>
+    ''' macroscopic density
+    ''' </summary>
+    Friend rho As Double()() = RectangularArray.Matrix(Of Double)(xdim, ydim)
+    ''' <summary>
+    ''' macroscopic velocity [ux]
+    ''' </summary>
     Friend xvel As Double()() = RectangularArray.Matrix(Of Double)(xdim, ydim)
+    ''' <summary>
+    ''' macroscopic velocity [uy]
+    ''' </summary>
     Friend yvel As Double()() = RectangularArray.Matrix(Of Double)(xdim, ydim)
     Friend speed2 As Double()() = RectangularArray.Matrix(Of Double)(xdim, ydim)
 
     ''' <summary>
-    ''' Boolean array, true at sites that contain barriers:
+    ''' Boolean array, true at sites that contain barriers
     ''' </summary>
     Friend barrier As Boolean()() = RectangularArray.Matrix(Of Boolean)(xdim, ydim)
 
@@ -115,7 +125,7 @@ Public Class FluidDynamics : Inherits Simulation
                     nSE(x)(y) = one36th * (1 + 3 * v + 3 * v * v)
                     nNW(x)(y) = one36th * (1 - 3 * v + 3 * v * v)
                     nSW(x)(y) = one36th * (1 - 3 * v + 3 * v * v)
-                    density(x)(y) = 1
+                    rho(x)(y) = 1
                     xvel(x)(y) = v
                     yvel(x)(y) = 0
                     speed2(x)(y) = v * v
@@ -245,32 +255,6 @@ Public Class FluidDynamics : Inherits Simulation
             nSE(x)(ydim - 1) = one36th * (1 + 3 * v + 3 * v * v)
             nNW(x)(ydim - 1) = one36th * (1 - 3 * v + 3 * v * v)
             nSW(x)(ydim - 1) = one36th * (1 - 3 * v + 3 * v * v)
-        Next
-    End Sub
-
-    Public Palette As SolidBrush()
-    Dim r = 1
-
-    ''' <summary>
-    ''' *************************************************************************
-    '''                            - DRAW SIMULATION -                           *
-    ''' **************************************************************************
-    ''' </summary>
-
-    Protected Overrides Sub draw(g As IGraphics)
-        Dim speedRange As DoubleRange = (From seed In speed2 Select New DoubleRange(seed)).Select(Function(a) {a.Min, a.Max}).IteratesALL.Range
-        Dim offset As DoubleRange = New Double() {0, Palette.Length - 1}
-
-        For x As Integer = 0 To xdim - 1
-            For Y As Integer = 0 To ydim - 1
-                ' draw speed value
-                ' Dim S = std.Min(CSng(std.Sqrt(speed2(x)(Y))) * 3.0F, 1.0F)
-                ' Dim color As Color = New HSBColor(0.5F, 1.0F, S).ToRgb
-                Dim S As Integer = speedRange.ScaleMapping(speed2(x)(Y), offset)
-                Dim color As Brush = Palette(S)
-
-                g.FillRectangle(color, New Rectangle(x, Y, r, r))
-            Next
         Next
     End Sub
 End Class
