@@ -53,6 +53,7 @@ export interface uiAdapter {
     get viscosity(): number;
     get speed(): number;
     get plotType(): number;
+    get steps(): number ;
 
     get drawTracers(): boolean;
     get drawFlowlines(): boolean;

@@ -86,7 +86,7 @@ export class CFD {
             }
         }
 
-       this. paintCanvas();
+        this.paintCanvas();
     }
 
     /**
@@ -274,55 +274,60 @@ export class CFD {
      * Simulate function executes a bunch of steps and then schedules another call to itself
     */
     public simulate() {
-        var stepsPerFrame = Number(stepsSlider.value);			// number of simulation steps per animation frame
-        setBoundaries();
+        var stepsPerFrame = this.pars.steps;			// number of simulation steps per animation frame
+        this.setBoundaries();
         // Test to see if we're dragging the fluid:
         var pushing = false;
         var pushX, pushY, pushUX, pushUY;
         if (mouseIsDown && mouseSelect.selectedIndex == 2) {
-            if (oldMouseX >= 0) {
-                var gridLoc = canvasToGrid(mouseX, mouseY);
+            if (this.opts.oldMouseX >= 0) {
+                var gridLoc = canvasToGrid(this.opts.mouseX, this.opts.mouseY);
                 pushX = gridLoc.x;
                 pushY = gridLoc.y;
-                pushUX = (mouseX - oldMouseX) / pxPerSquare / stepsPerFrame;
-                pushUY = -(mouseY - oldMouseY) / pxPerSquare / stepsPerFrame;	// y axis is flipped
+                pushUX = (this.opts.mouseX - this.opts.oldMouseX) / pxPerSquare / stepsPerFrame;
+                pushUY = -(this.opts.mouseY - this.opts.oldMouseY) / pxPerSquare / stepsPerFrame;	// y axis is flipped
                 if (Math.abs(pushUX) > 0.1) pushUX = 0.1 * Math.abs(pushUX) / pushUX;
                 if (Math.abs(pushUY) > 0.1) pushUY = 0.1 * Math.abs(pushUY) / pushUY;
                 pushing = true;
             }
-            oldMouseX = mouseX; oldMouseY = mouseY;
+            this.opts.oldMouseX = this.opts.mouseX; this.opts.oldMouseY = this.opts.mouseY;
         } else {
-            oldMouseX = -1; oldMouseY = -1;
+            this.opts.oldMouseX = -1; this.opts.oldMouseY = -1;
         }
         // Execute a bunch of time steps:
         for (var step = 0; step < stepsPerFrame; step++) {
-            collide();
-            stream();
+            this.collide();
+            this.stream();
             if (tracerCheck.checked) moveTracers();
             if (pushing) push(pushX, pushY, pushUX, pushUY);
-            time++;
-            if (showingPeriod && (barrierFy > 0) && (lastBarrierFy <= 0)) {
-                var thisFyOscTime = time - barrierFy / (barrierFy - lastBarrierFy);	// interpolate when Fy changed sign
-                if (lastFyOscTime > 0) {
-                    var period = thisFyOscTime - lastFyOscTime;
+            this.opts.time++;
+            if (this.opts.showingPeriod && (this.opts.barrierFy > 0) && (this.opts.lastBarrierFy <= 0)) {
+                var thisFyOscTime = this.opts.time - this.opts.barrierFy / (this.opts.barrierFy - this.opts.lastBarrierFy);	// interpolate when Fy changed sign
+                if (this.opts.lastFyOscTime > 0) {
+                    var period = thisFyOscTime - this.opts.lastFyOscTime;
                     dataArea.innerHTML += Number(period).toFixed(2) + "\n";
                     dataArea.scrollTop = dataArea.scrollHeight;
                 }
-                lastFyOscTime = thisFyOscTime;
+                this.opts.lastFyOscTime = thisFyOscTime;
             }
-            lastBarrierFy = barrierFy;
+            this.opts.lastBarrierFy = this.opts.barrierFy;
         }
         paintCanvas();
-        if (collectingData) {
+        if (this.opts.collectingData) {
             writeData();
-            if (time >= 10000) startOrStopData();
+            if (this.opts.time >= 10000) startOrStopData();
         }
         if (this.running) {
-            stepCount += stepsPerFrame;
-            var elapsedTime = ((new Date()).getTime() - startTime) / 1000;	// time in seconds
-            speedReadout.innerHTML = Number(stepCount / elapsedTime).toFixed(0);
+            this.opts.stepCount += stepsPerFrame;
+            var elapsedTime = ((new Date()).getTime() - this.opts.startTime) / 1000;	// time in seconds
+            speedReadout.innerHTML = Number(this.opts.stepCount / elapsedTime).toFixed(0);
         }
-        var stable = true;
+
+        let stable = true;
+        let xdim = this.pars.xdim;
+        let ydim = this.pars.ydim;
+        let rho = this.rho;
+
         for (var x = 0; x < xdim; x++) {
             var index = x + (ydim / 2) * xdim;	// look at middle row only
             if (rho[index] <= 0) stable = false;
@@ -336,7 +341,7 @@ export class CFD {
             if (rafCheck.checked) {
                 requestAnimFrame(() => this.simulate());	// let browser schedule next frame
             } else {
-                window.setTimeout(simulate, 1);	// schedule next frame asap (nominally 1 ms but always more)
+                window.setTimeout(() => this.simulate(), 1);	// schedule next frame asap (nominally 1 ms but always more)
             }
         }
     }

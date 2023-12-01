@@ -152,6 +152,10 @@ export class ui implements uiAdapter {
         this.paintCanvas = g.requestPaintCanvas;
     }
 
+    public get steps(): number {
+        return Number(this.stepsSlider.value);
+    };
+
     public get speed(): number {
         return Number(this.speedSlider.value);
     }
