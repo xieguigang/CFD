@@ -17,14 +17,6 @@ opts.sensorY = html.ydim / 2;
 
 init_options(opts);
 
-var barrierSelect: HTMLSelectElement = <any>document.getElementById('barrierSelect');
-
-for (var barrierIndex = 0; barrierIndex < barrierList.length; barrierIndex++) {
-    var shape = document.createElement("option");
-    shape.text = barrierList[barrierIndex].name;
-    barrierSelect.add(shape, null);
-}
-
 var CFD_app = new CFD(html.xdim, html.ydim, html, opts);
 var gr = new graphics(html, CFD_app, opts);
 

@@ -1,3 +1,4 @@
+import { barrierList } from "./barrier";
 import { CFD } from "./CFD";
 import { mobile } from "./global";
 import { four9ths, one36th, one9th, options, uiAdapter } from "./options";
@@ -35,6 +36,7 @@ export class ui implements uiAdapter {
     public readonly dataButton: HTMLInputElement;
 
     public readonly sizeSelect: HTMLSelectElement;
+    public readonly barrierSelect: HTMLSelectElement;
 
     private draggingSensor = false;
     private mouseIsDown = false;
@@ -79,7 +81,8 @@ export class ui implements uiAdapter {
         dataSection: string = "dataSection",
         dataArea: string = "dataArea",
         dataButton: string = "dataButton",
-        sizeSelect: string = "sizeSelect") {
+        sizeSelect: string = "sizeSelect",
+        barrierSelect: string = 'barrierSelect') {
 
         const canvas: HTMLCanvasElement = <any>document.getElementById(canvas_id);
         const context: CanvasRenderingContext2D = <any>canvas.getContext('2d');
@@ -123,6 +126,14 @@ export class ui implements uiAdapter {
         // smaller works better on mobile platforms
         if (mobile) {
             this.sizeSelect.selectedIndex = 1;
+        }
+
+        this.barrierSelect = <any>document.getElementById(barrierSelect);
+
+        for (let barrier of barrierList) {
+            const shape = document.createElement("option");
+            shape.text = barrier.name;
+            this.barrierSelect.add(shape, null);
         }
 
         this.setEvents();
@@ -238,8 +249,8 @@ export class ui implements uiAdapter {
         if (this.sensorCheck.checked) {
             const pxPerSquare = this.pxPerSquare;
 
-            var canvasLoc = pageToCanvas(e.pageX, e.pageY);
-            var gridLoc = canvasToGrid(canvasLoc.x, canvasLoc.y);
+            var canvasLoc = this.pageToCanvas(e.pageX, e.pageY);
+            var gridLoc = this.canvasToGrid(canvasLoc.x, canvasLoc.y);
             var dx = (gridLoc.x - this.opts.sensorX) * pxPerSquare;
             var dy = (gridLoc.y - this.opts.sensorY) * pxPerSquare;
 
@@ -264,9 +275,9 @@ export class ui implements uiAdapter {
     mousePressDrag(e) {
         e.preventDefault();
         this.mouseIsDown = true;
-        var canvasLoc = pageToCanvas(e.pageX, e.pageY);
+        var canvasLoc = this.pageToCanvas(e.pageX, e.pageY);
         if (this.draggingSensor) {
-            var gridLoc = canvasToGrid(canvasLoc.x, canvasLoc.y);
+            var gridLoc = this.canvasToGrid(canvasLoc.x, canvasLoc.y);
             this.opts.sensorX = gridLoc.x;
             this.opts.sensorY = gridLoc.y;
             paintCanvas();
@@ -277,7 +288,7 @@ export class ui implements uiAdapter {
             this.opts.mouseY = canvasLoc.y;
             return;
         }
-        var gridLoc = canvasToGrid(canvasLoc.x, canvasLoc.y);
+        var gridLoc = this.canvasToGrid(canvasLoc.x, canvasLoc.y);
         if (this.mouseSelect.selectedIndex == 0) {
             this.addBarrier(gridLoc.x, gridLoc.y);
             paintCanvas();
@@ -295,7 +306,7 @@ export class ui implements uiAdapter {
     }
 
     // Convert canvas coordinates to grid coordinates:
-    canvasToGrid(canvasX, canvasY) {
+    canvasToGrid(canvasX: number, canvasY: number) {
         var gridX = Math.floor(canvasX / this.pxPerSquare);
         var gridY = Math.floor((this.canvas.height - 1 - canvasY) / this.pxPerSquare); 	// off by 1?
         return { x: gridX, y: gridY };
@@ -333,18 +344,20 @@ export class ui implements uiAdapter {
                 barrier[x + y * xdim] = false;
             }
         }
+
         paintCanvas();
     }
 
     // Function to start or pause the simulation:
     startStop() {
-        running = !running;
-        if (running) {
-          this.  startButton.value = "Pause";
-          this.  resetTimer();
-          this.  CFD.simulate();
+        this.CFD.running = !this.CFD.running;
+
+        if (this.CFD.running) {
+            this.startButton.value = "Pause";
+            this.resetTimer();
+            this.CFD.simulate();
         } else {
-            this.  startButton.value = " Run ";
+            this.startButton.value = " Run ";
         }
     }
 
@@ -356,12 +369,12 @@ export class ui implements uiAdapter {
 
     // Show value of flow speed setting:
     adjustSpeed() {
-        this.   speedValue.innerHTML = Number(  this. speedSlider.value).toFixed(3);
+        this.speedValue.innerHTML = Number(this.speedSlider.value).toFixed(3);
     }
 
     // Show value of viscosity:
     adjustViscosity() {
-        this.  viscValue.innerHTML = Number(  this. viscSlider.value).toFixed(3);
+        this.viscValue.innerHTML = Number(this.viscSlider.value).toFixed(3);
     }
 
     // Show or hide the data area:
@@ -393,9 +406,11 @@ export class ui implements uiAdapter {
         var timeString = String(this.opts.time);
         var xdim = this.xdim;
         while (timeString.length < 5) timeString = "0" + timeString;
-        
-        const  sIndex = this.opts.sensorX + this.opts.sensorY * xdim;
 
+        const sIndex = this.opts.sensorX + this.opts.sensorY * xdim;
+        const ux = this.CFD.ux;
+        const uy = this.CFD.uy;
+        const rho = this.CFD.rho;
 
         this.dataArea.innerHTML += timeString + "\t" + Number(rho[sIndex]).toFixed(4) + "\t"
             + Number(ux[sIndex]).toFixed(4) + "\t" + Number(uy[sIndex]).toFixed(4) + "\t"
@@ -425,6 +440,7 @@ export class ui implements uiAdapter {
         const dataArea = this.dataArea;
         const xdim = this.xdim;
         const ydim = this.ydim;
+        const barrier = this.CFD.barrier;
 
         dataArea.innerHTML = '{name:"Barrier locations",\n';
         dataArea.innerHTML += 'locations:[\n';
@@ -439,7 +455,7 @@ export class ui implements uiAdapter {
 
     // Place a preset barrier:
     placePresetBarrier() {
-        var index = barrierSelect.selectedIndex;
+        var index = this.barrierSelect.selectedIndex;
         if (index == 0) return;
         this.clearBarriers();
         var bCount = barrierList[index - 1].locations.length / 2;	// number of barrier sites
@@ -458,15 +474,19 @@ export class ui implements uiAdapter {
                 yMax = barrierList[index - 1].locations[siteIndex + 1];
             }
         }
-        var yAverage = Math.round((yMin + yMax) / 2);
+
+        const yAverage = Math.round((yMin + yMax) / 2);
+        const xdim = this.xdim;
+        const ydim = this.ydim;
+
         // Now place the barriers:
         for (var siteIndex = 0; siteIndex < 2 * bCount; siteIndex += 2) {
             var x = barrierList[index - 1].locations[siteIndex] - xMin + Math.round(ydim / 3);
             var y = barrierList[index - 1].locations[siteIndex + 1] - yAverage + Math.round(ydim / 2);
-            addBarrier(x, y);
+            this.addBarrier(x, y);
         }
         paintCanvas();
-        barrierSelect.selectedIndex = 0;	// A choice on this menu is a one-time action, not an ongoing setting
+        this.barrierSelect.selectedIndex = 0;	// A choice on this menu is a one-time action, not an ongoing setting
     }
 
     // Print debugging data:
