@@ -38,7 +38,7 @@ Public Class FormMain
         ribbon1.SendToBack()
         ribbonItems = New RibbonItems(ribbon1)
 
-        dockPanel.SendToBack()
+        dockPanel.BringToFront()
 
         Globals.ribbonItems = ribbonItems
         Globals.dockPanel = dockPanel

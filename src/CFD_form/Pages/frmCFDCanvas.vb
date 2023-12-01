@@ -123,5 +123,6 @@ Public Class frmCFDCanvas
 
         toolkit.Show(dockPanel)
         toolkit.DockState = DockState.DockLeft
+        toolkit.SetTarget(reader, callback:=Me)
     End Sub
 End Class
