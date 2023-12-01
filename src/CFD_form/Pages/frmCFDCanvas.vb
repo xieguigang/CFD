@@ -45,6 +45,12 @@ Public Class frmCFDCanvas
             Next
         Next
 
+        If ribbonItems.CheckShowTracer.BooleanValue Then
+            For Each pt As PointF In CFD.moveTracers()
+                Call g.FillRectangle(Brushes.Black, New RectangleF(pt, New Size(2, 2)))
+            Next
+        End If
+
         PictureBox1.BackgroundImage = bitmap
     End Sub
 

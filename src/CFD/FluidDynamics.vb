@@ -108,7 +108,7 @@ Public Class FluidDynamics : Inherits Simulation
         Next
     End Sub
 
-    Public Sub moveTracers()
+    Public Function moveTracers() As PointF()
         For t As Integer = 0 To tracer.Length - 1
             Dim rx As Integer = std.Ceiling(tracer(t).X)
             Dim ry As Integer = std.Ceiling(tracer(t).Y)
@@ -119,7 +119,9 @@ Public Class FluidDynamics : Inherits Simulation
                 tracer(t) = New PointF(0, ydim * randf.NextDouble)
             End If
         Next
-    End Sub
+
+        Return tracer
+    End Function
 
     Public Sub clearBarrier()
         For x As Integer = 0 To xdim - 1
