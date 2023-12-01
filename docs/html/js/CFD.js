@@ -1115,7 +1115,6 @@ var app = /** @class */ (function () {
     };
     return app;
 }());
-var App = new app();
 var Global;
 (function (Global) {
     Global.UA = /iPhone|iPad|iPod|Android|BlackBerry|Opera Mini|IEMobile/i;

@@ -67,7 +67,6 @@ declare class app {
     */
     resize(): void;
 }
-declare var App: app;
 declare module Global {
     const UA: RegExp;
     const mobile: boolean;

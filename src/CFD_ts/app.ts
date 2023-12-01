@@ -130,5 +130,3 @@ class app {
         this.html.resetTimer();
     }
 }
-
-var App = new app();
