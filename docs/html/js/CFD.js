@@ -1584,7 +1584,7 @@ var Model;
     Model.options = options;
     function init_options(opts) {
         // Initialize tracers (but don't place them yet):
-        var nTracers = this.opts.nTracers;
+        var nTracers = opts.nTracers;
         var tracerX = new Array(nTracers);
         var tracerY = new Array(nTracers);
         for (var t = 0; t < nTracers; t++) {

@@ -84,7 +84,7 @@ namespace Model {
 
     export function init_options(opts: options) {
         // Initialize tracers (but don't place them yet):
-        var nTracers = this.opts.nTracers;
+        var nTracers = opts.nTracers;
         var tracerX = new Array(nTracers);
         var tracerY = new Array(nTracers);
 
