@@ -10,7 +10,7 @@ Imports WeifenLuo.WinFormsUI.Docking
 
 Public Class frmCFDCanvas
 
-    Dim CFD As New FluidDynamics(300, 200)
+    Dim CFD As New FluidDynamics(600, 480)
     Dim reader As New CFDHelper(CFD)
     Dim colors As SolidBrush()
     Dim offset As New DoubleRange(0, 255)
@@ -124,5 +124,9 @@ Public Class frmCFDCanvas
         toolkit.Show(dockPanel)
         toolkit.DockState = DockState.DockLeft
         toolkit.SetTarget(reader, callback:=Me)
+
+        TabText = "Computational Fluid Dynamics"
+
+        Call main.EnableVSRenderer(ContextMenuStrip1)
     End Sub
 End Class

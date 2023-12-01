@@ -1,11 +1,4 @@
-﻿Imports System.Runtime.CompilerServices
-Imports System.Text
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement
-Imports CFD
-Imports CFD_form.RibbonLib.Controls
-Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
-Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
-Imports Microsoft.VisualBasic.Linq
+﻿Imports CFD_form.RibbonLib.Controls
 Imports RibbonLib
 Imports WeifenLuo.WinFormsUI.Docking
 
@@ -47,12 +40,14 @@ Public Class FormMain
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         dockPanel.Theme = vS2015LightTheme1
-        EnableVSRenderer(VisualStudioToolStripExtender.VsVersion.Vs2015, vS2015LightTheme1)
+        EnableVSRenderer(StatusStrip1)
         CFD.Show(dockPanel)
         CFD.DockState = DockState.Document
     End Sub
 
-    Private Sub EnableVSRenderer(ByVal version As VisualStudioToolStripExtender.VsVersion, ByVal theme As ThemeBase)
-        vsToolStripExtender1.SetStyle(StatusStrip1, version, theme)
+    Friend Sub EnableVSRenderer(ParamArray toolStrips As ToolStrip())
+        For Each tool In toolStrips
+            vsToolStripExtender1.SetStyle(tool, VisualStudioToolStripExtender.VsVersion.Vs2015, vS2015LightTheme1)
+        Next
     End Sub
 End Class
