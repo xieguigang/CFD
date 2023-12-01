@@ -65,7 +65,9 @@ Public Class frmCFDCanvas
     End Sub
 
     Private Sub PictureBox1_MouseDown(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseDown
-        drawLine = True
+        If e.Button = MouseButtons.Left Then
+            drawLine = True
+        End If
     End Sub
 
     Private Sub PictureBox1_MouseClick(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseClick
