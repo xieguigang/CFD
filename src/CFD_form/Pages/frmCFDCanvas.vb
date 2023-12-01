@@ -114,12 +114,12 @@ Public Class frmCFDCanvas
         ToolTip1.SetToolTip(PictureBox1, tooltip.ToString)
     End Sub
 
-    Private Sub frmCFDCanvas_Load(sender As Object, e As EventArgs) Handles Me.Load
-        UpdatePalette()
-        CFD.reset()
+    Private Sub frmCFDCanvas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        UpdatePalette
+        CFD.reset
 
-        AddHandler RibbonItems.ButtonReset.ExecuteEvent, Sub() Call resetCFD()
-        AddHandler ribbonItems.ButtonClearBarrier.ExecuteEvent, Sub() Call CFD.clearBarrier()
+        AddHandler RibbonItems.ButtonReset.ExecuteEvent, Sub() resetCFD
+        AddHandler ribbonItems.ButtonClearBarrier.ExecuteEvent, Sub() CFD.clearBarrier
 
         toolkit.Show(dockPanel)
         toolkit.DockState = DockState.DockLeft

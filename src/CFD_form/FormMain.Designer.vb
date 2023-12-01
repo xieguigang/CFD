@@ -23,31 +23,14 @@ Partial Class FormMain
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormMain))
-        ContextMenuStrip1 = New ContextMenuStrip(components)
-        MarkPointToolStripMenuItem = New ToolStripMenuItem()
         Timer1 = New Timer(components)
         StatusStrip1 = New StatusStrip()
         ToolStripStatusLabel1 = New ToolStripStatusLabel()
         ToolStripStatusLabel2 = New ToolStripStatusLabel()
         ToolStripProgressBar1 = New ToolStripProgressBar()
         ToolTip1 = New ToolTip(components)
-        ContextMenuStrip1.SuspendLayout()
         StatusStrip1.SuspendLayout()
         SuspendLayout()
-        ' 
-        ' ContextMenuStrip1
-        ' 
-        ContextMenuStrip1.Items.AddRange(New ToolStripItem() {MarkPointToolStripMenuItem})
-        ContextMenuStrip1.Name = "ContextMenuStrip1"
-        ContextMenuStrip1.Size = New Size(133, 26)
-        ' 
-        ' MarkPointToolStripMenuItem
-        ' 
-        MarkPointToolStripMenuItem.Image = CType(resources.GetObject("MarkPointToolStripMenuItem.Image"), Image)
-        MarkPointToolStripMenuItem.Name = "MarkPointToolStripMenuItem"
-        MarkPointToolStripMenuItem.Size = New Size(132, 22)
-        MarkPointToolStripMenuItem.Text = "Mark Point"
         ' 
         ' Timer1
         ' 
@@ -94,7 +77,6 @@ Partial Class FormMain
         Controls.Add(StatusStrip1)
         Name = "FormMain"
         Text = "Computational Fluid Dynamics"
-        ContextMenuStrip1.ResumeLayout(False)
         StatusStrip1.ResumeLayout(False)
         StatusStrip1.PerformLayout()
         ResumeLayout(False)
@@ -106,7 +88,5 @@ Partial Class FormMain
     Friend WithEvents ToolStripProgressBar1 As ToolStripProgressBar
     Friend WithEvents ToolStripStatusLabel2 As ToolStripStatusLabel
     Friend WithEvents ToolTip1 As ToolTip
-    Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
-    Friend WithEvents MarkPointToolStripMenuItem As ToolStripMenuItem
 
 End Class

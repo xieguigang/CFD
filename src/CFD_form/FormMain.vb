@@ -15,6 +15,7 @@ Public Class FormMain
     Dim vsToolStripExtender1 As New VisualStudioToolStripExtender
     Dim vS2015LightTheme1 As New VS2015LightTheme
     Dim dockPanel As New DockPanel
+    Dim CFD As New frmCFDCanvas
 
     ReadOnly _toolStripProfessionalRenderer As New ToolStripProfessionalRenderer()
 
@@ -37,6 +38,8 @@ Public Class FormMain
         ribbon1.SendToBack()
         ribbonItems = New RibbonItems(ribbon1)
 
+        dockPanel.SendToBack()
+
         Globals.ribbonItems = ribbonItems
         Globals.dockPanel = dockPanel
         Globals.main = Me
@@ -45,6 +48,8 @@ Public Class FormMain
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         dockPanel.Theme = vS2015LightTheme1
         EnableVSRenderer(VisualStudioToolStripExtender.VsVersion.Vs2015, vS2015LightTheme1)
+        CFD.Show(dockPanel)
+        CFD.DockState = DockState.Document
     End Sub
 
     Private Sub EnableVSRenderer(ByVal version As VisualStudioToolStripExtender.VsVersion, ByVal theme As ThemeBase)

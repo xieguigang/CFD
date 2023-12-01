@@ -23,14 +23,20 @@ Partial Class frmCFDCanvas
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmCFDCanvas))
         PictureBox1 = New PictureBox()
         ToolTip1 = New ToolTip(components)
         Timer1 = New Timer(components)
+        ContextMenuStrip1 = New ContextMenuStrip(components)
+        MarkPointToolStripMenuItem = New ToolStripMenuItem()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
+        ContextMenuStrip1.SuspendLayout()
         SuspendLayout()
         ' 
         ' PictureBox1
         ' 
+        PictureBox1.BackgroundImageLayout = ImageLayout.Stretch
+        PictureBox1.ContextMenuStrip = ContextMenuStrip1
         PictureBox1.Dock = DockStyle.Fill
         PictureBox1.Location = New Point(0, 0)
         PictureBox1.Name = "PictureBox1"
@@ -43,6 +49,19 @@ Partial Class frmCFDCanvas
         Timer1.Enabled = True
         Timer1.Interval = 50
         ' 
+        ' ContextMenuStrip1
+        ' 
+        ContextMenuStrip1.Items.AddRange(New ToolStripItem() {MarkPointToolStripMenuItem})
+        ContextMenuStrip1.Name = "ContextMenuStrip1"
+        ContextMenuStrip1.Size = New Size(133, 26)
+        ' 
+        ' MarkPointToolStripMenuItem
+        ' 
+        MarkPointToolStripMenuItem.Image = CType(resources.GetObject("MarkPointToolStripMenuItem.Image"), Image)
+        MarkPointToolStripMenuItem.Name = "MarkPointToolStripMenuItem"
+        MarkPointToolStripMenuItem.Size = New Size(132, 22)
+        MarkPointToolStripMenuItem.Text = "Mark Point"
+        ' 
         ' frmCFDCanvas
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -50,12 +69,14 @@ Partial Class frmCFDCanvas
         ClientSize = New Size(800, 450)
         Controls.Add(PictureBox1)
         Name = "frmCFDCanvas"
-        Text = "Form1"
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
+        ContextMenuStrip1.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
 
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents ToolTip1 As ToolTip
     Friend WithEvents Timer1 As Timer
+    Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
+    Friend WithEvents MarkPointToolStripMenuItem As ToolStripMenuItem
 End Class
