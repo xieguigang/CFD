@@ -1,6 +1,8 @@
 ﻿Imports System.Drawing
 Imports System.IO
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.DataStorage.HDSPack
 Imports Microsoft.VisualBasic.DataStorage.HDSPack.FileSystem
@@ -36,6 +38,11 @@ Namespace Storage
             buf = New StreamPack(file, [readonly]:=True)
             Call loadMetadata()
         End Sub
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function GetValueRange(dimension As String) As DoubleRange
+            Return New DoubleRange(ranges(dimension))
+        End Function
 
         Private Sub loadMetadata()
             Dim json As String = buf.ReadText("/metadata.json")

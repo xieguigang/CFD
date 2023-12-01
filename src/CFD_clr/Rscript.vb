@@ -4,8 +4,8 @@ Imports CFD
 Imports CFD.Storage
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Emit.Delegates
-Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
 Imports Microsoft.VisualBasic.Linq
@@ -119,12 +119,15 @@ Module Rscript
 
         Dim colorSet As String = RColorPalette.getColorSet(colors, [default]:="jet")
         Dim dims As Size = pack.dims
+        Dim range As DoubleRange = pack.GetValueRange(dimension)
+        Dim scaleTarget As New DoubleRange(0, color_levels - 1)
 
         For time As Integer = 1 To pack.total
             Dim frame As Double()() = pack.ReadFrame(time, dimension)
             Dim pixels As PixelData() = frame _
+                .AsParallel _
                 .Select(Function(row, i)
-                            Return row.Select(Function(c, j) New PixelData(i + 1, j + 1, c))
+                            Return row.Select(Function(c, j) New PixelData(i + 1, j + 1, range.ScaleMapping(c, scaleTarget)))
                         End Function) _
                 .IteratesALL _
                 .ToArray
