@@ -29,6 +29,7 @@ export class graphics {
         this.image = html.image;
         this.curl = new Array(xdim * ydim);
 
+        // initFluid() 
         for (var y = 0; y < ydim; y++) {
             for (var x = 0; x < xdim; x++) {
                 this.curl[x + y * xdim] = 0.0;

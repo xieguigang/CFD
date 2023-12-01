@@ -1,5 +1,5 @@
 import { IrequestPaintCanvas, mobile, rgbToHex } from './global';
-import { four9ths, one36th, one9th, options, uiAdapter } from './options';
+import { Idebugger, four9ths, one36th, one9th, options, uiAdapter } from './options';
 
 export class CFD {
 
@@ -29,7 +29,8 @@ export class CFD {
 
     constructor(public xdim: number, public ydim: number,
         private pars: uiAdapter,
-        private opts: options) {
+        private opts: options,
+        private debug: Idebugger) {
 
         this.n0 = new Array(xdim * ydim);			// microscopic densities along each lattice direction
         this.nN = new Array(xdim * ydim);
@@ -87,6 +88,27 @@ export class CFD {
         }
 
         this.paintCanvas();
+    }
+
+    // "Drag" the fluid in a direction determined by the mouse (or touch) motion:
+    // (The drag affects a "circle", 5 px in diameter, centered on the given coordinates.)
+    push(pushX: number, pushY: number, pushUX: number, pushUY: number) {
+        // First make sure we're not too close to edge:
+        const margin = 3;
+        const xdim = this.xdim;
+        const ydim = this.ydim;
+
+        if ((pushX > margin) && (pushX < xdim - 1 - margin) && (pushY > margin) && (pushY < ydim - 1 - margin)) {
+            for (var dx = -1; dx <= 1; dx++) {
+                this.setEquil(pushX + dx, pushY + 2, pushUX, pushUY);
+                this.setEquil(pushX + dx, pushY - 2, pushUX, pushUY);
+            }
+            for (var dx = -2; dx <= 2; dx++) {
+                for (var dy = -1; dy <= 1; dy++) {
+                    this.setEquil(pushX + dx, pushY + dy, pushUX, pushUY);
+                }
+            }
+        }
     }
 
     /**
@@ -201,8 +223,8 @@ export class CFD {
     */
     public stream() {
         const opts = this.opts;
-        const xdim = this.pars.xdim;
-        const ydim = this.pars.ydim;
+        const xdim = this.xdim;
+        const ydim = this.ydim;
 
         const n0 = this.n0;
         const nN = this.nN;
@@ -274,14 +296,19 @@ export class CFD {
      * Simulate function executes a bunch of steps and then schedules another call to itself
     */
     public simulate() {
-        var stepsPerFrame = this.pars.steps;			// number of simulation steps per animation frame
-        this.setBoundaries();
+        // number of simulation steps per animation frame
+        var stepsPerFrame = this.pars.steps;
         // Test to see if we're dragging the fluid:
         var pushing = false;
         var pushX, pushY, pushUX, pushUY;
+
+        this.setBoundaries();
+
         if (mouseIsDown && mouseSelect.selectedIndex == 2) {
             if (this.opts.oldMouseX >= 0) {
                 var gridLoc = canvasToGrid(this.opts.mouseX, this.opts.mouseY);
+                var pxPerSquare = this.pars.pxPerSquare;
+
                 pushX = gridLoc.x;
                 pushY = gridLoc.y;
                 pushUX = (this.opts.mouseX - this.opts.oldMouseX) / pxPerSquare / stepsPerFrame;
@@ -290,23 +317,23 @@ export class CFD {
                 if (Math.abs(pushUY) > 0.1) pushUY = 0.1 * Math.abs(pushUY) / pushUY;
                 pushing = true;
             }
-            this.opts.oldMouseX = this.opts.mouseX; this.opts.oldMouseY = this.opts.mouseY;
+            this.opts.oldMouseX = this.opts.mouseX;
+            this.opts.oldMouseY = this.opts.mouseY;
         } else {
-            this.opts.oldMouseX = -1; this.opts.oldMouseY = -1;
+            this.opts.oldMouseX = -1;
+            this.opts.oldMouseY = -1;
         }
         // Execute a bunch of time steps:
         for (var step = 0; step < stepsPerFrame; step++) {
             this.collide();
             this.stream();
-            if (tracerCheck.checked) moveTracers();
-            if (pushing) push(pushX, pushY, pushUX, pushUY);
+            if (this.pars.drawTracers) this.debug.moveTracers();
+            if (pushing) this.push(pushX, pushY, pushUX, pushUY);
             this.opts.time++;
             if (this.opts.showingPeriod && (this.opts.barrierFy > 0) && (this.opts.lastBarrierFy <= 0)) {
                 var thisFyOscTime = this.opts.time - this.opts.barrierFy / (this.opts.barrierFy - this.opts.lastBarrierFy);	// interpolate when Fy changed sign
                 if (this.opts.lastFyOscTime > 0) {
-                    var period = thisFyOscTime - this.opts.lastFyOscTime;
-                    dataArea.innerHTML += Number(period).toFixed(2) + "\n";
-                    dataArea.scrollTop = dataArea.scrollHeight;
+                    this.debug.dataAreaWriteLine(Number(thisFyOscTime - this.opts.lastFyOscTime).toFixed(2));                   
                 }
                 this.opts.lastFyOscTime = thisFyOscTime;
             }
@@ -314,7 +341,7 @@ export class CFD {
         }
         paintCanvas();
         if (this.opts.collectingData) {
-            writeData();
+            this.debug.writeData();
             if (this.opts.time >= 10000) startOrStopData();
         }
         if (this.running) {
@@ -334,8 +361,8 @@ export class CFD {
         }
         if (!stable) {
             window.alert("The simulation has become unstable due to excessive fluid speeds.");
-            startStop();
-            initFluid();
+            this.startStop();
+            this.initFluid();
         }
         if (this.running) {
             if (rafCheck.checked) {

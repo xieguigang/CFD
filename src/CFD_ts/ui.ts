@@ -2,12 +2,12 @@ import { barrierList } from "./barrier";
 import { CFD } from "./CFD";
 import { IrequestPaintCanvas, mobile } from "./global";
 import { graphics } from "./graphics";
-import { four9ths, one36th, one9th, options, uiAdapter } from "./options";
+import { four9ths, Idebugger, one36th, one9th, options, uiAdapter } from "./options";
 
 /**
  * this html user interface handler
 */
-export class ui implements uiAdapter {
+export class ui implements uiAdapter, Idebugger {
 
     public readonly canvas: HTMLCanvasElement;
     public readonly context: CanvasRenderingContext2D;
@@ -143,6 +143,11 @@ export class ui implements uiAdapter {
 
         this.setEvents();
     }
+    
+    dataAreaWriteLine(s: string): void {
+        this.dataArea.innerHTML += s + "\n";
+        this.dataArea.scrollTop = this.dataArea.scrollHeight;
+    }
 
     public connectEngine(CFD: CFD) {
         this.CFD = CFD;
@@ -221,24 +226,6 @@ export class ui implements uiAdapter {
         }
     }
 
-    // "Drag" the fluid in a direction determined by the mouse (or touch) motion:
-    // (The drag affects a "circle", 5 px in diameter, centered on the given coordinates.)
-    push(pushX: number, pushY: number, pushUX: number, pushUY: number) {
-        // First make sure we're not too close to edge:
-        var margin = 3;
-        if ((pushX > margin) && (pushX < this.xdim - 1 - margin) && (pushY > margin) && (pushY < this.ydim - 1 - margin)) {
-            for (var dx = -1; dx <= 1; dx++) {
-                this.CFD.setEquil(pushX + dx, pushY + 2, pushUX, pushUY);
-                this.CFD.setEquil(pushX + dx, pushY - 2, pushUX, pushUY);
-            }
-            for (var dx = -2; dx <= 2; dx++) {
-                for (var dy = -1; dy <= 1; dy++) {
-                    this.CFD.setEquil(pushX + dx, pushY + dy, pushUX, pushUY);
-                }
-            }
-        }
-    }
-
     /**
      * Functions to handle mouse/touch interaction 
     */
@@ -295,7 +282,7 @@ export class ui implements uiAdapter {
     }
 
     // Convert page coordinates to canvas coordinates:
-    pageToCanvas(pageX, pageY) {
+    pageToCanvas(pageX: number, pageY: number) {
         var canvasX = pageX - this.canvas.offsetLeft;
         var canvasY = pageY - this.canvas.offsetTop;
         // this simple subtraction may not work when the canvas is nested in other elements
@@ -310,7 +297,7 @@ export class ui implements uiAdapter {
     }
 
     // Add a barrier at a given grid coordinate location:
-    addBarrier(x, y) {
+    addBarrier(x: number, y: number) {
         const xdim = this.xdim;
         const ydim = this.ydim;
 
@@ -320,7 +307,7 @@ export class ui implements uiAdapter {
     }
 
     // Remove a barrier at a given grid coordinate location:
-    removeBarrier(x, y) {
+    removeBarrier(x: number, y: number) {
         const xdim = this.xdim;
         const barrier = this.CFD.barrier;
 

@@ -23,7 +23,7 @@ export class app {
 
         init_options(opts);
 
-        this.engine = new CFD(html.xdim, html.ydim, html, opts);
+        this.engine = new CFD(html.xdim, html.ydim, html, opts, html);
         this.graphics = new graphics(html, this.engine, opts);
 
         html.connectEngine(this.engine);

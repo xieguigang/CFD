@@ -53,12 +53,21 @@ export interface uiAdapter {
     get viscosity(): number;
     get speed(): number;
     get plotType(): number;
-    get steps(): number ;
+    get steps(): number;
 
+    /**
+     * tracerCheck.checked
+    */
     get drawTracers(): boolean;
     get drawFlowlines(): boolean;
     get drawForceArrow(): boolean;
     get drawSensor(): boolean;
+}
+
+export interface Idebugger {
+    writeData(): void;
+    moveTracers(): void;
+    dataAreaWriteLine(s: string): void;
 }
 
 export function init_options(opts: options) {
