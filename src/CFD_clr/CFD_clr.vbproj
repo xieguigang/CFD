@@ -4,7 +4,7 @@
     <RootNamespace>CFD_clr</RootNamespace>
     <TargetFramework>net6.0</TargetFramework>
     <Platforms>AnyCPU;x64</Platforms>
-    <Configurations>Debug;Release;Rsharp_app_release;mzkit;mzkit_win32;gcmodeller_desktop</Configurations>
+    <Configurations>Debug;Release;Rsharp_app_release;mzkit;mzkit_win32;gcmodeller_desktop;CFD_win32</Configurations>
     <OutputPath>../../assembly</OutputPath>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -81,10 +81,24 @@
     <DefineTrace>True</DefineTrace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CFD_win32|AnyCPU'">
+    <RemoveIntegerChecks>True</RemoveIntegerChecks>
+    <DebugType>full</DebugType>
+    <DefineTrace>True</DefineTrace>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='gcmodeller_desktop|x64'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
     <DebugType>full</DebugType>
     <DefineTrace>True</DefineTrace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CFD_win32|x64'">
+    <RemoveIntegerChecks>True</RemoveIntegerChecks>
+    <DebugType>full</DebugType>
+    <DefineTrace>True</DefineTrace>
+    <OutputPath>../../assembly/bin\Rstudio\host</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
