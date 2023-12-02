@@ -1,4 +1,8 @@
 ﻿Public Enum Protocols
+
+    ''' <summary>
+    ''' setup the CFD session
+    ''' </summary>
     Setup
 
     Start

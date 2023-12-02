@@ -34,6 +34,11 @@ Public Class Backend : Implements ITaskDriver, IDisposable
 
     End Function
 
+    <Protocol(Protocols.RequestFrame)>
+    Public Function Setup(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
+
+    End Function
+
     Protected Overridable Sub Dispose(disposing As Boolean)
         If Not disposedValue Then
             If disposing Then

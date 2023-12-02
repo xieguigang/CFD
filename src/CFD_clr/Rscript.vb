@@ -73,6 +73,8 @@ Module Rscript
     <ExportAPI("start")>
     Public Function start(ss As Session, Optional max_time As Integer = 10 ^ 6) As Session
         Call ss.iterations(max_time).Run()
+        Call ss.Dispose()
+
         Return ss
     End Function
 

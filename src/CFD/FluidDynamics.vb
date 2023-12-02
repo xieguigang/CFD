@@ -1,7 +1,6 @@
 ﻿Imports System.Drawing
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports std = System.Math
-Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 
 ''' <summary>
 ''' *****************************************************************************
@@ -109,6 +108,27 @@ Public Class FluidDynamics : Inherits Simulation
                 netY += dy
             End If
         Next
+    End Sub
+
+    ''' <summary>
+    ''' Erase all memory data
+    ''' </summary>
+    Protected Overrides Sub close()
+        Erase n0
+        Erase nN
+        Erase nS
+        Erase nE
+        Erase nW
+        Erase nNW
+        Erase nNE
+        Erase nSW
+        Erase nSE
+        Erase rho
+        Erase xvel
+        Erase yvel
+        Erase speed2
+        Erase barrier
+        Erase tracer
     End Sub
 
     Public Function moveTracers(factor As Double) As PointF()
