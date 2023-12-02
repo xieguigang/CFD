@@ -105,6 +105,7 @@
     <ProjectReference Include="..\..\..\GCModeller\src\runtime\sciBASIC#\gr\physics\physics-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\GCModeller\src\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
     <ProjectReference Include="..\..\..\GCModeller\src\runtime\sciBASIC#\mime\text%html\html_netcore5.vbproj" />
+    <ProjectReference Include="..\..\..\GCModeller\src\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\network-netcore5.vbproj" />
     <ProjectReference Include="..\CFD\CFD.vbproj" />
   </ItemGroup>
 
