@@ -4,5 +4,5 @@ Computational fluid dynamics (CFD) is a branch of fluid mechanics that uses nume
 
 CFD is applied to a wide range of research and engineering problems in many fields of study and industries, including aerodynamics and aerospace analysis, hypersonics, weather simulation, natural science and environmental engineering, industrial system design and analysis, biological engineering, fluid flows and heat transfer, engine and combustion analysis, and visual effects for film and games.
 
-![](./docs/CFD.PNG)
+<img src="./docs/CFD.PNG" width="200px" />
 ![](./docs/Desktop.PNG)
