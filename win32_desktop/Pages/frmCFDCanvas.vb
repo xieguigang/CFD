@@ -5,6 +5,7 @@ Imports System.Text
 Imports CFD
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors.Scaler
 Imports Microsoft.VisualBasic.Linq
 Imports RibbonLib.Interop
 Imports WeifenLuo.WinFormsUI.Docking
@@ -44,9 +45,17 @@ Public Class frmCFDCanvas
     End Sub
 
     Private Sub Render(frame As Double()())
-        Dim bitmap As New BITMAP(CFD.xdim, CFD.ydim)
+        Dim bitmap As New bitmap(CFD.xdim, CFD.ydim)
         Dim g As Graphics = Graphics.FromImage(bitmap)
         Dim range As DoubleRange = frame.AsParallel.Select(Function(a) {a.Min, a.Max}).IteratesALL.Range
+        Dim v As Double
+        Dim index As Integer
+        Dim cut As Double = Double.MaxValue
+
+        If reader.enableTrIQ Then
+            cut = frame.IteratesALL.FindThreshold(reader.TrIQ)
+            range = New DoubleRange(range.Min, cut)
+        End If
 
         g.CompositingQuality = CompositingQuality.HighSpeed
         g.TextRenderingHint = TextRenderingHint.SystemDefault
@@ -60,7 +69,14 @@ Public Class frmCFDCanvas
             Dim row = frame(i)
 
             For j As Integer = 0 To row.Length - 1
-                Call g.FillRectangle(colors(CInt(range.ScaleMapping(row(j), offset))), New Rectangle(i, j, 1, 1))
+                v = row(j)
+
+                If reader.enableTrIQ AndAlso v > cut Then
+                    v = cut
+                End If
+
+                index = CInt(range.ScaleMapping(v, offset))
+                g.FillRectangle(colors(index), New Rectangle(i, j, 1, 1))
             Next
         Next
 
@@ -217,7 +233,7 @@ Public Class frmCFDCanvas
     End Sub
 
     Private Sub frmCFDCanvas_LostFocus(sender As Object, e As EventArgs) Handles Me.LostFocus
-        ribbonItems.TabSimulationPage.ContextAvailable = ContextAvailability.NotAvailable
+        ' ribbonItems.TabSimulationPage.ContextAvailable = ContextAvailability.NotAvailable
     End Sub
 
     Private Sub frmCFDCanvas_GotFocus(sender As Object, e As EventArgs) Handles Me.GotFocus

@@ -6,7 +6,8 @@ Public Class CFDHelper : Inherits DataAdapter
     Public Property DrawFrameData As FrameTypes
     Public Property Colors As ScalerPalette = ScalerPalette.FlexImaging
     Public Property ColorLevels As Integer = 255
-
+    Public Property TrIQ As Double = 0.85
+    Public Property enableTrIQ As Boolean = True
     Public Property TracerSpeedLevel As Double = 25
     Public Property RefreshRate As Integer
         Get
