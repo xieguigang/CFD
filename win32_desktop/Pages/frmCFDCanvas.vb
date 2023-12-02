@@ -3,11 +3,12 @@ Imports System.Drawing.Text
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports CFD
-Imports CFD_form.RibbonLib.Controls
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Linq
+Imports RibbonLib.Interop
 Imports WeifenLuo.WinFormsUI.Docking
+Imports bitmap = System.Drawing.Bitmap
 Imports std = System.Math
 
 Public Class frmCFDCanvas
@@ -43,7 +44,7 @@ Public Class frmCFDCanvas
     End Sub
 
     Private Sub Render(frame As Double()())
-        Dim bitmap As New Bitmap(CFD.xdim, CFD.ydim)
+        Dim bitmap As New BITMAP(CFD.xdim, CFD.ydim)
         Dim g As Graphics = Graphics.FromImage(bitmap)
         Dim range As DoubleRange = frame.AsParallel.Select(Function(a) {a.Min, a.Max}).IteratesALL.Range
 
@@ -209,5 +210,17 @@ Public Class frmCFDCanvas
         TabText = $"CFD Project - {Now.Year}{Now.Month.ToString.PadLeft(1, "0"c)}{Now.Day.ToString.PadLeft(1, "0"c)}-{App.ElapsedMilliseconds}"
 
         Call main.EnableVSRenderer(ContextMenuStrip1)
+    End Sub
+
+    Private Sub frmCFDCanvas_Activated(sender As Object, e As EventArgs) Handles Me.Activated
+        ribbonItems.TabSimulationPage.ContextAvailable = ContextAvailability.Active
+    End Sub
+
+    Private Sub frmCFDCanvas_LostFocus(sender As Object, e As EventArgs) Handles Me.LostFocus
+        ribbonItems.TabSimulationPage.ContextAvailable = ContextAvailability.NotAvailable
+    End Sub
+
+    Private Sub frmCFDCanvas_GotFocus(sender As Object, e As EventArgs) Handles Me.GotFocus
+        ribbonItems.TabSimulationPage.ContextAvailable = ContextAvailability.Active
     End Sub
 End Class
