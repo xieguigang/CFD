@@ -63,5 +63,15 @@
 #define cmdCheckShowFlowLine_TooltipDescription_RESID 60046
 #define cmdCheckShowFlowLine_SmallImages_192__RESID 60047
 #define cmdCheckShowFlowLine_LargeImages_192__RESID 60048
-#define InternalCmd2_LabelTitle_RESID 60049
-#define InternalCmd4_LabelTitle_RESID 60050
+#define cmdButtonAbout 12 
+#define cmdButtonAbout_LabelTitle_RESID 60049
+#define cmdButtonAbout_SmallImages_192__RESID 60050
+#define cmdButtonAbout_LargeImages_192__RESID 60051
+#define cmdButtonAppExit 13 
+#define cmdButtonAppExit_LabelTitle_RESID 60052
+#define cmdButtonAppExit_SmallImages_192__RESID 60053
+#define cmdButtonAppExit_LargeImages_192__RESID 60054
+#define cmdGroupApp 14 
+#define cmdGroupApp_LabelTitle_RESID 60055
+#define InternalCmd2_LabelTitle_RESID 60056
+#define InternalCmd4_LabelTitle_RESID 60057

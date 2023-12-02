@@ -53,6 +53,23 @@
         <Image MinDPI="192">Resources/icons8-journey-96.png</Image>
       </Command.LargeImages>
     </Command>
+    <Command Name="cmdButtonAbout" Id="12" LabelTitle="About">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-information-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-information-96.png</Image>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="cmdButtonAppExit" Id="13" LabelTitle="Exit">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-exit-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-exit-96.png</Image>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="cmdGroupApp" Id="14" LabelTitle="Application" />
   </Application.Commands>
   <Application.Views>
     <Ribbon>
@@ -61,6 +78,13 @@
           <ApplicationMenu.RecentItems>
             <RecentItems />
           </ApplicationMenu.RecentItems>
+          <MenuGroup>
+            <Button CommandName="cmdFileOpen" />
+          </MenuGroup>
+          <MenuGroup>
+            <Button CommandName="cmdButtonAbout" />
+            <Button CommandName="cmdButtonAppExit" />
+          </MenuGroup>
         </ApplicationMenu>
       </Ribbon.ApplicationMenu>
       <Ribbon.QuickAccessToolbar>
@@ -77,6 +101,9 @@
           <Group CommandName="cmdMenu2" SizeDefinition="TwoButtons">
             <ToggleButton CommandName="cmdCheckShowTracer" />
             <ToggleButton CommandName="cmdCheckShowFlowLine" />
+          </Group>
+          <Group CommandName="cmdGroupApp" SizeDefinition="OneButton">
+            <Button CommandName="cmdButtonAbout" />
           </Group>
         </Tab>
       </Ribbon.Tabs>
