@@ -5,7 +5,11 @@ Public Class Session : Implements IDisposable
 
     ReadOnly storage As FrameWriter
 
-    Dim CFD As FluidDynamics
+    ''' <summary>
+    ''' the simulation engine
+    ''' </summary>
+    Friend CFD As FluidDynamics
+
     Dim snapshotInterval As Integer = 30
     Dim max_time As Integer = 10 ^ 6
     Dim dimension As New Size(1280, 720)

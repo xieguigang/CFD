@@ -26,6 +26,10 @@ Public Class DataAdapter
         Me.CFD = CFD
     End Sub
 
+    Sub New(session As Session)
+        Me.New(CFD:=session.CFD)
+    End Sub
+
     Public Function GetSpeed() As Double()()
         Return CFD.speed2
     End Function
