@@ -45,11 +45,18 @@ Public Class FormMain
         EnableVSRenderer(StatusStrip1)
         CFD.Show(dockPanel)
         CFD.DockState = DockState.Document
+
+        AddHandler ribbonItems.ButtonAbout.ExecuteEvent, Sub() Call New SplashScreen().Show()
+        AddHandler ribbonItems.ButtonAppExit.ExecuteEvent, Sub() Call Me.Close()
     End Sub
 
     Friend Sub EnableVSRenderer(ParamArray toolStrips As ToolStrip())
         For Each tool In toolStrips
             vsToolStripExtender1.SetStyle(tool, VisualStudioToolStripExtender.VsVersion.Vs2015, vS2015LightTheme1)
         Next
+    End Sub
+
+    Private Sub FormMain_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+
     End Sub
 End Class
