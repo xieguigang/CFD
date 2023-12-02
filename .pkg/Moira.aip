@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DOCUMENT Type="Advanced Installer" CreateVersion="20.7.1" version="20.7.1" Modules="professional" RootPath="." Language="zh" Id="{57A3AEFF-4A46-4E67-904D-CC7BEF35C3D8}">
+  <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
+    <ROW Name="HiddenItems" Value="AppXProductDetailsComponent;AppXDependenciesComponent;AppXAppDetailsComponent;AppXVisualAssetsComponent;AppXCapabilitiesComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent;MsiDriverPackagesComponent;UserAccountsComponent;ScheduledTasksComponent;SqlConnectionComponent;AutorunComponent;FirewallExceptionComponent;GameUxComponent;MsiDirectEditorComponent;SharePointSlnComponent;SilverlightSlnComponent;MultipleInstancesComponent;SccmComponent;ActSyncAppComponent;CPLAppletComponent;FixupComponent;MsiXDiffComponent;MsixManifestEditorComponent"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
+    <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
+    <ROW Property="ALLUSERS" Value="1"/>
+    <ROW Property="ARPCOMMENTS" Value="Moira workshop for computational fluid dynamics (CFD)" ValueLocId="*"/>
+    <ROW Property="ARPPRODUCTICON" Value="CFD.exe" Type="8"/>
+    <ROW Property="Manufacturer" Value="xieguigang.me"/>
+    <ROW Property="MsiLogging" MultiBuildValue="DefaultBuild:vp"/>
+    <ROW Property="ProductCode" Value="2052:{005F6CFA-3EC3-4F68-A179-1649301176A7} " Type="16"/>
+    <ROW Property="ProductLanguage" Value="1033"/>
+    <ROW Property="ProductName" Value="Moira"/>
+    <ROW Property="ProductVersion" Value="1.0.0" Options="32"/>
+    <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
+    <ROW Property="UpgradeCode" Value="{954D7FD0-0A7A-4FAD-A74F-FC53C2CCE4A5}"/>
+    <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsType9XDisplay" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40Display" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50Display" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5X" MultiBuildValue="DefaultBuild:Windows XP/2003" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5XDisplay" MultiBuildValue="DefaultBuild:Windows XP/2003" ValueLocId="-"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
+    <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
+    <ROW Directory="Rstudio_Dir" Directory_Parent="APPDIR" DefaultDir="Rstudio"/>
+    <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
+    <ROW Directory="bin_Dir" Directory_Parent="Rstudio_Dir" DefaultDir="bin"/>
+    <ROW Directory="host_Dir" Directory_Parent="Rstudio_Dir" DefaultDir="host"/>
+    <ROW Directory="lib_1_Dir" Directory_Parent="win_Dir" DefaultDir="lib"/>
+    <ROW Directory="lib_Dir" Directory_Parent="unix_Dir" DefaultDir="lib"/>
+    <ROW Directory="net6.0_1_Dir" Directory_Parent="lib_1_Dir" DefaultDir="net6.0"/>
+    <ROW Directory="net6.0_Dir" Directory_Parent="lib_Dir" DefaultDir="net6.0"/>
+    <ROW Directory="runtimes_Dir" Directory_Parent="bin_Dir" DefaultDir="runtimes"/>
+    <ROW Directory="unix_Dir" Directory_Parent="runtimes_Dir" DefaultDir="unix"/>
+    <ROW Directory="win_Dir" Directory_Parent="runtimes_Dir" DefaultDir="win"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
+    <ROW Component="APPDIR" ComponentId="{85AB2D1B-22E9-42BA-8775-5F9A0FE76B3C}" Directory_="APPDIR" Attributes="0"/>
+    <ROW Component="CFD.dll" ComponentId="{243E37CA-7480-4713-962E-6CD64E25067F}" Directory_="APPDIR" Attributes="256" KeyPath="CFD.dll"/>
+    <ROW Component="CFD.dll_1" ComponentId="{3CCC6626-6C8B-4F99-A6DD-5006D54FD3AA}" Directory_="host_Dir" Attributes="256" KeyPath="CFD.dll_1"/>
+    <ROW Component="CFD.pdb" ComponentId="{EAE24126-817D-4F79-ADA8-C9275BABAD43}" Directory_="APPDIR" Attributes="0" KeyPath="CFD.pdb" Type="4"/>
+    <ROW Component="CFD.pdb_1" ComponentId="{D62A5F33-1EEA-4BF7-A94C-740662AD7139}" Directory_="host_Dir" Attributes="0" KeyPath="CFD.pdb_1" Type="4"/>
+    <ROW Component="CFD.xml" ComponentId="{B9B7DC30-C846-47F1-8D3D-874EB56904FB}" Directory_="APPDIR" Attributes="0" KeyPath="CFD_win32.deps.json" Type="0"/>
+    <ROW Component="CFD.xml_1" ComponentId="{B10979DB-5F09-4886-AC0D-DFBE5568776E}" Directory_="APPDIR" Attributes="0" KeyPath="CFD.xml"/>
+    <ROW Component="CFD.xml_2" ComponentId="{CAC43022-828D-432E-A071-7FAB21BA1CAD}" Directory_="host_Dir" Attributes="0" KeyPath="CFD_clr.deps.json" Type="0"/>
+    <ROW Component="CFD.xml_3" ComponentId="{8A51396A-0272-4D38-8CB2-847833357FD0}" Directory_="host_Dir" Attributes="0" KeyPath="CFD.xml_1"/>
+    <ROW Component="CFD_clr.1.0.0.nupkg" ComponentId="{89F6378E-262C-48D9-BBD3-9936D6937821}" Directory_="host_Dir" Attributes="0" KeyPath="CFD_clr.1.0.0.nupkg"/>
+    <ROW Component="CFD_clr.1.0.0.symbols.nupkg" ComponentId="{F93C5842-9DDE-4E99-BD01-1CA8B272F814}" Directory_="host_Dir" Attributes="0" KeyPath="CFD_clr.1.0.0.symbols.nupkg"/>
+    <ROW Component="CFD_clr.dll" ComponentId="{9809F311-99E7-4169-AECB-718BA35909A0}" Directory_="host_Dir" Attributes="256" KeyPath="CFD_clr.dll"/>
+    <ROW Component="CFD_clr.pdb" ComponentId="{A4AA7DC3-94FE-4209-BB9E-3EDDA992E07F}" Directory_="host_Dir" Attributes="0" KeyPath="CFD_clr.pdb" Type="4"/>
+    <ROW Component="CFD_clr.xml" ComponentId="{EB208BE8-6275-408C-AEE9-45E1C318878D}" Directory_="host_Dir" Attributes="0" KeyPath="CFD_clr.xml"/>
+    <ROW Component="CFD_win32.dll" ComponentId="{3B576B4B-59AD-4B32-998A-E424F7502BA5}" Directory_="APPDIR" Attributes="256" KeyPath="CFD_win32.dll"/>
+    <ROW Component="CFD_win32.exe" ComponentId="{655C09BF-2A05-46EF-93A6-2FD878401AC8}" Directory_="APPDIR" Attributes="256" KeyPath="CFD_win32.exe"/>
+    <ROW Component="CFD_win32.pdb" ComponentId="{804D5ACB-9E72-4DDF-A870-8B2CC74EF393}" Directory_="APPDIR" Attributes="0" KeyPath="CFD_win32.pdb" Type="4"/>
+    <ROW Component="CFD_win32.xml" ComponentId="{2D27C835-C68A-4D63-854B-E5B89E747EB7}" Directory_="APPDIR" Attributes="0" KeyPath="CFD_win32.xml"/>
+    <ROW Component="Microsoft.VisualBasic.Data.BinaryData.dll" ComponentId="{3ECE6229-CDB4-45A7-A5D1-3011988EC1E7}" Directory_="APPDIR" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.BinaryData.dll"/>
+    <ROW Component="Microsoft.VisualBasic.Data.BinaryData.dll_1" ComponentId="{860D6A3F-6A17-4E30-BC41-550416EBAD9A}" Directory_="host_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.BinaryData.dll_1"/>
+    <ROW Component="Microsoft.VisualBasic.Data.BinaryData.pdb" ComponentId="{801CF16B-5868-48F7-AA38-EB0A25E48785}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.VisualBasic.Data.BinaryData.pdb" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.Data.BinaryData.pdb_1" ComponentId="{16B9F542-10A6-4739-AFD4-E8C0C176E771}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Data.BinaryData.pdb_1" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.Data.BinaryData.xml" ComponentId="{B5C893E4-15CE-4DB0-A3F4-D1B454FFD792}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.VisualBasic.Data.BinaryData.xml"/>
+    <ROW Component="Microsoft.VisualBasic.Data.BinaryData.xml_1" ComponentId="{C1B4E6F2-4B65-40CA-956E-139FA287ED10}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Data.BinaryData.xml_1"/>
+    <ROW Component="Microsoft.VisualBasic.Data.GraphTheory.dll" ComponentId="{C6E29660-5242-4943-BD6B-59AF05BE3F18}" Directory_="APPDIR" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.GraphTheory.dll"/>
+    <ROW Component="Microsoft.VisualBasic.Data.GraphTheory.dll_1" ComponentId="{DE5E2F7B-438C-4800-A3CC-1F0652F8D68A}" Directory_="host_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.GraphTheory.dll_1"/>
+    <ROW Component="Microsoft.VisualBasic.Data.GraphTheory.pdb" ComponentId="{BCD73974-922B-4C3C-A60F-B4EE82355F2D}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.VisualBasic.Data.GraphTheory.pdb" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.Data.GraphTheory.pdb_1" ComponentId="{6911841C-D652-4B25-95AA-C091F3564D5F}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Data.GraphTheory.pdb_1" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.Data.GraphTheory.xml" ComponentId="{ABA09F26-3288-4514-A102-F69F0E1BB54F}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.VisualBasic.Data.GraphTheory.xml"/>
+    <ROW Component="Microsoft.VisualBasic.Data.GraphTheory.xml_1" ComponentId="{1F253B57-49A2-4639-B8E1-15F6F23F18ED}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Data.GraphTheory.xml_1"/>
+    <ROW Component="Microsoft.VisualBasic.Data.IO.MessagePack.dll" ComponentId="{0A08E965-04B6-4E1B-BDBD-59C341A9D207}" Directory_="APPDIR" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.IO.MessagePack.dll"/>
+    <ROW Component="Microsoft.VisualBasic.Data.IO.MessagePack.dll_1" ComponentId="{4B5134C7-B776-453D-ADF1-CDF961A1FA56}" Directory_="host_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Data.IO.MessagePack.dll_1"/>
+    <ROW Component="Microsoft.VisualBasic.Data.IO.MessagePack.pdb" ComponentId="{7C119CF3-AF43-47A1-AF0D-895C6E9F1BBA}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.VisualBasic.Data.IO.MessagePack.pdb" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.Data.IO.MessagePack.pdb_1" ComponentId="{FFF10668-FEAF-431B-BFE5-CC70739ED65C}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Data.IO.MessagePack.pdb_1" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.Data.IO.MessagePack.xml" ComponentId="{61692858-8D85-4A3F-9016-92027721ECF7}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.VisualBasic.Data.IO.MessagePack.xml"/>
+    <ROW Component="Microsoft.VisualBasic.Data.IO.MessagePack.xml_1" ComponentId="{CEE61AE7-F136-4C96-A80B-67499D8DFF5C}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Data.IO.MessagePack.xml_1"/>
+    <ROW Component="Microsoft.VisualBasic.DataStorage.HDSPack.dll" ComponentId="{08FD8799-3E6C-4558-A70D-5B59A97EEE1A}" Directory_="APPDIR" Attributes="256" KeyPath="Microsoft.VisualBasic.DataStorage.HDSPack.dll"/>
+    <ROW Component="Microsoft.VisualBasic.DataStorage.HDSPack.dll_1" ComponentId="{F90E42E9-4E7C-417E-9D05-6FE3583A5BBA}" Directory_="host_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.DataStorage.HDSPack.dll_1"/>
+    <ROW Component="Microsoft.VisualBasic.DataStorage.HDSPack.pdb" ComponentId="{D760F92C-1802-4203-9D82-4B95D88F9796}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.VisualBasic.DataStorage.HDSPack.pdb" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.DataStorage.HDSPack.pdb_1" ComponentId="{2BD8B2FE-B419-44AE-BF5E-BBD7AADB41A8}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.DataStorage.HDSPack.pdb_1" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.DataStorage.HDSPack.xml" ComponentId="{6B04FE49-C8B2-4E3A-BC1A-4B9E98EEC5BD}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.DataStorage.HDSPack.xml"/>
+    <ROW Component="Microsoft.VisualBasic.Imaging.Physics.dll" ComponentId="{6041162B-4F41-485E-96DD-34BC2B86E97D}" Directory_="APPDIR" Attributes="256" KeyPath="Microsoft.VisualBasic.Imaging.Physics.dll"/>
+    <ROW Component="Microsoft.VisualBasic.Imaging.Physics.dll_1" ComponentId="{946DBF67-8AA3-4EB3-8F3C-ECB1E74CA1CB}" Directory_="host_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Imaging.Physics.dll_1"/>
+    <ROW Component="Microsoft.VisualBasic.Imaging.Physics.pdb" ComponentId="{96040D95-44DC-4522-8F65-0C20AADD8F25}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.VisualBasic.Imaging.Physics.pdb" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.Imaging.Physics.pdb_1" ComponentId="{E34FF5A1-0037-4127-8E84-7AD118E4DAE1}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Imaging.Physics.pdb_1" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.Imaging.Physics.xml" ComponentId="{80F28579-E9CD-4FC9-A9B6-B9F29D427F72}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.VisualBasic.Imaging.Physics.xml"/>
+    <ROW Component="Microsoft.VisualBasic.Imaging.Physics.xml_1" ComponentId="{02770D66-E434-40A6-A4EA-7A051E81813F}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Imaging.Physics.xml_1"/>
+    <ROW Component="Microsoft.VisualBasic.Imaging.dll" ComponentId="{588D0896-CDE2-4A7A-B974-529CA7E41955}" Directory_="APPDIR" Attributes="256" KeyPath="Microsoft.VisualBasic.Imaging.dll"/>
+    <ROW Component="Microsoft.VisualBasic.Imaging.dll_1" ComponentId="{AC4F58AE-6CD0-4742-9788-53B68AB840E0}" Directory_="host_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Imaging.dll_1"/>
+    <ROW Component="Microsoft.VisualBasic.Imaging.pdb" ComponentId="{8994DA03-4912-4A43-8E7B-382245CCC04E}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.VisualBasic.Imaging.pdb" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.Imaging.pdb_1" ComponentId="{8DABF0E9-E5DA-40DB-A4E1-49A4892099AB}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Imaging.pdb_1" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.Imaging.xml" ComponentId="{380EC8BD-E09E-4928-A23D-091685F93A3A}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.VisualBasic.Imaging.xml"/>
+    <ROW Component="Microsoft.VisualBasic.Imaging.xml_1" ComponentId="{417C8A0A-8564-477E-BAE7-A08BF42527A5}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Imaging.xml_1"/>
+    <ROW Component="Microsoft.VisualBasic.MIME.Html.dll" ComponentId="{37EFCC8A-56EB-402E-91B0-B4F9276FF1BD}" Directory_="APPDIR" Attributes="256" KeyPath="Microsoft.VisualBasic.MIME.Html.dll"/>
+    <ROW Component="Microsoft.VisualBasic.MIME.Html.dll_1" ComponentId="{D4E2FB83-1C4A-4A91-B097-D29644C9A1CD}" Directory_="host_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.MIME.Html.dll_1"/>
+    <ROW Component="Microsoft.VisualBasic.MIME.Html.pdb" ComponentId="{D6433371-3155-4AFE-9D87-9B5D747C1B54}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.VisualBasic.MIME.Html.pdb" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.MIME.Html.pdb_1" ComponentId="{4FC39F81-A193-476E-899F-D13B50709453}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.MIME.Html.pdb_1" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.MIME.Html.xml" ComponentId="{57C9D0BF-D5DB-4105-8896-4566931424EF}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.VisualBasic.MIME.Html.xml"/>
+    <ROW Component="Microsoft.VisualBasic.MIME.Html.xml_1" ComponentId="{C866415D-88CA-4540-98E1-B51B657B64BE}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.MIME.Html.xml_1"/>
+    <ROW Component="Microsoft.VisualBasic.Math.Core.dll" ComponentId="{8A03C4AE-FF99-460F-B346-5E183B6C1064}" Directory_="APPDIR" Attributes="256" KeyPath="Microsoft.VisualBasic.Math.Core.dll"/>
+    <ROW Component="Microsoft.VisualBasic.Math.Core.dll_1" ComponentId="{1E8DA3F4-3C27-4296-BE4A-5C01607C5804}" Directory_="host_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Math.Core.dll_1"/>
+    <ROW Component="Microsoft.VisualBasic.Math.Core.pdb" ComponentId="{DD9F6E1E-C078-442F-BA2E-A551C748220C}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.VisualBasic.Math.Core.pdb" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.Math.Core.pdb_1" ComponentId="{27ED64F3-724B-4499-A74C-AE7BD0A5C021}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Math.Core.pdb_1" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.Math.Core.xml" ComponentId="{4EEAE86A-9047-42A6-A9B3-6F3352C241A7}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.VisualBasic.Math.Core.xml"/>
+    <ROW Component="Microsoft.VisualBasic.Math.Core.xml_1" ComponentId="{96EA17F2-7C6C-433D-BA8B-A476D5F0C921}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Math.Core.xml_1"/>
+    <ROW Component="Microsoft.VisualBasic.Network.dll" ComponentId="{94DC3313-A1C9-49A1-ADAA-FC94989732DF}" Directory_="host_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Network.dll"/>
+    <ROW Component="Microsoft.VisualBasic.Network.pdb" ComponentId="{C0F1219E-DEC0-4870-A56A-FFB97F735C76}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Network.pdb" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.Network.xml" ComponentId="{8E884397-321B-489D-99EF-CCBA63B01ACA}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Network.xml"/>
+    <ROW Component="Microsoft.VisualBasic.Runtime.dll" ComponentId="{512FC0F0-F754-479E-8147-1902273AE705}" Directory_="APPDIR" Attributes="256" KeyPath="Microsoft.VisualBasic.Runtime.dll"/>
+    <ROW Component="Microsoft.VisualBasic.Runtime.dll.config" ComponentId="{79156AAC-B7D1-4D01-838F-60BBB2835847}" Directory_="bin_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Runtime.dll.config_1" Type="0"/>
+    <ROW Component="Microsoft.VisualBasic.Runtime.dll_1" ComponentId="{1C647709-E158-4394-A19F-B218CE30B702}" Directory_="bin_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Runtime.dll_1"/>
+    <ROW Component="Microsoft.VisualBasic.Runtime.dll_2" ComponentId="{677B0A1C-C8F4-43DD-B327-0D605F8B5A75}" Directory_="host_Dir" Attributes="256" KeyPath="Microsoft.VisualBasic.Runtime.dll_2"/>
+    <ROW Component="Microsoft.VisualBasic.Runtime.pdb" ComponentId="{254E3D41-1186-4F96-B84E-7A1956A101E5}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.VisualBasic.Runtime.pdb" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.Runtime.pdb_1" ComponentId="{BE20072A-7636-4FD6-9757-2DEDDAB7601C}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Runtime.pdb_2" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.Runtime.pdb_2" ComponentId="{4DF2A77E-1127-43CF-8B46-411A09A86C84}" Directory_="bin_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Runtime.pdb_1" Type="4"/>
+    <ROW Component="Microsoft.VisualBasic.Runtime.xml" ComponentId="{650D25FE-6486-46A8-93EE-3C22F7E0D75C}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.VisualBasic.Runtime.xml"/>
+    <ROW Component="Microsoft.VisualBasic.Runtime.xml_1" ComponentId="{CD0FD4DF-5504-4723-AE40-E76C999E9B92}" Directory_="host_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Runtime.xml_2"/>
+    <ROW Component="Microsoft.VisualBasic.Runtime.xml_2" ComponentId="{5154B3AE-5225-47D1-8707-1621D08779F2}" Directory_="bin_Dir" Attributes="0" KeyPath="Microsoft.VisualBasic.Runtime.xml_1"/>
+    <ROW Component="Microsoft.Win32.SystemEvents.dll" ComponentId="{19A6435B-771D-40C1-8B9E-3329A4B8E530}" Directory_="bin_Dir" Attributes="0" KeyPath="Microsoft.Win32.SystemEvents.dll"/>
+    <ROW Component="Microsoft.Win32.SystemEvents.dll_1" ComponentId="{AB35C7E3-2E64-4FA3-A8B5-9E977B46F7C0}" Directory_="net6.0_1_Dir" Attributes="0" KeyPath="Microsoft.Win32.SystemEvents.dll_1"/>
+    <ROW Component="Microsoft.Windows.SDK.NET.dll" ComponentId="{ACEFF200-FFB9-4BE9-B823-BFF5A28B18DC}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Windows.SDK.NET.dll"/>
+    <ROW Component="ProductInformation" ComponentId="{9CB203EA-4638-4A30-8C6D-B90616A6A7C6}" Directory_="APPDIR" Attributes="260" KeyPath="Version"/>
+    <ROW Component="R.dll" ComponentId="{B7F63F80-0C0D-414C-9505-290995FEFC11}" Directory_="bin_Dir" Attributes="256" KeyPath="R.dll"/>
+    <ROW Component="R.exe" ComponentId="{EDA1685E-C25D-4EAB-B62F-55FE449CCE19}" Directory_="bin_Dir" Attributes="256" KeyPath="R.exe"/>
+    <ROW Component="R.pdb" ComponentId="{147D6890-2077-447E-838C-45144C5066E5}" Directory_="bin_Dir" Attributes="0" KeyPath="R.pdb" Type="4"/>
+    <ROW Component="R.xml" ComponentId="{A4C96D84-A511-4B0D-8B08-DBF6E38C5FA9}" Directory_="bin_Dir" Attributes="0" KeyPath="R.xml"/>
+    <ROW Component="REnv.dll" ComponentId="{3144900D-B9B3-43D5-949F-0705C1EC13F1}" Directory_="bin_Dir" Attributes="256" KeyPath="REnv.dll"/>
+    <ROW Component="REnv.dll_1" ComponentId="{94C1F47D-26E3-4185-AE09-4F093675946B}" Directory_="host_Dir" Attributes="256" KeyPath="REnv.dll_1"/>
+    <ROW Component="REnv.pdb" ComponentId="{D4725B9D-4A6D-4C64-9ECE-85D48C9785B2}" Directory_="host_Dir" Attributes="0" KeyPath="REnv.pdb_1" Type="4"/>
+    <ROW Component="REnv.pdb_1" ComponentId="{7C264B8F-6A0F-4AEF-89A8-2CE092574F46}" Directory_="bin_Dir" Attributes="0" KeyPath="REnv.pdb" Type="4"/>
+    <ROW Component="REnv.xml" ComponentId="{1E95A01C-41B1-4A2F-8593-B390FB9A1B8A}" Directory_="host_Dir" Attributes="0" KeyPath="REnv.xml_1"/>
+    <ROW Component="REnv.xml_1" ComponentId="{B89F2506-6F9C-4BDF-A286-BE5C0FD04F01}" Directory_="bin_Dir" Attributes="0" KeyPath="REnv.xml"/>
+    <ROW Component="Rscript.dll" ComponentId="{BC51FE75-6882-4ADF-A6CE-DDB7465AFAEB}" Directory_="bin_Dir" Attributes="256" KeyPath="Rscript.dll"/>
+    <ROW Component="Rscript.exe" ComponentId="{D4CC7CA4-B8CF-4A2E-8267-F19C956CFDA4}" Directory_="bin_Dir" Attributes="256" KeyPath="Rscript.exe"/>
+    <ROW Component="Rscript.pdb" ComponentId="{04050DBD-4BD6-4D79-AD58-DFCC6C5C42DE}" Directory_="bin_Dir" Attributes="0" KeyPath="Rscript.pdb" Type="4"/>
+    <ROW Component="Rscript.xml" ComponentId="{BAF75CAF-EE5C-4097-BA14-12C4D2462D05}" Directory_="bin_Dir" Attributes="0" KeyPath="Rscript.xml"/>
+    <ROW Component="System.Composition.AttributedModel.dll" ComponentId="{A5262E79-DCAF-4833-82A6-F87CA8C7703C}" Directory_="APPDIR" Attributes="0" KeyPath="System.Composition.AttributedModel.dll"/>
+    <ROW Component="System.Composition.AttributedModel.dll_1" ComponentId="{83C0D2C8-11F9-45E2-ABC1-E4E0CAE6BDE5}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Composition.AttributedModel.dll_1"/>
+    <ROW Component="System.Composition.Convention.dll" ComponentId="{D324CD47-B755-4D2C-B7F6-DAA73D4ACD3A}" Directory_="APPDIR" Attributes="0" KeyPath="System.Composition.Convention.dll"/>
+    <ROW Component="System.Composition.Convention.dll_1" ComponentId="{D06556A9-2DFB-406F-8CF8-32472D64B7BA}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Composition.Convention.dll_1"/>
+    <ROW Component="System.Composition.Hosting.dll" ComponentId="{71A30FE7-F95A-46E4-9F6C-A8846A3C321D}" Directory_="APPDIR" Attributes="0" KeyPath="System.Composition.Hosting.dll"/>
+    <ROW Component="System.Composition.Hosting.dll_1" ComponentId="{C428A2A5-9ACF-4A1F-9C06-284C0B41A113}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Composition.Hosting.dll_1"/>
+    <ROW Component="System.Composition.Runtime.dll" ComponentId="{DA9AABC4-89AE-41B6-BE32-84EFA355C1FF}" Directory_="APPDIR" Attributes="0" KeyPath="System.Composition.Runtime.dll"/>
+    <ROW Component="System.Composition.Runtime.dll_1" ComponentId="{2D9B005F-FDCE-46C9-9383-47C343DADFB1}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Composition.Runtime.dll_1"/>
+    <ROW Component="System.Composition.TypedParts.dll" ComponentId="{C2DD507C-F6B0-4305-8FF6-78162B36B632}" Directory_="APPDIR" Attributes="0" KeyPath="System.Composition.TypedParts.dll"/>
+    <ROW Component="System.Composition.TypedParts.dll_1" ComponentId="{9DD3E710-5BEE-4143-9F29-08C86654DE12}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Composition.TypedParts.dll_1"/>
+    <ROW Component="System.Configuration.ConfigurationManager.dll" ComponentId="{B415ACF9-D439-4607-8214-E4930F26AE5D}" Directory_="APPDIR" Attributes="0" KeyPath="System.Configuration.ConfigurationManager.dll"/>
+    <ROW Component="System.Configuration.ConfigurationManager.dll_1" ComponentId="{78CEF6EB-C055-49A4-B431-BF9B5BD5420A}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Configuration.ConfigurationManager.dll_1"/>
+    <ROW Component="System.Drawing.Common.dll" ComponentId="{F68F762D-F787-4374-80C6-E4B0B69E1590}" Directory_="net6.0_Dir" Attributes="0" KeyPath="System.Drawing.Common.dll"/>
+    <ROW Component="System.Drawing.Common.dll_1" ComponentId="{11C43965-4ADB-4188-AD23-B4EF876DE74B}" Directory_="net6.0_1_Dir" Attributes="0" KeyPath="System.Drawing.Common.dll_1"/>
+    <ROW Component="System.Drawing.Common.dll_2" ComponentId="{44AE81F9-A32F-4338-B9DA-E23FA5042EF5}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Drawing.Common.dll_2"/>
+    <ROW Component="System.Numerics.Tensors.dll" ComponentId="{0745C6C4-DEFD-4D2B-A004-4566128C4AD4}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Numerics.Tensors.dll"/>
+    <ROW Component="System.Resources.Extensions.dll" ComponentId="{0CE3D418-8750-4D57-B02A-D3415D1923D5}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Resources.Extensions.dll"/>
+    <ROW Component="System.Security.Cryptography.ProtectedData.dll" ComponentId="{DCA03E95-F9E5-47B2-8DDB-9AE4C6A03575}" Directory_="net6.0_1_Dir" Attributes="0" KeyPath="System.Security.Cryptography.ProtectedData.dll"/>
+    <ROW Component="System.Security.Cryptography.ProtectedData.dll_1" ComponentId="{B7C8BB73-C442-40E1-9F94-58AA593CB55E}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Security.Cryptography.ProtectedData.dll_1"/>
+    <ROW Component="System.Security.Permissions.dll" ComponentId="{377B3654-35E3-43D6-9F07-71D1A90FAF4C}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Security.Permissions.dll"/>
+    <ROW Component="System.Windows.Extensions.dll" ComponentId="{563C08E7-2B9E-438B-9AF8-66C94874C62B}" Directory_="net6.0_1_Dir" Attributes="0" KeyPath="System.Windows.Extensions.dll"/>
+    <ROW Component="System.Windows.Extensions.dll_1" ComponentId="{479FCBFE-81B0-42A6-8567-CF828BC9F1A8}" Directory_="bin_Dir" Attributes="0" KeyPath="System.Windows.Extensions.dll_1"/>
+    <ROW Component="WinRT.Runtime.dll" ComponentId="{C305E6D9-7B34-4F06-B8B9-78A47302E087}" Directory_="APPDIR" Attributes="0" KeyPath="WinRT.Runtime.dll"/>
+    <ROW Component="WindowsDocking.ThemeVS2015.dll" ComponentId="{8982EC96-2C04-448B-B847-C9FA055F2741}" Directory_="APPDIR" Attributes="256" KeyPath="WindowsDocking.ThemeVS2015.dll"/>
+    <ROW Component="WindowsDocking.dll" ComponentId="{93471E6E-D31B-4DA0-A590-56FFE3BC8EA5}" Directory_="APPDIR" Attributes="256" KeyPath="WindowsDocking.dll"/>
+    <ROW Component="WindowsRibbon.dll" ComponentId="{614DA349-9EFB-4104-8B3B-D754159C34B2}" Directory_="APPDIR" Attributes="0" KeyPath="WindowsRibbon.dll"/>
+    <ROW Component="WindowsRibbon.xml" ComponentId="{0B455C5F-B5B7-45E4-A55A-A45B14382002}" Directory_="APPDIR" Attributes="0" KeyPath="WindowsRibbon.xml"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
+    <ROW Feature="VisualStudio_Diagnose" Title="VisualStudio_Diagnose" Description="描述" Display="3" Level="1" Directory_="APPDIR" Attributes="0"/>
+    <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
+    <ROW File="CFD.dll" Component_="CFD.dll" FileName="CFD.dll" Attributes="0" SourcePath="..\assembly\bin\CFD.dll" SelfReg="false"/>
+    <ROW File="CFD.pdb" Component_="CFD.pdb" FileName="CFD.pdb" Attributes="0" SourcePath="..\assembly\bin\CFD.pdb" SelfReg="false"/>
+    <ROW File="CFD.xml" Component_="CFD.xml_1" FileName="CFD.xml" Attributes="0" SourcePath="..\assembly\bin\CFD.xml" SelfReg="false"/>
+    <ROW File="CFD_win32.deps.json" Component_="CFD.xml" FileName="CFD_WI~1.JSO|CFD_win32.deps.json" Attributes="0" SourcePath="..\assembly\bin\CFD_win32.deps.json" SelfReg="false"/>
+    <ROW File="CFD_win32.dll" Component_="CFD_win32.dll" FileName="CFD_WI~1.DLL|CFD_win32.dll" Attributes="0" SourcePath="..\assembly\bin\CFD_win32.dll" SelfReg="false"/>
+    <ROW File="CFD_win32.exe" Component_="CFD_win32.exe" FileName="CFD_WI~1.EXE|CFD_win32.exe" Attributes="0" SourcePath="..\assembly\bin\CFD_win32.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="CFD_win32.pdb" Component_="CFD_win32.pdb" FileName="CFD_WI~1.PDB|CFD_win32.pdb" Attributes="0" SourcePath="..\assembly\bin\CFD_win32.pdb" SelfReg="false"/>
+    <ROW File="CFD_win32.runtimeconfig.json" Component_="CFD.xml" FileName="CFD_WI~2.JSO|CFD_win32.runtimeconfig.json" Attributes="0" SourcePath="..\assembly\bin\CFD_win32.runtimeconfig.json" SelfReg="false"/>
+    <ROW File="CFD_win32.xml" Component_="CFD_win32.xml" FileName="CFD_WI~1.XML|CFD_win32.xml" Attributes="0" SourcePath="..\assembly\bin\CFD_win32.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.BinaryData.dll" Component_="Microsoft.VisualBasic.Data.BinaryData.dll" FileName="MICROS~1.DLL|Microsoft.VisualBasic.Data.BinaryData.dll" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Data.BinaryData.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.BinaryData.pdb" Component_="Microsoft.VisualBasic.Data.BinaryData.pdb" FileName="MICROS~1.PDB|Microsoft.VisualBasic.Data.BinaryData.pdb" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Data.BinaryData.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.BinaryData.xml" Component_="Microsoft.VisualBasic.Data.BinaryData.xml" FileName="MICROS~1.XML|Microsoft.VisualBasic.Data.BinaryData.xml" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Data.BinaryData.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.GraphTheory.dll" Component_="Microsoft.VisualBasic.Data.GraphTheory.dll" FileName="MICROS~2.DLL|Microsoft.VisualBasic.Data.GraphTheory.dll" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Data.GraphTheory.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.GraphTheory.pdb" Component_="Microsoft.VisualBasic.Data.GraphTheory.pdb" FileName="MICROS~2.PDB|Microsoft.VisualBasic.Data.GraphTheory.pdb" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Data.GraphTheory.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.GraphTheory.xml" Component_="Microsoft.VisualBasic.Data.GraphTheory.xml" FileName="MICROS~2.XML|Microsoft.VisualBasic.Data.GraphTheory.xml" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Data.GraphTheory.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.IO.MessagePack.dll" Component_="Microsoft.VisualBasic.Data.IO.MessagePack.dll" FileName="MICROS~3.DLL|Microsoft.VisualBasic.Data.IO.MessagePack.dll" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Data.IO.MessagePack.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.IO.MessagePack.pdb" Component_="Microsoft.VisualBasic.Data.IO.MessagePack.pdb" FileName="MICROS~3.PDB|Microsoft.VisualBasic.Data.IO.MessagePack.pdb" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Data.IO.MessagePack.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.IO.MessagePack.xml" Component_="Microsoft.VisualBasic.Data.IO.MessagePack.xml" FileName="MICROS~3.XML|Microsoft.VisualBasic.Data.IO.MessagePack.xml" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Data.IO.MessagePack.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.DataStorage.HDSPack.dll" Component_="Microsoft.VisualBasic.DataStorage.HDSPack.dll" FileName="MICROS~4.DLL|Microsoft.VisualBasic.DataStorage.HDSPack.dll" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.DataStorage.HDSPack.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.DataStorage.HDSPack.pdb" Component_="Microsoft.VisualBasic.DataStorage.HDSPack.pdb" FileName="MICROS~4.PDB|Microsoft.VisualBasic.DataStorage.HDSPack.pdb" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.DataStorage.HDSPack.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Imaging.dll" Component_="Microsoft.VisualBasic.Imaging.dll" FileName="MICROS~5.DLL|Microsoft.VisualBasic.Imaging.dll" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Imaging.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Imaging.pdb" Component_="Microsoft.VisualBasic.Imaging.pdb" FileName="MICROS~5.PDB|Microsoft.VisualBasic.Imaging.pdb" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Imaging.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Imaging.Physics.dll" Component_="Microsoft.VisualBasic.Imaging.Physics.dll" FileName="MICROS~6.DLL|Microsoft.VisualBasic.Imaging.Physics.dll" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Imaging.Physics.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Imaging.Physics.pdb" Component_="Microsoft.VisualBasic.Imaging.Physics.pdb" FileName="MICROS~6.PDB|Microsoft.VisualBasic.Imaging.Physics.pdb" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Imaging.Physics.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Imaging.Physics.xml" Component_="Microsoft.VisualBasic.Imaging.Physics.xml" FileName="MICROS~4.XML|Microsoft.VisualBasic.Imaging.Physics.xml" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Imaging.Physics.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Imaging.xml" Component_="Microsoft.VisualBasic.Imaging.xml" FileName="MICROS~5.XML|Microsoft.VisualBasic.Imaging.xml" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Imaging.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Math.Core.dll" Component_="Microsoft.VisualBasic.Math.Core.dll" FileName="MICROS~7.DLL|Microsoft.VisualBasic.Math.Core.dll" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Math.Core.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Math.Core.dll.config" Component_="CFD.xml" FileName="MICROS~1.CON|Microsoft.VisualBasic.Math.Core.dll.config" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Math.Core.dll.config" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Math.Core.pdb" Component_="Microsoft.VisualBasic.Math.Core.pdb" FileName="MICROS~7.PDB|Microsoft.VisualBasic.Math.Core.pdb" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Math.Core.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Math.Core.xml" Component_="Microsoft.VisualBasic.Math.Core.xml" FileName="MICROS~6.XML|Microsoft.VisualBasic.Math.Core.xml" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Math.Core.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.MIME.Html.dll" Component_="Microsoft.VisualBasic.MIME.Html.dll" FileName="MICROS~8.DLL|Microsoft.VisualBasic.MIME.Html.dll" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.MIME.Html.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.MIME.Html.pdb" Component_="Microsoft.VisualBasic.MIME.Html.pdb" FileName="MICROS~8.PDB|Microsoft.VisualBasic.MIME.Html.pdb" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.MIME.Html.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.MIME.Html.xml" Component_="Microsoft.VisualBasic.MIME.Html.xml" FileName="MICROS~7.XML|Microsoft.VisualBasic.MIME.Html.xml" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.MIME.Html.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Runtime.dll" Component_="Microsoft.VisualBasic.Runtime.dll" FileName="MICROS~9.DLL|Microsoft.VisualBasic.Runtime.dll" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Runtime.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Runtime.dll.config" Component_="CFD.xml" FileName="MICROS~2.CON|Microsoft.VisualBasic.Runtime.dll.config" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Runtime.dll.config" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Runtime.pdb" Component_="Microsoft.VisualBasic.Runtime.pdb" FileName="MICROS~9.PDB|Microsoft.VisualBasic.Runtime.pdb" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Runtime.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Runtime.xml" Component_="Microsoft.VisualBasic.Runtime.xml" FileName="MICROS~8.XML|Microsoft.VisualBasic.Runtime.xml" Attributes="0" SourcePath="..\assembly\bin\Microsoft.VisualBasic.Runtime.xml" SelfReg="false"/>
+    <ROW File="Microsoft.Windows.SDK.NET.dll" Component_="Microsoft.Windows.SDK.NET.dll" FileName="MICRO~10.DLL|Microsoft.Windows.SDK.NET.dll" Attributes="0" SourcePath="..\assembly\bin\Microsoft.Windows.SDK.NET.dll" SelfReg="false"/>
+    <ROW File="System.Composition.AttributedModel.dll" Component_="System.Composition.AttributedModel.dll" FileName="SYSTEM~1.DLL|System.Composition.AttributedModel.dll" Attributes="0" SourcePath="..\assembly\bin\System.Composition.AttributedModel.dll" SelfReg="false"/>
+    <ROW File="System.Composition.Convention.dll" Component_="System.Composition.Convention.dll" FileName="SYSTEM~2.DLL|System.Composition.Convention.dll" Attributes="0" SourcePath="..\assembly\bin\System.Composition.Convention.dll" SelfReg="false"/>
+    <ROW File="System.Composition.Hosting.dll" Component_="System.Composition.Hosting.dll" FileName="SYSTEM~3.DLL|System.Composition.Hosting.dll" Attributes="0" SourcePath="..\assembly\bin\System.Composition.Hosting.dll" SelfReg="false"/>
+    <ROW File="System.Composition.Runtime.dll" Component_="System.Composition.Runtime.dll" FileName="SYSTEM~4.DLL|System.Composition.Runtime.dll" Attributes="0" SourcePath="..\assembly\bin\System.Composition.Runtime.dll" SelfReg="false"/>
+    <ROW File="System.Composition.TypedParts.dll" Component_="System.Composition.TypedParts.dll" FileName="SYSTEM~5.DLL|System.Composition.TypedParts.dll" Attributes="0" SourcePath="..\assembly\bin\System.Composition.TypedParts.dll" SelfReg="false"/>
+    <ROW File="System.Configuration.ConfigurationManager.dll" Component_="System.Configuration.ConfigurationManager.dll" FileName="SYSTEM~6.DLL|System.Configuration.ConfigurationManager.dll" Attributes="0" SourcePath="..\assembly\bin\System.Configuration.ConfigurationManager.dll" SelfReg="false"/>
+    <ROW File="WindowsDocking.dll" Component_="WindowsDocking.dll" FileName="WINDOW~1.DLL|WindowsDocking.dll" Attributes="0" SourcePath="..\assembly\bin\WindowsDocking.dll" SelfReg="false"/>
+    <ROW File="WindowsDocking.ThemeVS2015.dll" Component_="WindowsDocking.ThemeVS2015.dll" FileName="WINDOW~2.DLL|WindowsDocking.ThemeVS2015.dll" Attributes="0" SourcePath="..\assembly\bin\WindowsDocking.ThemeVS2015.dll" SelfReg="false"/>
+    <ROW File="WindowsRibbon.dll" Component_="WindowsRibbon.dll" FileName="WINDOW~3.DLL|WindowsRibbon.dll" Attributes="0" SourcePath="..\assembly\bin\WindowsRibbon.dll" SelfReg="false"/>
+    <ROW File="WindowsRibbon.xml" Component_="WindowsRibbon.xml" FileName="WINDOW~1.XML|WindowsRibbon.xml" Attributes="0" SourcePath="..\assembly\bin\WindowsRibbon.xml" SelfReg="false"/>
+    <ROW File="WinRT.Runtime.dll" Component_="WinRT.Runtime.dll" FileName="WINRTR~1.DLL|WinRT.Runtime.dll" Attributes="0" SourcePath="..\assembly\bin\WinRT.Runtime.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Runtime.dll_1" Component_="Microsoft.VisualBasic.Runtime.dll_1" FileName="MICROS~1.DLL|Microsoft.VisualBasic.Runtime.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\Microsoft.VisualBasic.Runtime.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Runtime.dll.config_1" Component_="Microsoft.VisualBasic.Runtime.dll.config" FileName="MICROS~1.CON|Microsoft.VisualBasic.Runtime.dll.config" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\Microsoft.VisualBasic.Runtime.dll.config" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Runtime.pdb_1" Component_="Microsoft.VisualBasic.Runtime.pdb_2" FileName="MICROS~1.PDB|Microsoft.VisualBasic.Runtime.pdb" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\Microsoft.VisualBasic.Runtime.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Runtime.xml_1" Component_="Microsoft.VisualBasic.Runtime.xml_2" FileName="MICROS~1.XML|Microsoft.VisualBasic.Runtime.xml" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\Microsoft.VisualBasic.Runtime.xml" SelfReg="false"/>
+    <ROW File="Microsoft.Win32.SystemEvents.dll" Component_="Microsoft.Win32.SystemEvents.dll" FileName="MICROS~2.DLL|Microsoft.Win32.SystemEvents.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\Microsoft.Win32.SystemEvents.dll" SelfReg="false"/>
+    <ROW File="R.deps.json" Component_="Microsoft.VisualBasic.Runtime.dll.config" FileName="R#DEPS~1.JSO|R#.deps.json" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\R#.deps.json" SelfReg="false"/>
+    <ROW File="R.dll" Component_="R.dll" FileName="R#.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\R#.dll" SelfReg="false"/>
+    <ROW File="R.dll.config" Component_="Microsoft.VisualBasic.Runtime.dll.config" FileName="R#DLL~1.CON|R#.dll.config" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\R#.dll.config" SelfReg="false"/>
+    <ROW File="R.exe" Component_="R.exe" FileName="R#.exe" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\R#.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="R.pdb" Component_="R.pdb" FileName="R#.pdb" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\R#.pdb" SelfReg="false"/>
+    <ROW File="R.runtimeconfig.json" Component_="Microsoft.VisualBasic.Runtime.dll.config" FileName="R#RUNT~1.JSO|R#.runtimeconfig.json" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\R#.runtimeconfig.json" SelfReg="false"/>
+    <ROW File="R.xml" Component_="R.xml" FileName="R#.xml" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\R#.xml" SelfReg="false"/>
+    <ROW File="REnv.dll" Component_="REnv.dll" FileName="REnv.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\REnv.dll" SelfReg="false"/>
+    <ROW File="REnv.dll.config" Component_="Microsoft.VisualBasic.Runtime.dll.config" FileName="RENVDL~1.CON|REnv.dll.config" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\REnv.dll.config" SelfReg="false"/>
+    <ROW File="REnv.pdb" Component_="REnv.pdb_1" FileName="REnv.pdb" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\REnv.pdb" SelfReg="false"/>
+    <ROW File="REnv.xml" Component_="REnv.xml_1" FileName="REnv.xml" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\REnv.xml" SelfReg="false"/>
+    <ROW File="Rscript.deps.json" Component_="Microsoft.VisualBasic.Runtime.dll.config" FileName="RSCRIP~1.JSO|Rscript.deps.json" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\Rscript.deps.json" SelfReg="false"/>
+    <ROW File="Rscript.dll" Component_="Rscript.dll" FileName="Rscript.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\Rscript.dll" SelfReg="false"/>
+    <ROW File="Rscript.dll.config" Component_="Microsoft.VisualBasic.Runtime.dll.config" FileName="RSCRIP~1.CON|Rscript.dll.config" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\Rscript.dll.config" SelfReg="false"/>
+    <ROW File="Rscript.exe" Component_="Rscript.exe" FileName="Rscript.exe" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\Rscript.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="Rscript.pdb" Component_="Rscript.pdb" FileName="Rscript.pdb" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\Rscript.pdb" SelfReg="false"/>
+    <ROW File="Rscript.runtimeconfig.json" Component_="Microsoft.VisualBasic.Runtime.dll.config" FileName="RSCRIP~2.JSO|Rscript.runtimeconfig.json" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\Rscript.runtimeconfig.json" SelfReg="false"/>
+    <ROW File="Rscript.xml" Component_="Rscript.xml" FileName="Rscript.xml" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\Rscript.xml" SelfReg="false"/>
+    <ROW File="System.Drawing.Common.dll" Component_="System.Drawing.Common.dll" FileName="SYSTEM~1.DLL|System.Drawing.Common.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\runtimes\unix\lib\net6.0\System.Drawing.Common.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Win32.SystemEvents.dll_1" Component_="Microsoft.Win32.SystemEvents.dll_1" FileName="MICROS~1.DLL|Microsoft.Win32.SystemEvents.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll" SelfReg="false"/>
+    <ROW File="System.Drawing.Common.dll_1" Component_="System.Drawing.Common.dll_1" FileName="SYSTEM~1.DLL|System.Drawing.Common.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\runtimes\win\lib\net6.0\System.Drawing.Common.dll" SelfReg="false"/>
+    <ROW File="System.Security.Cryptography.ProtectedData.dll" Component_="System.Security.Cryptography.ProtectedData.dll" FileName="SYSTEM~2.DLL|System.Security.Cryptography.ProtectedData.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll" SelfReg="false"/>
+    <ROW File="System.Windows.Extensions.dll" Component_="System.Windows.Extensions.dll" FileName="SYSTEM~3.DLL|System.Windows.Extensions.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\runtimes\win\lib\net6.0\System.Windows.Extensions.dll" SelfReg="false"/>
+    <ROW File="System.Composition.AttributedModel.dll_1" Component_="System.Composition.AttributedModel.dll_1" FileName="SYSTEM~1.DLL|System.Composition.AttributedModel.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\System.Composition.AttributedModel.dll" SelfReg="false"/>
+    <ROW File="System.Composition.Convention.dll_1" Component_="System.Composition.Convention.dll_1" FileName="SYSTEM~2.DLL|System.Composition.Convention.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\System.Composition.Convention.dll" SelfReg="false"/>
+    <ROW File="System.Composition.Hosting.dll_1" Component_="System.Composition.Hosting.dll_1" FileName="SYSTEM~3.DLL|System.Composition.Hosting.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\System.Composition.Hosting.dll" SelfReg="false"/>
+    <ROW File="System.Composition.Runtime.dll_1" Component_="System.Composition.Runtime.dll_1" FileName="SYSTEM~4.DLL|System.Composition.Runtime.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\System.Composition.Runtime.dll" SelfReg="false"/>
+    <ROW File="System.Composition.TypedParts.dll_1" Component_="System.Composition.TypedParts.dll_1" FileName="SYSTEM~5.DLL|System.Composition.TypedParts.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\System.Composition.TypedParts.dll" SelfReg="false"/>
+    <ROW File="System.Configuration.ConfigurationManager.dll_1" Component_="System.Configuration.ConfigurationManager.dll_1" FileName="SYSTEM~6.DLL|System.Configuration.ConfigurationManager.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\System.Configuration.ConfigurationManager.dll" SelfReg="false"/>
+    <ROW File="System.Drawing.Common.dll_2" Component_="System.Drawing.Common.dll_2" FileName="SYSTEM~7.DLL|System.Drawing.Common.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\System.Drawing.Common.dll" SelfReg="false"/>
+    <ROW File="System.Numerics.Tensors.dll" Component_="System.Numerics.Tensors.dll" FileName="SYSTEM~8.DLL|System.Numerics.Tensors.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\System.Numerics.Tensors.dll" SelfReg="false"/>
+    <ROW File="System.Resources.Extensions.dll" Component_="System.Resources.Extensions.dll" FileName="SYSTEM~9.DLL|System.Resources.Extensions.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\System.Resources.Extensions.dll" SelfReg="false"/>
+    <ROW File="System.Security.Cryptography.ProtectedData.dll_1" Component_="System.Security.Cryptography.ProtectedData.dll_1" FileName="SYSTE~10.DLL|System.Security.Cryptography.ProtectedData.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\System.Security.Cryptography.ProtectedData.dll" SelfReg="false"/>
+    <ROW File="System.Security.Permissions.dll" Component_="System.Security.Permissions.dll" FileName="SYSTE~11.DLL|System.Security.Permissions.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\System.Security.Permissions.dll" SelfReg="false"/>
+    <ROW File="System.Windows.Extensions.dll_1" Component_="System.Windows.Extensions.dll_1" FileName="SYSTE~12.DLL|System.Windows.Extensions.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\bin\System.Windows.Extensions.dll" SelfReg="false"/>
+    <ROW File="CFD.dll_1" Component_="CFD.dll_1" FileName="CFD.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\CFD.dll" SelfReg="false"/>
+    <ROW File="CFD.pdb_1" Component_="CFD.pdb_1" FileName="CFD.pdb" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\CFD.pdb" SelfReg="false"/>
+    <ROW File="CFD.xml_1" Component_="CFD.xml_3" FileName="CFD.xml" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\CFD.xml" SelfReg="false"/>
+    <ROW File="CFD_clr.1.0.0.nupkg" Component_="CFD_clr.1.0.0.nupkg" FileName="CFD_CL~1.NUP|CFD_clr.1.0.0.nupkg" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\CFD_clr.1.0.0.nupkg" SelfReg="false"/>
+    <ROW File="CFD_clr.1.0.0.symbols.nupkg" Component_="CFD_clr.1.0.0.symbols.nupkg" FileName="CFD_CL~2.NUP|CFD_clr.1.0.0.symbols.nupkg" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\CFD_clr.1.0.0.symbols.nupkg" SelfReg="false"/>
+    <ROW File="CFD_clr.deps.json" Component_="CFD.xml_2" FileName="CFD_CL~1.JSO|CFD_clr.deps.json" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\CFD_clr.deps.json" SelfReg="false"/>
+    <ROW File="CFD_clr.dll" Component_="CFD_clr.dll" FileName="CFD_clr.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\CFD_clr.dll" SelfReg="false"/>
+    <ROW File="CFD_clr.pdb" Component_="CFD_clr.pdb" FileName="CFD_clr.pdb" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\CFD_clr.pdb" SelfReg="false"/>
+    <ROW File="CFD_clr.xml" Component_="CFD_clr.xml" FileName="CFD_clr.xml" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\CFD_clr.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.BinaryData.dll_1" Component_="Microsoft.VisualBasic.Data.BinaryData.dll_1" FileName="MICROS~1.DLL|Microsoft.VisualBasic.Data.BinaryData.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Data.BinaryData.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.BinaryData.pdb_1" Component_="Microsoft.VisualBasic.Data.BinaryData.pdb_1" FileName="MICROS~1.PDB|Microsoft.VisualBasic.Data.BinaryData.pdb" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Data.BinaryData.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.BinaryData.xml_1" Component_="Microsoft.VisualBasic.Data.BinaryData.xml_1" FileName="MICROS~1.XML|Microsoft.VisualBasic.Data.BinaryData.xml" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Data.BinaryData.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.GraphTheory.dll_1" Component_="Microsoft.VisualBasic.Data.GraphTheory.dll_1" FileName="MICROS~2.DLL|Microsoft.VisualBasic.Data.GraphTheory.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Data.GraphTheory.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.GraphTheory.pdb_1" Component_="Microsoft.VisualBasic.Data.GraphTheory.pdb_1" FileName="MICROS~2.PDB|Microsoft.VisualBasic.Data.GraphTheory.pdb" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Data.GraphTheory.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.GraphTheory.xml_1" Component_="Microsoft.VisualBasic.Data.GraphTheory.xml_1" FileName="MICROS~2.XML|Microsoft.VisualBasic.Data.GraphTheory.xml" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Data.GraphTheory.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.IO.MessagePack.dll_1" Component_="Microsoft.VisualBasic.Data.IO.MessagePack.dll_1" FileName="MICROS~3.DLL|Microsoft.VisualBasic.Data.IO.MessagePack.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Data.IO.MessagePack.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.IO.MessagePack.pdb_1" Component_="Microsoft.VisualBasic.Data.IO.MessagePack.pdb_1" FileName="MICROS~3.PDB|Microsoft.VisualBasic.Data.IO.MessagePack.pdb" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Data.IO.MessagePack.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Data.IO.MessagePack.xml_1" Component_="Microsoft.VisualBasic.Data.IO.MessagePack.xml_1" FileName="MICROS~3.XML|Microsoft.VisualBasic.Data.IO.MessagePack.xml" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Data.IO.MessagePack.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.DataStorage.HDSPack.dll_1" Component_="Microsoft.VisualBasic.DataStorage.HDSPack.dll_1" FileName="MICROS~4.DLL|Microsoft.VisualBasic.DataStorage.HDSPack.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.DataStorage.HDSPack.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.DataStorage.HDSPack.pdb_1" Component_="Microsoft.VisualBasic.DataStorage.HDSPack.pdb_1" FileName="MICROS~4.PDB|Microsoft.VisualBasic.DataStorage.HDSPack.pdb" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.DataStorage.HDSPack.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.DataStorage.HDSPack.xml" Component_="Microsoft.VisualBasic.DataStorage.HDSPack.xml" FileName="MICROS~4.XML|Microsoft.VisualBasic.DataStorage.HDSPack.xml" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.DataStorage.HDSPack.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Imaging.dll_1" Component_="Microsoft.VisualBasic.Imaging.dll_1" FileName="MICROS~5.DLL|Microsoft.VisualBasic.Imaging.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Imaging.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Imaging.pdb_1" Component_="Microsoft.VisualBasic.Imaging.pdb_1" FileName="MICROS~5.PDB|Microsoft.VisualBasic.Imaging.pdb" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Imaging.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Imaging.Physics.dll_1" Component_="Microsoft.VisualBasic.Imaging.Physics.dll_1" FileName="MICROS~6.DLL|Microsoft.VisualBasic.Imaging.Physics.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Imaging.Physics.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Imaging.Physics.pdb_1" Component_="Microsoft.VisualBasic.Imaging.Physics.pdb_1" FileName="MICROS~6.PDB|Microsoft.VisualBasic.Imaging.Physics.pdb" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Imaging.Physics.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Imaging.Physics.xml_1" Component_="Microsoft.VisualBasic.Imaging.Physics.xml_1" FileName="MICROS~5.XML|Microsoft.VisualBasic.Imaging.Physics.xml" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Imaging.Physics.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Imaging.xml_1" Component_="Microsoft.VisualBasic.Imaging.xml_1" FileName="MICROS~6.XML|Microsoft.VisualBasic.Imaging.xml" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Imaging.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Math.Core.dll_1" Component_="Microsoft.VisualBasic.Math.Core.dll_1" FileName="MICROS~7.DLL|Microsoft.VisualBasic.Math.Core.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Math.Core.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Math.Core.dll.config_1" Component_="CFD.xml_2" FileName="MICROS~1.CON|Microsoft.VisualBasic.Math.Core.dll.config" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Math.Core.dll.config" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Math.Core.pdb_1" Component_="Microsoft.VisualBasic.Math.Core.pdb_1" FileName="MICROS~7.PDB|Microsoft.VisualBasic.Math.Core.pdb" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Math.Core.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Math.Core.xml_1" Component_="Microsoft.VisualBasic.Math.Core.xml_1" FileName="MICROS~7.XML|Microsoft.VisualBasic.Math.Core.xml" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Math.Core.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.MIME.Html.dll_1" Component_="Microsoft.VisualBasic.MIME.Html.dll_1" FileName="MICROS~8.DLL|Microsoft.VisualBasic.MIME.Html.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.MIME.Html.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.MIME.Html.pdb_1" Component_="Microsoft.VisualBasic.MIME.Html.pdb_1" FileName="MICROS~8.PDB|Microsoft.VisualBasic.MIME.Html.pdb" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.MIME.Html.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.MIME.Html.xml_1" Component_="Microsoft.VisualBasic.MIME.Html.xml_1" FileName="MICROS~8.XML|Microsoft.VisualBasic.MIME.Html.xml" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.MIME.Html.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Network.dll" Component_="Microsoft.VisualBasic.Network.dll" FileName="MICROS~9.DLL|Microsoft.VisualBasic.Network.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Network.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Network.pdb" Component_="Microsoft.VisualBasic.Network.pdb" FileName="MICROS~9.PDB|Microsoft.VisualBasic.Network.pdb" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Network.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Network.xml" Component_="Microsoft.VisualBasic.Network.xml" FileName="MICROS~9.XML|Microsoft.VisualBasic.Network.xml" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Network.xml" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Runtime.dll_2" Component_="Microsoft.VisualBasic.Runtime.dll_2" FileName="MICRO~10.DLL|Microsoft.VisualBasic.Runtime.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Runtime.dll" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Runtime.dll.config_2" Component_="CFD.xml_2" FileName="MICROS~2.CON|Microsoft.VisualBasic.Runtime.dll.config" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Runtime.dll.config" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Runtime.pdb_2" Component_="Microsoft.VisualBasic.Runtime.pdb_1" FileName="MICRO~10.PDB|Microsoft.VisualBasic.Runtime.pdb" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Runtime.pdb" SelfReg="false"/>
+    <ROW File="Microsoft.VisualBasic.Runtime.xml_2" Component_="Microsoft.VisualBasic.Runtime.xml_1" FileName="MICRO~10.XML|Microsoft.VisualBasic.Runtime.xml" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\Microsoft.VisualBasic.Runtime.xml" SelfReg="false"/>
+    <ROW File="REnv.dll_1" Component_="REnv.dll_1" FileName="REnv.dll" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\REnv.dll" SelfReg="false"/>
+    <ROW File="REnv.dll.config_1" Component_="CFD.xml_2" FileName="RENVDL~1.CON|REnv.dll.config" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\REnv.dll.config" SelfReg="false"/>
+    <ROW File="REnv.pdb_1" Component_="REnv.pdb" FileName="REnv.pdb" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\REnv.pdb" SelfReg="false"/>
+    <ROW File="REnv.xml_1" Component_="REnv.xml" FileName="REnv.xml" Attributes="0" SourcePath="..\assembly\bin\Rstudio\host\REnv.xml" SelfReg="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
+    <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
+    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="Setup Files" PackageFileName="install_win32" Languages="zh" InstallationType="3" CabsLocation="1" ResSubFolder="resources" PackageType="1" ExeIconPath="installer.ico" UseLargeSchema="true" Unicode="true" ExeName="moira" MsiPackageType="x64" UACExecutionLevel="2"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
+    <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
+    <ROW Path="&lt;AI_DICTS&gt;ui_zh.ail"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
+    <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
+    <ROW Fragment="FolderDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\FolderDlg.aip"/>
+    <ROW Fragment="MaintenanceTypeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceTypeDlg.aip"/>
+    <ROW Fragment="MaintenanceWelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceWelcomeDlg.aip"/>
+    <ROW Fragment="SequenceDialogs.aip" Path="&lt;AI_THEMES&gt;classic\fragments\SequenceDialogs.aip"/>
+    <ROW Fragment="Sequences.aip" Path="&lt;AI_FRAGS&gt;Sequences.aip"/>
+    <ROW Fragment="StaticUIStrings.aip" Path="&lt;AI_FRAGS&gt;StaticUIStrings.aip"/>
+    <ROW Fragment="Themes.aip" Path="&lt;AI_FRAGS&gt;Themes.aip"/>
+    <ROW Fragment="UI.aip" Path="&lt;AI_THEMES&gt;classic\fragments\UI.aip"/>
+    <ROW Fragment="Validation.aip" Path="&lt;AI_FRAGS&gt;Validation.aip"/>
+    <ROW Fragment="VerifyRemoveDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRemoveDlg.aip"/>
+    <ROW Fragment="VerifyRepairDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRepairDlg.aip"/>
+    <ROW Fragment="WelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\WelcomeDlg.aip"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiBinaryComponent">
+    <ROW Name="aicustact.dll" SourcePath="&lt;AI_CUSTACTS&gt;aicustact.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
+    <ROW Dialog_="WelcomeDlg" Control_="Next" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="FolderDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="FolderDlg" Control_="Back" Event="NewDialog" Argument="WelcomeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="MaintenanceWelcomeDlg" Control_="Next" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="99"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_MAINT" Ordering="198"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="202"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_INSTALL" Ordering="197"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_MAINT" Ordering="101"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="ChangeButton" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="501"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceWelcomeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RemoveButton" Event="NewDialog" Argument="VerifyRemoveDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RepairButton" Event="NewDialog" Argument="VerifyRepairDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="1"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Repair" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="399" Options="1"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Remove" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="299" Options="1"/>
+    <ROW Dialog_="PatchWelcomeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_PATCH" Ordering="201"/>
+    <ROW Dialog_="ResumeDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_RESUME" Ordering="299"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_PATCH" Ordering="199"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="PatchWelcomeDlg" Condition="AI_PATCH" Ordering="203"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
+    <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
+    <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Type="51" Source="AI_SETUPEXEPATH_ORIGINAL" Target="[AI_SETUPEXEPATH]"/>
+    <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
+    <ROW Action="AI_DpiContentScale" Type="1" Source="aicustact.dll" Target="DpiContentScale"/>
+    <ROW Action="AI_EnableDebugLog" Type="321" Source="aicustact.dll" Target="EnableDebugLog"/>
+    <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Type="65" Source="aicustact.dll" Target="PreserveInstallType"/>
+    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Type="51" Source="AI_SETUPEXEPATH" Target="[AI_SETUPEXEPATH_ORIGINAL]"/>
+    <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
+    <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
+    <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
+    <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
+    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="DefaultBuild:[ProgramFiles64Folder][Manufacturer]\[ProductName]"/>
+    <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
+    <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatCompsComponent">
+    <ROW Feature_="MainFeature" Component_="APPDIR"/>
+    <ROW Feature_="MainFeature" Component_="ProductInformation"/>
+    <ROW Feature_="MainFeature" Component_="CFD.dll"/>
+    <ROW Feature_="MainFeature" Component_="CFD.xml"/>
+    <ROW Feature_="MainFeature" Component_="CFD_win32.dll"/>
+    <ROW Feature_="MainFeature" Component_="CFD_win32.exe"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Data.BinaryData.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Data.GraphTheory.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Data.IO.MessagePack.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.DataStorage.HDSPack.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Imaging.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Imaging.Physics.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Math.Core.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.MIME.Html.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Runtime.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Windows.SDK.NET.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.AttributedModel.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.Convention.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.Hosting.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.Runtime.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.TypedParts.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Configuration.ConfigurationManager.dll"/>
+    <ROW Feature_="MainFeature" Component_="WindowsDocking.dll"/>
+    <ROW Feature_="MainFeature" Component_="WindowsDocking.ThemeVS2015.dll"/>
+    <ROW Feature_="MainFeature" Component_="WindowsRibbon.dll"/>
+    <ROW Feature_="MainFeature" Component_="WinRT.Runtime.dll"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="CFD.xml_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="CFD_win32.xml"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Data.BinaryData.xml"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Data.GraphTheory.xml"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Data.IO.MessagePack.xml"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Imaging.Physics.xml"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Imaging.xml"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Math.Core.xml"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.MIME.Html.xml"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Runtime.xml"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="WindowsRibbon.xml"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="CFD.pdb"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="CFD_win32.pdb"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Data.BinaryData.pdb"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Data.GraphTheory.pdb"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Data.IO.MessagePack.pdb"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.DataStorage.HDSPack.pdb"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Imaging.pdb"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Imaging.Physics.pdb"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Math.Core.pdb"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.MIME.Html.pdb"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Runtime.pdb"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Runtime.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Runtime.dll.config"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Win32.SystemEvents.dll"/>
+    <ROW Feature_="MainFeature" Component_="R.dll"/>
+    <ROW Feature_="MainFeature" Component_="R.exe"/>
+    <ROW Feature_="MainFeature" Component_="REnv.dll"/>
+    <ROW Feature_="MainFeature" Component_="Rscript.dll"/>
+    <ROW Feature_="MainFeature" Component_="Rscript.exe"/>
+    <ROW Feature_="MainFeature" Component_="System.Drawing.Common.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Win32.SystemEvents.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Drawing.Common.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Security.Cryptography.ProtectedData.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Windows.Extensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.AttributedModel.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.Convention.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.Hosting.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.Runtime.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Composition.TypedParts.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Configuration.ConfigurationManager.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Drawing.Common.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="System.Numerics.Tensors.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Resources.Extensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Security.Cryptography.ProtectedData.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Security.Permissions.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Windows.Extensions.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="CFD.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="CFD.xml_2"/>
+    <ROW Feature_="MainFeature" Component_="CFD_clr.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Data.BinaryData.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Data.GraphTheory.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Data.IO.MessagePack.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.DataStorage.HDSPack.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Imaging.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Imaging.Physics.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Math.Core.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.MIME.Html.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Network.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.VisualBasic.Runtime.dll_2"/>
+    <ROW Feature_="MainFeature" Component_="REnv.dll_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="CFD.xml_3"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="REnv.xml"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Network.xml"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Data.IO.MessagePack.xml_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="CFD_clr.xml"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Data.BinaryData.xml_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Data.GraphTheory.xml_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.DataStorage.HDSPack.xml"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Imaging.Physics.xml_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Imaging.xml_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Math.Core.xml_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.MIME.Html.xml_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Runtime.xml_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="CFD_clr.1.0.0.nupkg"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="CFD_clr.1.0.0.symbols.nupkg"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="CFD.pdb_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="REnv.pdb"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="CFD_clr.pdb"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Data.BinaryData.pdb_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Data.GraphTheory.pdb_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Data.IO.MessagePack.pdb_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.DataStorage.HDSPack.pdb_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Imaging.pdb_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Imaging.Physics.pdb_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Math.Core.pdb_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Runtime.pdb_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.MIME.Html.pdb_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Network.pdb"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Rscript.xml"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Runtime.xml_2"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="R.xml"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="REnv.xml_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Microsoft.VisualBasic.Runtime.pdb_2"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="R.pdb"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="REnv.pdb_1"/>
+    <ROW Feature_="VisualStudio_Diagnose" Component_="Rscript.pdb"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
+    <ROW Name="CFD.exe" SourcePath="..\win32_desktop\CFD.ico" Index="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
+    <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_STORE_LOCATION" Condition="(Not Installed) OR REINSTALL" Sequence="1501"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Condition="AI_UPGRADE=&quot;No&quot; AND (Not Installed)" Sequence="1397"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Sequence="199"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="53"/>
+    <ROW Action="AI_DpiContentScale" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+    <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Sequence="99"/>
+    <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Condition="AI_SETUPEXEPATH_ORIGINAL" Sequence="101"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
+    <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] 无法安装在 [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] 无法安装在 [WindowsTypeNT40Display]." DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] 无法安装在 [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="SETUPEXEDIR OR (REMOVE=&quot;ALL&quot;)" Description="This package can only be run from a bootstrapper." DescriptionLocId="AI.LaunchCondition.RequireBootstrapper" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="VersionNT" Description="[ProductName] 无法安装在 [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
+    <ROW Registry="Manufacturer" Root="-1" Key="Software\[Manufacturer]" Name="\"/>
+    <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
+    <ROW Registry="ProductName" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="\"/>
+    <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
+    <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
+    <ATTRIBUTE name="UsedTheme" value="classic"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiUpgradeComponent">
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="0.0.1" VersionMax="[|ProductVersion]" Attributes="257" ActionProperty="OLDPRODUCTS"/>
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="[|ProductVersion]" Attributes="2" ActionProperty="AI_NEWERPRODUCTFOUND"/>
+  </COMPONENT>
+</DOCUMENT>
