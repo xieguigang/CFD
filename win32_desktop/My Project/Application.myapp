@@ -7,4 +7,7 @@
   <EnableVisualStyles>true</EnableVisualStyles>
   <AuthenticationMode>0</AuthenticationMode>
   <SaveMySettingsOnExit>true</SaveMySettingsOnExit>
+  <HighDpiMode>0</HighDpiMode>
+  <SplashScreen>SplashScreen</SplashScreen>
+  <MinimumSplashScreenDisplayTime>1000</MinimumSplashScreenDisplayTime>
 </MyApplicationData>
