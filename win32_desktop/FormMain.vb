@@ -1,4 +1,4 @@
-﻿Imports CFD_form.RibbonLib.Controls
+﻿Imports CFD_win32.RibbonLib.Controls
 Imports RibbonLib
 Imports WeifenLuo.WinFormsUI.Docking
 
@@ -27,7 +27,7 @@ Public Class FormMain
         vsToolStripExtender1.DefaultRenderer = _toolStripProfessionalRenderer
 
         ' 在 InitializeComponent() 调用之后添加任何初始化。
-        ribbon1.ResourceName = $"{App.AssemblyName}.RibbonMarkup.ribbon"
+        ribbon1.ResourceName = $"CFD_win32.RibbonMarkup.ribbon"
         ribbon1.Dock = DockStyle.Top
         ribbon1.Height = 100
         ribbon1.SendToBack()

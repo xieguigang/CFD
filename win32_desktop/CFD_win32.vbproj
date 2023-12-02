@@ -9,6 +9,8 @@
     <Platforms>AnyCPU;x64</Platforms>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <ApplicationIcon>CFD.ico</ApplicationIcon>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>../assembly/bin/</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

@@ -1,4 +1,4 @@
-﻿Imports CFD_form.RibbonLib.Controls
+﻿Imports CFD_win32.RibbonLib.Controls
 Imports WeifenLuo.WinFormsUI.Docking
 
 Module Globals
