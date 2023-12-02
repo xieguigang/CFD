@@ -19,14 +19,21 @@ Namespace RibbonLib.Controls
             Public Const cmdFileOpen As UInteger = 8
             Public Const cmdButtonAbout As UInteger = 12
             Public Const cmdButtonAppExit As UInteger = 13
-            Public Const cmdTabPage As UInteger = 3
-            Public Const cmdCommandGroup As UInteger = 4
-            Public Const cmdButtonReset As UInteger = 2
-            Public Const cmdButtonClearBarrier As UInteger = 6
-            Public Const cmdCheckDrawBarrier As UInteger = 7
+            Public Const cmdTabSimulationPage As UInteger = 15
+            Public Const cmdGroupSimulation As UInteger = 16
+            Public Const cmdPageSimulation As UInteger = 17
+            Public Const cmdButtonSimulationStart As UInteger = 18
+            Public Const cmdButtonSimulationPause As UInteger = 19
+            Public Const cmdButtonSimulationStop As UInteger = 20
             Public Const cmdMenu2 As UInteger = 10
             Public Const cmdCheckShowTracer As UInteger = 9
             Public Const cmdCheckShowFlowLine As UInteger = 11
+            Public Const cmdTabSimulationOperations As UInteger = 22
+            Public Const cmdButtonClearBarrier As UInteger = 6
+            Public Const cmdButtonReset As UInteger = 2
+            Public Const cmdCheckDrawBarrier As UInteger = 7
+            Public Const cmdTabApplicationMain As UInteger = 21
+            Public Const cmdCommandGroup As UInteger = 4
             Public Const cmdGroupApp As UInteger = 14
         End Class
 
@@ -56,34 +63,40 @@ Namespace RibbonLib.Controls
                 Return _ButtonAppExit
             End Get
         End Property
-        Private _TabPage As RibbonTab
-        Public ReadOnly Property TabPage As RibbonTab
+        Private _TabSimulationPage As RibbonTabGroup
+        Public ReadOnly Property TabSimulationPage As RibbonTabGroup
             Get
-                Return _TabPage
+                Return _TabSimulationPage
             End Get
         End Property
-        Private _CommandGroup As RibbonGroup
-        Public ReadOnly Property CommandGroup As RibbonGroup
+        Private _GroupSimulation As RibbonTab
+        Public ReadOnly Property GroupSimulation As RibbonTab
             Get
-                Return _CommandGroup
+                Return _GroupSimulation
             End Get
         End Property
-        Private _ButtonReset As RibbonButton
-        Public ReadOnly Property ButtonReset As RibbonButton
+        Private _PageSimulation As RibbonGroup
+        Public ReadOnly Property PageSimulation As RibbonGroup
             Get
-                Return _ButtonReset
+                Return _PageSimulation
             End Get
         End Property
-        Private _ButtonClearBarrier As RibbonButton
-        Public ReadOnly Property ButtonClearBarrier As RibbonButton
+        Private _ButtonSimulationStart As RibbonButton
+        Public ReadOnly Property ButtonSimulationStart As RibbonButton
             Get
-                Return _ButtonClearBarrier
+                Return _ButtonSimulationStart
             End Get
         End Property
-        Private _CheckDrawBarrier As RibbonToggleButton
-        Public ReadOnly Property CheckDrawBarrier As RibbonToggleButton
+        Private _ButtonSimulationPause As RibbonButton
+        Public ReadOnly Property ButtonSimulationPause As RibbonButton
             Get
-                Return _CheckDrawBarrier
+                Return _ButtonSimulationPause
+            End Get
+        End Property
+        Private _ButtonSimulationStop As RibbonButton
+        Public ReadOnly Property ButtonSimulationStop As RibbonButton
+            Get
+                Return _ButtonSimulationStop
             End Get
         End Property
         Private _Menu2 As RibbonGroup
@@ -104,6 +117,42 @@ Namespace RibbonLib.Controls
                 Return _CheckShowFlowLine
             End Get
         End Property
+        Private _TabSimulationOperations As RibbonGroup
+        Public ReadOnly Property TabSimulationOperations As RibbonGroup
+            Get
+                Return _TabSimulationOperations
+            End Get
+        End Property
+        Private _ButtonClearBarrier As RibbonButton
+        Public ReadOnly Property ButtonClearBarrier As RibbonButton
+            Get
+                Return _ButtonClearBarrier
+            End Get
+        End Property
+        Private _ButtonReset As RibbonButton
+        Public ReadOnly Property ButtonReset As RibbonButton
+            Get
+                Return _ButtonReset
+            End Get
+        End Property
+        Private _CheckDrawBarrier As RibbonToggleButton
+        Public ReadOnly Property CheckDrawBarrier As RibbonToggleButton
+            Get
+                Return _CheckDrawBarrier
+            End Get
+        End Property
+        Private _TabApplicationMain As RibbonTab
+        Public ReadOnly Property TabApplicationMain As RibbonTab
+            Get
+                Return _TabApplicationMain
+            End Get
+        End Property
+        Private _CommandGroup As RibbonGroup
+        Public ReadOnly Property CommandGroup As RibbonGroup
+            Get
+                Return _CommandGroup
+            End Get
+        End Property
         Private _GroupApp As RibbonGroup
         Public ReadOnly Property GroupApp As RibbonGroup
             Get
@@ -119,14 +168,21 @@ Namespace RibbonLib.Controls
             _FileOpen = New RibbonButton(_ribbon, Cmd.cmdFileOpen)
             _ButtonAbout = New RibbonButton(_ribbon, Cmd.cmdButtonAbout)
             _ButtonAppExit = New RibbonButton(_ribbon, Cmd.cmdButtonAppExit)
-            _TabPage = New RibbonTab(_ribbon, Cmd.cmdTabPage)
-            _CommandGroup = New RibbonGroup(_ribbon, Cmd.cmdCommandGroup)
-            _ButtonReset = New RibbonButton(_ribbon, Cmd.cmdButtonReset)
-            _ButtonClearBarrier = New RibbonButton(_ribbon, Cmd.cmdButtonClearBarrier)
-            _CheckDrawBarrier = New RibbonToggleButton(_ribbon, Cmd.cmdCheckDrawBarrier)
+            _TabSimulationPage = New RibbonTabGroup(_ribbon, Cmd.cmdTabSimulationPage)
+            _GroupSimulation = New RibbonTab(_ribbon, Cmd.cmdGroupSimulation)
+            _PageSimulation = New RibbonGroup(_ribbon, Cmd.cmdPageSimulation)
+            _ButtonSimulationStart = New RibbonButton(_ribbon, Cmd.cmdButtonSimulationStart)
+            _ButtonSimulationPause = New RibbonButton(_ribbon, Cmd.cmdButtonSimulationPause)
+            _ButtonSimulationStop = New RibbonButton(_ribbon, Cmd.cmdButtonSimulationStop)
             _Menu2 = New RibbonGroup(_ribbon, Cmd.cmdMenu2)
             _CheckShowTracer = New RibbonToggleButton(_ribbon, Cmd.cmdCheckShowTracer)
             _CheckShowFlowLine = New RibbonToggleButton(_ribbon, Cmd.cmdCheckShowFlowLine)
+            _TabSimulationOperations = New RibbonGroup(_ribbon, Cmd.cmdTabSimulationOperations)
+            _ButtonClearBarrier = New RibbonButton(_ribbon, Cmd.cmdButtonClearBarrier)
+            _ButtonReset = New RibbonButton(_ribbon, Cmd.cmdButtonReset)
+            _CheckDrawBarrier = New RibbonToggleButton(_ribbon, Cmd.cmdCheckDrawBarrier)
+            _TabApplicationMain = New RibbonTab(_ribbon, Cmd.cmdTabApplicationMain)
+            _CommandGroup = New RibbonGroup(_ribbon, Cmd.cmdCommandGroup)
             _GroupApp = New RibbonGroup(_ribbon, Cmd.cmdGroupApp)
         End Sub
 

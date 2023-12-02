@@ -70,6 +70,35 @@
       </Command.LargeImages>
     </Command>
     <Command Name="cmdGroupApp" Id="14" LabelTitle="Application" />
+    <Command Name="cmdTabSimulationPage" Id="15" LabelTitle="Simulation" />
+    <Command Name="cmdGroupSimulation" Id="16" LabelTitle="Simulation" />
+    <Command Name="cmdPageSimulation" Id="17" LabelTitle="CFD Simulation" />
+    <Command Name="cmdButtonSimulationStart" Id="18" LabelTitle="Start">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-start-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-start-96.png</Image>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="cmdButtonSimulationPause" Id="19" LabelTitle="Pause">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-pause-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-pause-96.png</Image>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="cmdButtonSimulationStop" Id="20" LabelTitle="Stop">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-stop-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-stop-96.png</Image>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="cmdTabApplicationMain" Id="21" LabelTitle="Application" />
+    <Command Name="cmdTabSimulationOperations" Id="22" LabelTitle="Operations" />
   </Application.Commands>
   <Application.Views>
     <Ribbon>
@@ -79,6 +108,9 @@
             <RecentItems />
           </ApplicationMenu.RecentItems>
           <MenuGroup>
+            <Button CommandName="cmdFileOpen" />
+          </MenuGroup>
+          <MenuGroup>
             <Button CommandName="cmdButtonAbout" />
             <Button CommandName="cmdButtonAppExit" />
           </MenuGroup>
@@ -87,17 +119,30 @@
       <Ribbon.QuickAccessToolbar>
         <QuickAccessToolbar />
       </Ribbon.QuickAccessToolbar>
+      <Ribbon.ContextualTabs>
+        <TabGroup CommandName="cmdTabSimulationPage">
+          <Tab CommandName="cmdGroupSimulation">
+            <Group CommandName="cmdPageSimulation" SizeDefinition="ThreeButtons">
+              <Button CommandName="cmdButtonSimulationStart" />
+              <Button CommandName="cmdButtonSimulationPause" />
+              <Button CommandName="cmdButtonSimulationStop" />
+            </Group>
+            <Group CommandName="cmdMenu2" SizeDefinition="TwoButtons">
+              <ToggleButton CommandName="cmdCheckShowTracer" />
+              <ToggleButton CommandName="cmdCheckShowFlowLine" />
+            </Group>
+            <Group CommandName="cmdTabSimulationOperations">
+              <Button CommandName="cmdButtonClearBarrier" />
+              <Button CommandName="cmdButtonReset" />
+              <ToggleButton CommandName="cmdCheckDrawBarrier" />
+            </Group>
+          </Tab>
+        </TabGroup>
+      </Ribbon.ContextualTabs>
       <Ribbon.Tabs>
-        <Tab CommandName="cmdTabPage">
-          <Group CommandName="cmdCommandGroup" SizeDefinition="FourButtons">
+        <Tab CommandName="cmdTabApplicationMain">
+          <Group CommandName="cmdCommandGroup" SizeDefinition="OneButton">
             <Button CommandName="cmdFileOpen" />
-            <Button CommandName="cmdButtonReset" />
-            <Button CommandName="cmdButtonClearBarrier" />
-            <ToggleButton CommandName="cmdCheckDrawBarrier" />
-          </Group>
-          <Group CommandName="cmdMenu2" SizeDefinition="TwoButtons">
-            <ToggleButton CommandName="cmdCheckShowTracer" />
-            <ToggleButton CommandName="cmdCheckShowFlowLine" />
           </Group>
           <Group CommandName="cmdGroupApp" SizeDefinition="OneButton">
             <Button CommandName="cmdButtonAbout" />

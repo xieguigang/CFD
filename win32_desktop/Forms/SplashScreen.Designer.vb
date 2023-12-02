@@ -48,7 +48,7 @@ Partial Class SplashScreen
         Label1.BackColor = Color.Transparent
         Label1.Font = New Font("Consolas", 36F, FontStyle.Regular, GraphicsUnit.Point)
         Label1.ForeColor = Color.White
-        Label1.Location = New Point(139, 34)
+        Label1.Location = New Point(134, 81)
         Label1.Name = "Label1"
         Label1.Size = New Size(388, 56)
         Label1.TabIndex = 1
@@ -60,7 +60,7 @@ Partial Class SplashScreen
         Label2.BackColor = Color.Transparent
         Label2.Font = New Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point)
         Label2.ForeColor = Color.White
-        Label2.Location = New Point(145, 91)
+        Label2.Location = New Point(146, 137)
         Label2.Name = "Label2"
         Label2.Size = New Size(212, 20)
         Label2.TabIndex = 2

@@ -46,7 +46,7 @@ Public Class FormMain
         CFD.Show(dockPanel)
         CFD.DockState = DockState.Document
 
-        AddHandler ribbonItems.ButtonAbout.ExecuteEvent, Sub() Call New SplashScreen().Show()
+        AddHandler ribbonItems.ButtonAbout.ExecuteEvent, Sub() Call New SplashScreen() With {.ShowAbout = True}.Show()
         AddHandler ribbonItems.ButtonAppExit.ExecuteEvent, Sub() Call Me.Close()
     End Sub
 
@@ -56,7 +56,7 @@ Public Class FormMain
         Next
     End Sub
 
-    Private Sub FormMain_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+    Private Sub FormMain_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
 
     End Sub
 End Class
