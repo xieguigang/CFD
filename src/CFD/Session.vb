@@ -73,6 +73,7 @@ Public Class Session : Implements IDisposable
         If Not disposedValue Then
             If disposing Then
                 ' TODO: 释放托管状态(托管对象)
+                Call CFD.Dispose()
                 Call storage.Dispose()
             End If
 
