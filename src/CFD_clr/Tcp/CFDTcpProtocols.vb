@@ -48,6 +48,11 @@ Public Class CFDTcpProtocols
     Public Function getFrameData(type As FrameTypes) As Double()()
         Dim req As New RequestStream(lpProtocol, Protocols.RequestFrame, BitConverter.GetBytes(CInt(type)))
         Dim data = requestData(req)
+
+        If data.Protocol <> 200 Then
+            Return Nothing
+        End If
+
         Dim dims As New Size(pars.dims(0), pars.dims(1))
         Dim frame As Double()() = New Double(dims.Width - 1)() {}
         Dim rd As New BinaryDataReader(data) With {.ByteOrder = ByteOrder.LittleEndian}

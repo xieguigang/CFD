@@ -100,16 +100,18 @@ Public Class Backend : Implements ITaskDriver, IDisposable
         Return New DataPipe(ms)
     End Function
 
-    <Protocol(Protocols.Setup)>
-    Public Function Setup(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
-        Dim args As SetupParameters = request.LoadObject(Of SetupParameters)
+    Public Sub Setup(args As SetupParameters)
         Dim save As New FrameWriter(args.storagefile.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False))
 
         session = New Session(save)
         session.dims(New Size(args.dims(0), args.dims(1))) _
             .interval(args.interval) _
             .iterations(args.max_time)
+    End Sub
 
+    <Protocol(Protocols.Setup)>
+    Public Function Setup(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
+        Call Setup(args:=request.LoadObject(Of SetupParameters))
         Return New DataPipe(CFDTcpProtocols.ok)
     End Function
 

@@ -36,7 +36,16 @@ Public Class frmCFDCanvas
         Dim xyDims As Size = CFD.pars.getDims
         Dim bitmap As New bitmap(xyDims.Width, xyDims.Height)
         Dim g As Graphics = Graphics.FromImage(bitmap)
-        Dim range As DoubleRange = frame.AsParallel.Select(Function(a) {a.Min, a.Max}).IteratesALL.Range
+
+        If frame.IsNullOrEmpty Then
+            Call Globals.Message("invalid frame data!")
+            Return
+        End If
+
+        Dim range As DoubleRange = frame.AsParallel _
+            .Select(Function(a) {a.Min, a.Max}) _
+            .IteratesALL _
+            .Range
         Dim v As Double
         Dim index As Integer
         Dim cut As Double = Double.MaxValue
