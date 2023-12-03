@@ -40,7 +40,7 @@ Public NotInheritable Class RscriptHelper
     Public Shared Function CreateCFDServer(await As Double, log As Action(Of String)) As Integer
         Dim script As String = GetRscript("Moira-CFD.R")
         Dim args As String = $"{script.CLIPath} --SetDllDirectory {$"{RstudioFolder}/host".CLIPath}"
-        Dim pip As New RunSlavePipeline(RscriptHost, script, RscriptHost.ParentPath)
+        Dim pip As New RunSlavePipeline(RscriptHost, args, RscriptHost.ParentPath)
         Dim task As New Thread(AddressOf pip.Run)
         Dim port As Integer? = Nothing
         Dim sleepTime As Double = 10
