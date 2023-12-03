@@ -71,7 +71,7 @@ Public Class Backend : Implements ITaskDriver, IDisposable
             .interval(args.interval) _
             .iterations(args.max_time)
 
-        Return New DataPipe("ok!")
+        Return New DataPipe(TcpProtocols.ok)
     End Function
 
     <Protocol(Protocols.Start)>
@@ -80,10 +80,10 @@ Public Class Backend : Implements ITaskDriver, IDisposable
             Return New DataPipe(NetResponse.RFC_FAILED_DEPENDENCY)
         ElseIf session.IsPaused Then
             Call session.Resume()
-            Return New DataPipe("ok!")
+            Return New DataPipe(TcpProtocols.ok)
         Else
             Call session.Run()
-            Return New DataPipe("ok!")
+            Return New DataPipe(TcpProtocols.ok)
         End If
     End Function
 
@@ -93,7 +93,7 @@ Public Class Backend : Implements ITaskDriver, IDisposable
             Return New DataPipe(NetResponse.RFC_FAILED_DEPENDENCY)
         Else
             Call session.Stop()
-            Return New DataPipe("ok!")
+            Return New DataPipe(TcpProtocols.ok)
         End If
     End Function
 
@@ -104,7 +104,7 @@ Public Class Backend : Implements ITaskDriver, IDisposable
         Else
             Call session.Stop()
             Call session.Dispose()
-            Return New DataPipe("ok!")
+            Return New DataPipe(TcpProtocols.ok)
         End If
     End Function
 

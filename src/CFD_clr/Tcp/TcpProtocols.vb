@@ -10,6 +10,8 @@ Public Class TcpProtocols
 
     Public ReadOnly lpProtocol As Long = ProtocolAttribute.GetProtocolCategory(GetType(Protocols)).EntryPoint
 
+    Public Const ok As String = "ok!"
+
     Public ReadOnly Property EndPoint As IPEndPoint
     Public ReadOnly Property dims As Size
 
@@ -28,6 +30,50 @@ Public Class TcpProtocols
         Next
 
         Return frame
+    End Function
+
+    Public Function start() As Boolean
+        Dim req As New RequestStream(lpProtocol, Protocols.Start)
+        Dim data = requestData(req)
+
+        If data.GetUTF8String = ok Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
+    Public Function pause() As Boolean
+        Dim req As New RequestStream(lpProtocol, Protocols.Pause)
+        Dim data = requestData(req)
+
+        If data.GetUTF8String = ok Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
+    Public Function [stop]() As Boolean
+        Dim req As New RequestStream(lpProtocol, Protocols.Stop)
+        Dim data = requestData(req)
+
+        If data.GetUTF8String = ok Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
+    Public Function [resume]() As Boolean
+        Dim req As New RequestStream(lpProtocol, Protocols.Start)
+        Dim data = requestData(req)
+
+        If data.GetUTF8String = ok Then
+            Return True
+        Else
+            Return False
+        End If
     End Function
 
 End Class

@@ -5,6 +5,9 @@
     ''' </summary>
     Setup
 
+    ''' <summary>
+    ''' start or resume
+    ''' </summary>
     Start
     Pause
     [Stop]
