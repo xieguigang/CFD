@@ -8,7 +8,6 @@ Public Class FormMain
     Dim vsToolStripExtender1 As New VisualStudioToolStripExtender
     Dim vS2015LightTheme1 As New VS2015LightTheme
     Dim dockPanel As New DockPanel
-    Dim CFD As New frmCFDCanvas
 
     ReadOnly _toolStripProfessionalRenderer As New ToolStripProfessionalRenderer()
 
@@ -43,17 +42,23 @@ Public Class FormMain
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         dockPanel.Theme = vS2015LightTheme1
         EnableVSRenderer(StatusStrip1)
-        CFD.Show(dockPanel)
-        CFD.DockState = DockState.Document
 
         AddHandler ribbonItems.ButtonAbout.ExecuteEvent, Sub() Call New SplashScreen() With {.ShowAbout = True}.Show()
         AddHandler ribbonItems.ButtonAppExit.ExecuteEvent, Sub() Call Me.Close()
+        AddHandler ribbonItems.FileNew.ExecuteEvent, Sub() Call CreateNewSimulation()
     End Sub
 
     Friend Sub EnableVSRenderer(ParamArray toolStrips As ToolStrip())
         For Each tool In toolStrips
             vsToolStripExtender1.SetStyle(tool, VisualStudioToolStripExtender.VsVersion.Vs2015, vS2015LightTheme1)
         Next
+    End Sub
+
+    Private Sub CreateNewSimulation()
+        Dim CFD As New frmCFDCanvas
+
+        CFD.Show(dockPanel)
+        CFD.DockState = DockState.Document
     End Sub
 
     Private Sub FormMain_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
