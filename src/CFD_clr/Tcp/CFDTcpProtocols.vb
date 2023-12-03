@@ -9,7 +9,7 @@ Imports Microsoft.VisualBasic.Serialization.JSON
 
 Public Class CFDTcpProtocols
 
-    Public ReadOnly lpProtocol As Long = ProtocolAttribute.GetProtocolCategory(GetType(Protocols)).EntryPoint
+    Public ReadOnly lpProtocol As Long = New ProtocolAttribute(GetType(Protocols)).EntryPoint
 
     Public Const ok As String = "ok!"
 
