@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+﻿Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
 
 <Package("Tcp")>
@@ -13,6 +14,8 @@ Module Tcp
     ''' </remarks>
     <ExportAPI("start")>
     Public Function start(Optional debug_port As Integer? = Nothing) As Object
-        Return New Backend(debug_port).Run
+        Dim session As New Backend(debug_port)
+        Call RunSlavePipeline.SendMessage($"port={session.TcpPort}")
+        Return session.Run
     End Function
 End Module

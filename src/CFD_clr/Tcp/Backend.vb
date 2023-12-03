@@ -24,6 +24,10 @@ Public Class Backend : Implements ITaskDriver, IDisposable
     Dim disposedValue As Boolean
     Dim session As Session
 
+    ''' <summary>
+    ''' create background server and bind to the tcp port
+    ''' </summary>
+    ''' <param name="debugPort"></param>
     Sub New(Optional debugPort As Integer? = Nothing)
         Dim port As Integer = If(debugPort Is Nothing, GetFirstAvailablePort(), debugPort)
 
