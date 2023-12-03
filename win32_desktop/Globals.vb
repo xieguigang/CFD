@@ -9,6 +9,7 @@ Module Globals
     Public ribbonItems As RibbonItems
     Public main As FormMain
     Public dockPanel As DockPanel
+    Public ReadOnly toolkit As New toolCFDParameters
 
     Public Sub Message(str As String)
         main.Invoke(Sub() main.ToolStripStatusLabel2.Text = str)

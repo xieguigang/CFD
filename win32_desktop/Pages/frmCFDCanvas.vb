@@ -19,7 +19,6 @@ Public Class frmCFDCanvas
     Dim colors As SolidBrush()
     Dim offset As New DoubleRange(0, 255)
     Dim drawLine As Boolean = False
-    Dim toolkit As New toolCFDParameters
 
     ReadOnly grays As SolidBrush() = Designer.GetBrushes(ScalerPalette.Gray.Description, 30)
     ReadOnly grayOffset As New DoubleRange(0, 29)
@@ -232,7 +231,7 @@ Public Class frmCFDCanvas
     End Sub
 
     Private Sub frmCFDCanvas_Activated(sender As Object, e As EventArgs) Handles Me.Activated
-        ribbonItems.TabSimulationPage.ContextAvailable = ContextAvailability.Active
+        Call SetCurrent()
     End Sub
 
     Private Sub frmCFDCanvas_LostFocus(sender As Object, e As EventArgs) Handles Me.LostFocus
@@ -240,6 +239,11 @@ Public Class frmCFDCanvas
     End Sub
 
     Private Sub frmCFDCanvas_GotFocus(sender As Object, e As EventArgs) Handles Me.GotFocus
+        Call SetCurrent()
+    End Sub
+
+    Private Sub SetCurrent()
+        toolkit.SetTarget(callback:=Me)
         ribbonItems.TabSimulationPage.ContextAvailable = ContextAvailability.Active
     End Sub
 End Class
