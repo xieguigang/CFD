@@ -214,8 +214,8 @@ Public Class frmCFDCanvas
     End Sub
 
     Private Sub frmCFDCanvas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        CFD = Globals.CreateService
         UpdatePalette()
-        ' CFD.reset()
 
         AddHandler ribbonItems.ButtonReset.ExecuteEvent, Sub() resetCFD()
         AddHandler ribbonItems.ButtonClearBarrier.ExecuteEvent, Sub()
