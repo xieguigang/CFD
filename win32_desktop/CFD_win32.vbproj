@@ -81,6 +81,7 @@
     <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\network-netcore5.vbproj" />
     <ProjectReference Include="..\src\CFD\CFD.vbproj" />
     <ProjectReference Include="..\src\CFD_clr\CFD_clr.vbproj" />
+    <ProjectReference Include="..\src\desktop\BackgroundHost\BackgroundHost.vbproj" />
   </ItemGroup>
 
   <ItemGroup>
