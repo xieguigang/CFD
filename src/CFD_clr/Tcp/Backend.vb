@@ -1,8 +1,11 @@
-﻿Imports System.IO
+﻿Imports System.Drawing
+Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports CFD
+Imports CFD.Storage
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Data.IO
+Imports Microsoft.VisualBasic.Net.HTTP
 Imports Microsoft.VisualBasic.Net.Protocols.Reflection
 Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Parallel
@@ -60,13 +63,57 @@ Public Class Backend : Implements ITaskDriver, IDisposable
 
     <Protocol(Protocols.RequestFrame)>
     Public Function Setup(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
+        Dim args As SetupParameters = request.LoadObject(Of SetupParameters)
+        Dim save As New FrameWriter(args.storagefile.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False))
 
+        session = New Session(save)
+        session.dims(New Size(args.dims(0), args.dims(1))) _
+            .interval(args.interval) _
+            .iterations(args.max_time)
+
+        Return New DataPipe("ok!")
+    End Function
+
+    <Protocol(Protocols.Start)>
+    Public Function Start(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
+        If session Is Nothing Then
+            Return New DataPipe(NetResponse.RFC_FAILED_DEPENDENCY)
+        ElseIf session.IsPaused Then
+            Call session.Resume()
+            Return New DataPipe("ok!")
+        Else
+            Call session.Run()
+            Return New DataPipe("ok!")
+        End If
+    End Function
+
+    <Protocol(Protocols.Pause)>
+    Public Function Pause(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
+        If session Is Nothing Then
+            Return New DataPipe(NetResponse.RFC_FAILED_DEPENDENCY)
+        Else
+            Call session.Stop()
+            Return New DataPipe("ok!")
+        End If
+    End Function
+
+    <Protocol(Protocols.[Stop])>
+    Public Function [Stop](request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
+        If session Is Nothing Then
+            Return New DataPipe(NetResponse.RFC_FAILED_DEPENDENCY)
+        Else
+            Call session.Stop()
+            Call session.Dispose()
+            Return New DataPipe("ok!")
+        End If
     End Function
 
     Protected Overridable Sub Dispose(disposing As Boolean)
         If Not disposedValue Then
             If disposing Then
                 ' TODO: 释放托管状态(托管对象)
+                Call socket.Dispose()
+                Call session.Dispose()
             End If
 
             ' TODO: 释放未托管的资源(未托管的对象)并重写终结器

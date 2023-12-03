@@ -18,6 +18,12 @@ Public Class Session : Implements IDisposable
 
     Private disposedValue As Boolean
 
+    Public ReadOnly Property IsPaused As Boolean
+        Get
+            Return pause
+        End Get
+    End Property
+
     Public Sub New(file As FrameWriter)
         storage = file
     End Sub
