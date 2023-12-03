@@ -39,7 +39,7 @@ Public NotInheritable Class RscriptHelper
 
         Call Helpers.logCommandLine(RscriptHost, cmdl, workdir)
 
-        Return New RunSlavePipeline(RscriptHost, args, workdir)
+        Return New RunSlavePipeline(RscriptHost, cmdl, workdir)
     End Function
 
     ''' <summary>
