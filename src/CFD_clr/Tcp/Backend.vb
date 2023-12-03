@@ -99,7 +99,7 @@ Public Class Backend : Implements ITaskDriver, IDisposable
         Return New DataPipe(ms)
     End Function
 
-    <Protocol(Protocols.RequestFrame)>
+    <Protocol(Protocols.Setup)>
     Public Function Setup(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
         Dim args As SetupParameters = request.LoadObject(Of SetupParameters)
         Dim save As New FrameWriter(args.storagefile.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False))
