@@ -81,6 +81,24 @@ Public Class Backend : Implements ITaskDriver, IDisposable
         Return New DataPipe(BitConverter.GetBytes(val))
     End Function
 
+    <Protocol(Protocols.RequestPoint)>
+    Public Function MoveTracers(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
+        Dim speed As Double = BitConverter.ToDouble(request.ChunkBuffer)
+        Dim tracers As PointF() = New DataAdapter(session).CFD.moveTracers(factor:=speed).ToArray
+        Dim ms As New MemoryStream
+        Dim wr As New BinaryDataWriter(ms) With {.ByteOrder = ByteOrder.LittleEndian}
+
+        Call wr.Write(tracers.Length)
+
+        For Each pt As PointF In tracers
+            Call wr.Write(New Single() {pt.X, pt.Y})
+        Next
+
+        Call wr.Flush()
+
+        Return New DataPipe(ms)
+    End Function
+
     <Protocol(Protocols.RequestFrame)>
     Public Function Setup(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
         Dim args As SetupParameters = request.LoadObject(Of SetupParameters)

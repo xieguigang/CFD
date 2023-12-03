@@ -2,7 +2,7 @@
 
 Public Class DataAdapter
 
-    Protected ReadOnly CFD As FluidDynamics
+    Public ReadOnly CFD As FluidDynamics
 
     Public Property velocity As Double
         Get
