@@ -33,14 +33,22 @@ Public NotInheritable Class RscriptHelper
         Return $"{RscriptFolder}/{filename}".GetFullPath
     End Function
 
+    Private Shared Function CreateRscript(args As String) As RunSlavePipeline
+        Dim cmdl As String = $"{args} --SetDllDirectory {$"{RstudioFolder}/host".CLIPath}"
+        Dim workdir As String = RscriptHost.ParentPath
+
+        Call Helpers.logCommandLine(RscriptHost, cmdl, workdir)
+
+        Return New RunSlavePipeline(RscriptHost, args, workdir)
+    End Function
+
     ''' <summary>
     ''' create a new CFD server
     ''' </summary>
     ''' <returns>the tcp port number, negative or zero means create not success</returns>
     Public Shared Function CreateCFDServer(await As Double, log As Action(Of String)) As Integer
         Dim script As String = GetRscript("Moira-CFD.R")
-        Dim args As String = $"{script.CLIPath} --SetDllDirectory {$"{RstudioFolder}/host".CLIPath}"
-        Dim pip As New RunSlavePipeline(RscriptHost, args, RscriptHost.ParentPath)
+        Dim pip = CreateRscript(args:=script)
         Dim task As New Thread(AddressOf pip.Run)
         Dim port As Integer? = Nothing
         Dim sleepTime As Double = 10
@@ -56,7 +64,7 @@ Public NotInheritable Class RscriptHelper
                 End If
             End Sub
 
-        Call Helpers.logCommandLine(RscriptHost, args, RscriptHost.ParentPath)
+
         Call task.Start()
 
         Do While t < totalMs
