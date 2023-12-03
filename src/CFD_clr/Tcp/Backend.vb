@@ -1,6 +1,7 @@
 ﻿Imports System.Drawing
 Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports System.Threading
 Imports CFD
 Imports CFD.Storage
 Imports Microsoft.VisualBasic.ComponentModel
@@ -115,12 +116,12 @@ Public Class Backend : Implements ITaskDriver, IDisposable
     <Protocol(Protocols.Start)>
     Public Function Start(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
         If session Is Nothing Then
-            Return New DataPipe(NetResponse.RFC_FAILED_DEPENDENCY)
+            Return New DataPipe(NetResponse.RFC_EXPECTATION_FAILED)
         ElseIf session.IsPaused Then
-            Call session.Resume()
+            Call New Thread(AddressOf session.Resume).Start()
             Return New DataPipe(CFDTcpProtocols.ok)
         Else
-            Call session.Run()
+            Call New Thread(AddressOf session.Run).Start()
             Return New DataPipe(CFDTcpProtocols.ok)
         End If
     End Function
@@ -128,7 +129,7 @@ Public Class Backend : Implements ITaskDriver, IDisposable
     <Protocol(Protocols.Pause)>
     Public Function Pause(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
         If session Is Nothing Then
-            Return New DataPipe(NetResponse.RFC_FAILED_DEPENDENCY)
+            Return New DataPipe(NetResponse.RFC_EXPECTATION_FAILED)
         Else
             Call session.Stop()
             Return New DataPipe(CFDTcpProtocols.ok)
@@ -138,7 +139,7 @@ Public Class Backend : Implements ITaskDriver, IDisposable
     <Protocol(Protocols.[Stop])>
     Public Function [Stop](request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
         If session Is Nothing Then
-            Return New DataPipe(NetResponse.RFC_FAILED_DEPENDENCY)
+            Return New DataPipe(NetResponse.RFC_EXPECTATION_FAILED)
         Else
             Call session.Stop()
             Call session.Dispose()
