@@ -51,6 +51,7 @@ Public NotInheritable Class RscriptHelper
                 End If
             End Sub
 
+        Call Helpers.logCommandLine(RscriptHost, script, RscriptHost.ParentPath)
         Call task.Start()
 
         Do While t < totalMs
