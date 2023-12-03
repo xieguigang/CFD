@@ -118,4 +118,36 @@ Public Class CFDTcpProtocols
             Yield New PointF(xy(0), xy(1))
         Next
     End Function
+
+    Public Function GetSpeed(xy As Point) As Double
+        Dim pars As New PointRequestParameters With {.x = xy.X, .y = xy.Y, .frame = FrameTypes.Speed}
+        Dim req As New RequestStream(lpProtocol, Protocols.RequestPoint, pars.GetJson)
+        Dim data = requestData(req)
+
+        Return BitConverter.ToDouble(data.ChunkBuffer)
+    End Function
+
+    Public Function GetDensity(xy As Point) As Double
+        Dim pars As New PointRequestParameters With {.x = xy.X, .y = xy.Y, .frame = FrameTypes.Density}
+        Dim req As New RequestStream(lpProtocol, Protocols.RequestPoint, pars.GetJson)
+        Dim data = requestData(req)
+
+        Return BitConverter.ToDouble(data.ChunkBuffer)
+    End Function
+
+    Public Function GetXVel(xy As Point) As Double
+        Dim pars As New PointRequestParameters With {.x = xy.X, .y = xy.Y, .frame = FrameTypes.XVel}
+        Dim req As New RequestStream(lpProtocol, Protocols.RequestPoint, pars.GetJson)
+        Dim data = requestData(req)
+
+        Return BitConverter.ToDouble(data.ChunkBuffer)
+    End Function
+
+    Public Function GetYVel(xy As Point) As Double
+        Dim pars As New PointRequestParameters With {.x = xy.X, .y = xy.Y, .frame = FrameTypes.YVel}
+        Dim req As New RequestStream(lpProtocol, Protocols.RequestPoint, pars.GetJson)
+        Dim data = requestData(req)
+
+        Return BitConverter.ToDouble(data.ChunkBuffer)
+    End Function
 End Class

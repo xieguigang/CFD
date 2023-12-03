@@ -183,10 +183,10 @@ Public Class frmCFDCanvas
 
         Call Message($"[{xy.X},{xy.Y}]")
 
-        Dim speed As Double = reader.GetSpeed(xy)
-        Dim density As Double = reader.GetDensity(xy)
-        Dim xvel As Double = reader.GetXVel(xy)
-        Dim yvel As Double = reader.GetYVel(xy)
+        Dim speed As Double = CFD.GetSpeed(xy)
+        Dim density As Double = CFD.GetDensity(xy)
+        Dim xvel As Double = CFD.GetXVel(xy)
+        Dim yvel As Double = CFD.GetYVel(xy)
 
         tooltip.AppendLine($"point xy: ({xy.X},{xy.Y})")
         tooltip.AppendLine($"density: {density}")

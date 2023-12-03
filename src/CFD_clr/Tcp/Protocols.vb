@@ -20,4 +20,5 @@
     ''' request a frame data
     ''' </summary>
     RequestFrame
+    RequestPoint
 End Enum
