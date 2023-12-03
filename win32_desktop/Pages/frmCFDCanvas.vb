@@ -25,7 +25,9 @@ Public Class frmCFDCanvas
     ReadOnly grayOffset As New DoubleRange(0, 29)
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
-        Call Render(frame:=CFD.getFrameData(toolkit.pars.DrawFrameData))
+        If CFD IsNot Nothing AndAlso CFD.ready Then
+            Call Render(frame:=CFD.getFrameData(toolkit.pars.DrawFrameData))
+        End If
     End Sub
 
     Private Sub Render(frame As Double()())
@@ -127,7 +129,9 @@ Public Class frmCFDCanvas
     End Sub
 
     Private Sub resetCFD()
-        Call CFD.reset()
+        If CFD IsNot Nothing AndAlso CFD.ready Then
+            Call CFD.reset()
+        End If
     End Sub
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -153,7 +157,7 @@ Public Class frmCFDCanvas
     End Function
 
     Private Sub PictureBox1_MouseClick(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseClick
-        If e.Button = MouseButtons.Left AndAlso CheckDrawBarrier() Then
+        If e.Button = MouseButtons.Left AndAlso CheckDrawBarrier() AndAlso CFD IsNot Nothing AndAlso CFD.ready Then
             ' Call reader.SetBarrierPoint(GetCFDPosition, 1)
         End If
     End Sub

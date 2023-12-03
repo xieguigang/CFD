@@ -16,6 +16,14 @@ Public Class CFDTcpProtocols
     Public ReadOnly Property EndPoint As IPEndPoint
     Public ReadOnly Property pars As SetupParameters
 
+    Public ReadOnly Property ready As Boolean
+        Get
+            Return pars IsNot Nothing AndAlso session_started
+        End Get
+    End Property
+
+    Dim session_started As Boolean
+
     Sub New(server As IPEndPoint)
         Me.EndPoint = server
     End Sub
@@ -55,7 +63,9 @@ Public Class CFDTcpProtocols
         Dim req As New RequestStream(lpProtocol, Protocols.Start)
         Dim data = requestData(req)
 
-        If data.GetUTF8String = ok Then
+        session_started = data.GetUTF8String = ok
+
+        If session_started Then
             Return True
         Else
             Return False
