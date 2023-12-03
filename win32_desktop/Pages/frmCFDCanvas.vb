@@ -90,10 +90,10 @@ Public Class frmCFDCanvas
                     index = CInt(range.ScaleMapping(v, offset))
                 End If
 
-                g.FillRectangle(colors(index), New Rectangle(i, j, 1, 1))
+                SyncLock colors
+                    g.FillRectangle(colors(index), New Rectangle(i, j, 1, 1))
+                End SyncLock
             Next
-
-            ' Call Application.DoEvents()
         Next
 
         If ribbonItems.CheckShowTracer.BooleanValue Then
