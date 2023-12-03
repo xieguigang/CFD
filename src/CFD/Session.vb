@@ -44,23 +44,41 @@ Public Class Session : Implements IDisposable
         Return Me
     End Function
 
+    ''' <summary>
+    ''' resume running
+    ''' </summary>
     Public Sub [Resume]()
-
+        Call Run(reset:=False)
     End Sub
 
+    ''' <summary>
+    ''' pause
+    ''' </summary>
     Public Sub [Stop]()
         pause = True
     End Sub
 
-    Public Sub Run()
-        Dim i As Integer = 1
+    Dim i As Integer = 1
+
+    ''' <summary>
+    ''' start
+    ''' </summary>
+    ''' <param name="reset"></param>
+    Public Sub Run(Optional reset As Boolean = True)
         Dim d As Integer = max_time / 50
         Dim t0 As Date = Now
 
-        CFD = New FluidDynamics(dimension.Width, dimension.Height)
-        CFD.reset()
+        If reset Then
+            CFD = New FluidDynamics(dimension.Width, dimension.Height)
+            CFD.reset()
 
-        For time As Integer = 0 To max_time
+            Me.i = 0
+            Me.time = 0
+        End If
+
+        Dim startTime As Integer = Me.time
+
+        For time As Integer = startTime To max_time
             If time Mod snapshotInterval = 0 Then
                 ' take snapshot
                 Call storage.addFrame(i, NameOf(FluidDynamics.rho), CFD.rho)
@@ -75,6 +93,9 @@ Public Class Session : Implements IDisposable
 
             If time Mod d = 0 Then
                 Call VBDebugger.EchoLine($"[{time}/{max_time}] {(time / max_time * 100).ToString("F1")}% ..... {StringFormats.ReadableElapsedTime((Now - t0).TotalMilliseconds)}")
+            End If
+            If pause Then
+                Exit For
             End If
         Next
     End Sub
