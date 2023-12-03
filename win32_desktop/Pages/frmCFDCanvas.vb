@@ -224,8 +224,6 @@ Public Class frmCFDCanvas
         CFD = Globals.CreateService
         CFD.config(New SetupParameters With {.storagefile = $"{Workspace}/data.CFD"})
 
-        UpdatePalette()
-
         AddHandler ribbonItems.ButtonReset.ExecuteEvent, Sub() resetCFD()
         AddHandler ribbonItems.ButtonClearBarrier.ExecuteEvent, Sub()
                                                                     ' CFD.clearBarrier()
@@ -257,5 +255,7 @@ Public Class frmCFDCanvas
         Globals.current = CFD
         toolkit.SetTarget(callback:=Me)
         ribbonItems.TabSimulationPage.ContextAvailable = ContextAvailability.Active
+
+        Call UpdatePalette()
     End Sub
 End Class
