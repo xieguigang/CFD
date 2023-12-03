@@ -136,6 +136,10 @@ Public Class frmCFDCanvas
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Friend Sub UpdatePalette()
+        If toolkit Is Nothing OrElse toolkit.pars Is Nothing Then
+            Return
+        End If
+
         offset = New DoubleRange(0, toolkit.pars.ColorLevels)
         colors = GetColors(toolkit.pars.Colors.Description, toolkit.pars.ColorLevels + 1) _
             .Select(Function(c) New SolidBrush(c)) _
@@ -205,7 +209,7 @@ Public Class frmCFDCanvas
 
     Private Sub frmCFDCanvas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         UpdatePalette()
-        CFD.reset()
+        ' CFD.reset()
 
         AddHandler ribbonItems.ButtonReset.ExecuteEvent, Sub() resetCFD()
         AddHandler ribbonItems.ButtonClearBarrier.ExecuteEvent, Sub()

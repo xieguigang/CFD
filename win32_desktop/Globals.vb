@@ -1,4 +1,7 @@
-﻿Imports CFD_win32.RibbonLib.Controls
+﻿Imports BackgroundHost
+Imports CFD_clr
+Imports CFD_win32.RibbonLib.Controls
+Imports Microsoft.VisualBasic.Net
 Imports WeifenLuo.WinFormsUI.Docking
 
 Module Globals
@@ -8,7 +11,13 @@ Module Globals
     Public dockPanel As DockPanel
 
     Public Sub Message(str As String)
-        main.ToolStripStatusLabel2.Text = str
+        main.Invoke(Sub() main.ToolStripStatusLabel2.Text = str)
     End Sub
+
+    Public Function CreateService() As CFDTcpProtocols
+        Dim port As Integer = RscriptHelper.CreateCFDServer(await:=1500, log:=AddressOf Message)
+        Dim client As New CFDTcpProtocols(New IPEndPoint("127.0.0.1", port))
+        Return client
+    End Function
 
 End Module
