@@ -26,20 +26,31 @@ Public Class frmCFDCanvas
 
     Public Property Workspace As String
 
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+    Private Async Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         If CFD IsNot Nothing AndAlso CFD.ready Then
-            Call Render(frame:=CFD.getFrameData(toolkit.pars.DrawFrameData))
+            Dim bitmap As bitmap = Await GetRenderBitmap()
+
+            If Not bitmap Is Nothing Then
+                PictureBox1.BackgroundImage = bitmap
+            End If
         End If
     End Sub
 
-    Private Sub Render(frame As Double()())
+    Private Function GetRenderBitmap() As Task(Of bitmap)
+        Return Task(Of bitmap).Run(
+            Function()
+                Return Render(frame:=CFD.getFrameData(toolkit.pars.DrawFrameData))
+            End Function)
+    End Function
+
+    Private Function Render(frame As Double()()) As bitmap
         Dim xyDims As Size = CFD.pars.getDims
         Dim bitmap As New bitmap(xyDims.Width, xyDims.Height)
         Dim g As Graphics = Graphics.FromImage(bitmap)
 
         If frame.IsNullOrEmpty Then
             Call Globals.Message("invalid frame data!")
-            Return
+            Return Nothing
         End If
 
         Dim range As DoubleRange = frame.AsParallel _
@@ -60,7 +71,7 @@ Public Class frmCFDCanvas
         g.SmoothingMode = SmoothingMode.None
 
         If range.Min.IsNaNImaginary OrElse range.Max.IsNaNImaginary Then
-            Return
+            Return Nothing
         End If
 
         For i As Integer = 0 To frame.Length - 1
@@ -94,8 +105,8 @@ Public Class frmCFDCanvas
             Call drawFlowlines(g)
         End If
 
-        PictureBox1.BackgroundImage = bitmap
-    End Sub
+        Return bitmap
+    End Function
 
     Private Sub drawFlowlines(g As Graphics)
         Dim xyDims As Size = CFD.pars.getDims
