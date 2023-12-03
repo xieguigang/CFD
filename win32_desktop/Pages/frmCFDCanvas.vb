@@ -64,7 +64,12 @@ Public Class frmCFDCanvas
                     v = cut
                 End If
 
-                index = CInt(range.ScaleMapping(v, offset))
+                If range.Length = 0.0 Then
+                    index = 0
+                Else
+                    index = CInt(range.ScaleMapping(v, offset))
+                End If
+
                 g.FillRectangle(colors(index), New Rectangle(i, j, 1, 1))
             Next
         Next
