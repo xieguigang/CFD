@@ -25,7 +25,7 @@ Namespace Storage
         Dim disposedValue As Boolean
 
         Sub New(file As Stream)
-            buf = New StreamPack(file)
+            buf = New StreamPack(file, meta_size:=16 * 1024 * 1024)
         End Sub
 
         Public Sub dimension(val As Size)
