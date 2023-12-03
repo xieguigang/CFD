@@ -6,7 +6,7 @@ Imports Microsoft.VisualBasic.Net.Protocols.Reflection
 Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Parallel
 
-Public Class TcpProtocols
+Public Class CFDTcpProtocols
 
     Public ReadOnly lpProtocol As Long = ProtocolAttribute.GetProtocolCategory(GetType(Protocols)).EntryPoint
 
