@@ -13,8 +13,8 @@ Public Module Helpers
 
         Call log.info($"app={app}", trace)
         Call log.info($"commandline={commandLine}", trace)
-        Call log.Debug("workdir=%s", workdir)
-        Call log.Debug("pipeline=""%s"" %s", app, commandLine)
+        Call log.Debug("workdir={0}", workdir)
+        Call log.Debug("pipeline=""{0}"" {1}", app, commandLine)
         Call log.Dispose()
     End Sub
 End Module

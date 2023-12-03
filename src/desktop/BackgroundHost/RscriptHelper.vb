@@ -1,4 +1,5 @@
 Imports System.Threading
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 
 Public NotInheritable Class RscriptHelper
@@ -14,8 +15,11 @@ Public NotInheritable Class RscriptHelper
     ''' <returns></returns>
     Public Shared ReadOnly Property RscriptFolder As String
 
+    Public Shared ReadOnly Property RstudioFolder As String
+
     Shared Sub New()
         RscriptHost = $"{App.HOME}/Rstudio\bin\Rscript.exe"
+        RstudioFolder = RscriptHost.ParentPath.ParentPath
 
         If ENV.developmentEnv Then
             RscriptFolder = $"{App.HOME}/../../src\Rstudio"
@@ -35,6 +39,7 @@ Public NotInheritable Class RscriptHelper
     ''' <returns>the tcp port number, negative or zero means create not success</returns>
     Public Shared Function CreateCFDServer(await As Double, log As Action(Of String)) As Integer
         Dim script As String = GetRscript("Moira-CFD.R")
+        Dim args As String = $"{script.CLIPath} --SetDllDirectory {$"{RstudioFolder}/host".CLIPath}"
         Dim pip As New RunSlavePipeline(RscriptHost, script, RscriptHost.ParentPath)
         Dim task As New Thread(AddressOf pip.Run)
         Dim port As Integer? = Nothing
@@ -51,7 +56,7 @@ Public NotInheritable Class RscriptHelper
                 End If
             End Sub
 
-        Call Helpers.logCommandLine(RscriptHost, script, RscriptHost.ParentPath)
+        Call Helpers.logCommandLine(RscriptHost, args, RscriptHost.ParentPath)
         Call task.Start()
 
         Do While t < totalMs

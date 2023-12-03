@@ -81,7 +81,7 @@ Public Class Backend : Implements ITaskDriver, IDisposable
         Return New DataPipe(BitConverter.GetBytes(val))
     End Function
 
-    <Protocol(Protocols.RequestPoint)>
+    <Protocol(Protocols.MoveTracers)>
     Public Function MoveTracers(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
         Dim speed As Double = BitConverter.ToDouble(request.ChunkBuffer)
         Dim tracers As PointF() = New DataAdapter(session).CFD.moveTracers(factor:=speed).ToArray
