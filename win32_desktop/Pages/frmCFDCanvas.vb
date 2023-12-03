@@ -26,9 +26,9 @@ Public Class frmCFDCanvas
 
     Public Property Workspace As String
 
-    Private Async Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         If CFD IsNot Nothing AndAlso CFD.ready Then
-            Dim bitmap As bitmap = Await GetRenderBitmap()
+            Dim bitmap As bitmap = Render(frame:=CFD.getFrameData(toolkit.pars.DrawFrameData)) ' Await GetRenderBitmap()
 
             If Not bitmap Is Nothing Then
                 PictureBox1.BackgroundImage = bitmap
@@ -36,12 +36,12 @@ Public Class frmCFDCanvas
         End If
     End Sub
 
-    Private Function GetRenderBitmap() As Task(Of bitmap)
-        Return Task(Of bitmap).Run(
-            Function()
-                Return Render(frame:=CFD.getFrameData(toolkit.pars.DrawFrameData))
-            End Function)
-    End Function
+    'Private Function GetRenderBitmap() As Task(Of bitmap)
+    '    Return Task(Of bitmap).Run(
+    '        Function()
+    '            Return Render(frame:=CFD.getFrameData(toolkit.pars.DrawFrameData))
+    '        End Function)
+    'End Function
 
     Private Function Render(frame As Double()()) As bitmap
         Dim xyDims As Size = CFD.pars.getDims
