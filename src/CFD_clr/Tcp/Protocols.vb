@@ -4,6 +4,7 @@
     ''' setup the CFD session
     ''' </summary>
     Setup
+    Reset
 
     ''' <summary>
     ''' start or resume
@@ -13,6 +14,7 @@
     [Stop]
 
     SetBarrier
+    MoveTracers
 
     ''' <summary>
     ''' request a frame data

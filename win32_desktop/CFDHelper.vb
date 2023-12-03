@@ -1,7 +1,8 @@
 ﻿Imports CFD
+Imports CFD_clr
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 
-Public Class CFDHelper : Inherits DataAdapter
+Public Class CFDHelper
 
     Public Property DrawFrameData As FrameTypes
     Public Property Colors As ScalerPalette = ScalerPalette.FlexImaging
@@ -20,25 +21,19 @@ Public Class CFDHelper : Inherits DataAdapter
 
     Public ReadOnly Property dimension As Size
         Get
-            Return New Size(CFD.xdim, CFD.ydim)
+            Return dims
         End Get
     End Property
 
     Dim timer As Timer
+    Dim dims As Size
 
-    Public Sub New(CFD As FluidDynamics, timer As Timer)
-        MyBase.New(CFD)
+    Public Sub New(timer As Timer)
         Me.timer = timer
     End Sub
 
-    Public Sub SetBarrierPoint(xy As Point, r As Integer)
-        Dim barrier = GetBarrier()
-
-        For x As Integer = xy.X - r To xy.X + r
-            For y As Integer = xy.Y - r To xy.Y + r
-                barrier(x)(y) = True
-            Next
-        Next
+    Public Sub SetParameters(pars As SetupParameters)
+        dims = New Size(pars.dims(0), pars.dims(1))
     End Sub
 End Class
 

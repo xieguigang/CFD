@@ -4,8 +4,10 @@ Public Class toolCFDParameters
 
     Dim callback As frmCFDCanvas
 
-    Public Sub SetTarget(target As CFDHelper, callback As frmCFDCanvas)
-        PropertyGrid1.SelectedObject = target
+    Public ReadOnly Property pars As CFDHelper
+
+    Public Sub SetTarget(callback As frmCFDCanvas)
+        PropertyGrid1.SelectedObject = New CFDHelper(callback.Timer1)
         PropertyGrid1.Refresh()
 
         Me.callback = callback

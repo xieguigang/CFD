@@ -5,6 +5,7 @@ Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.Net.Protocols.Reflection
 Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Parallel
+Imports Microsoft.VisualBasic.Serialization.JSON
 
 Public Class CFDTcpProtocols
 
@@ -13,7 +14,24 @@ Public Class CFDTcpProtocols
     Public Const ok As String = "ok!"
 
     Public ReadOnly Property EndPoint As IPEndPoint
-    Public ReadOnly Property dims As Size
+    Public ReadOnly Property pars As SetupParameters
+
+    Sub New(server As IPEndPoint)
+        Me.EndPoint = server
+    End Sub
+
+    Public Function config(pars As SetupParameters) As Boolean
+        Dim req As New RequestStream(lpProtocol, Protocols.Setup, pars.GetJson)
+        Dim data = requestData(req)
+
+        _pars = pars
+
+        If data.GetUTF8String = ok Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
 
     Private Function requestData(req As RequestStream) As RequestStream
         Return New TcpRequest(EndPoint).SendMessage(req)
@@ -22,6 +40,7 @@ Public Class CFDTcpProtocols
     Public Function getFrameData(type As FrameTypes) As Double()()
         Dim req As New RequestStream(lpProtocol, Protocols.RequestFrame, BitConverter.GetBytes(CInt(type)))
         Dim data = requestData(req)
+        Dim dims As New Size(pars.dims(0), pars.dims(1))
         Dim frame As Double()() = New Double(dims.Width - 1)() {}
         Dim rd As New BinaryDataReader(data) With {.ByteOrder = ByteOrder.LittleEndian}
 
@@ -76,4 +95,27 @@ Public Class CFDTcpProtocols
         End If
     End Function
 
+    Public Function reset() As Boolean
+        Dim req As New RequestStream(lpProtocol, Protocols.Reset)
+        Dim data = requestData(req)
+
+        If data.GetUTF8String = ok Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
+    Public Iterator Function moveTracers(tracerSpeedLevel As Double) As IEnumerable(Of PointF)
+        Dim req As New RequestStream(lpProtocol, Protocols.MoveTracers, BitConverter.GetBytes(tracerSpeedLevel))
+        Dim data = requestData(req)
+        Dim rd As New BinaryDataReader(data) With {.ByteOrder = ByteOrder.LittleEndian}
+        Dim n As Integer = rd.ReadInt32
+        Dim xy As Single()
+
+        For i As Integer = 0 To n - 1
+            xy = rd.ReadSingles(2)
+            Yield New PointF(xy(0), xy(1))
+        Next
+    End Function
 End Class

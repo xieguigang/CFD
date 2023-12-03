@@ -3,6 +3,7 @@ Imports System.Drawing.Text
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports CFD
+Imports CFD_clr
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors.Scaler
@@ -14,8 +15,7 @@ Imports std = System.Math
 
 Public Class frmCFDCanvas
 
-    Dim CFD As New FluidDynamics(600, 480, 2500)
-    Dim reader As CFDHelper
+    Dim CFD As CFDTcpProtocols
     Dim colors As SolidBrush()
     Dim offset As New DoubleRange(0, 255)
     Dim drawLine As Boolean = False
@@ -24,36 +24,21 @@ Public Class frmCFDCanvas
     ReadOnly grays As SolidBrush() = Designer.GetBrushes(ScalerPalette.Gray.Description, 30)
     ReadOnly grayOffset As New DoubleRange(0, 29)
 
-    Sub New()
-
-        ' 此调用是设计器所必需的。
-        InitializeComponent()
-
-        ' 在 InitializeComponent() 调用之后添加任何初始化。
-        reader = New CFDHelper(CFD, Timer1)
-    End Sub
-
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
-        Call CFD.advance()
-
-        Select Case reader.DrawFrameData
-            Case FrameTypes.Speed : Call Render(frame:=reader.GetSpeed)
-            Case FrameTypes.Density : Call Render(frame:=reader.GetDensity)
-            Case FrameTypes.XVel : Call Render(frame:=reader.GetXVel)
-            Case FrameTypes.YVel : Call Render(frame:=reader.GetYVel)
-        End Select
+        Call Render(frame:=CFD.getFrameData(toolkit.pars.DrawFrameData))
     End Sub
 
     Private Sub Render(frame As Double()())
-        Dim bitmap As New bitmap(CFD.xdim, CFD.ydim)
+        Dim xyDims As Size = CFD.pars.getDims
+        Dim bitmap As New bitmap(xyDims.Width, xyDims.Height)
         Dim g As Graphics = Graphics.FromImage(bitmap)
         Dim range As DoubleRange = frame.AsParallel.Select(Function(a) {a.Min, a.Max}).IteratesALL.Range
         Dim v As Double
         Dim index As Integer
         Dim cut As Double = Double.MaxValue
 
-        If reader.enableTrIQ Then
-            cut = frame.IteratesALL.FindThreshold(reader.TrIQ)
+        If toolkit.pars.enableTrIQ Then
+            cut = frame.IteratesALL.FindThreshold(toolkit.pars.TrIQ)
             range = New DoubleRange(range.Min, cut)
         End If
 
@@ -71,7 +56,7 @@ Public Class frmCFDCanvas
             For j As Integer = 0 To row.Length - 1
                 v = row(j)
 
-                If reader.enableTrIQ AndAlso v > cut Then
+                If toolkit.pars.enableTrIQ AndAlso v > cut Then
                     v = cut
                 End If
 
@@ -81,7 +66,7 @@ Public Class frmCFDCanvas
         Next
 
         If ribbonItems.CheckShowTracer.BooleanValue Then
-            For Each pt As PointF In CFD.moveTracers(reader.TracerSpeedLevel)
+            For Each pt As PointF In CFD.moveTracers(toolkit.pars.TracerSpeedLevel)
                 Call g.FillRectangle(Brushes.Black, New RectangleF(pt, New Size(1, 1)))
             Next
         End If
@@ -93,15 +78,16 @@ Public Class frmCFDCanvas
     End Sub
 
     Private Sub drawFlowlines(g As Graphics)
-        Dim xdim = CFD.xdim
-        Dim ydim = CFD.ydim
+        Dim xyDims As Size = CFD.pars.getDims
+        Dim xdim = xyDims.Width
+        Dim ydim = xyDims.Height
         Dim lenX As Single = 13
         Dim lenY As Single = 8
         Dim xLines = xdim / lenX
         Dim yLines = ydim / lenY
 
-        Dim ux = reader.GetXVel
-        Dim uy = reader.GetYVel
+        Dim ux = CFD.getFrameData(FrameTypes.XVel)
+        Dim uy = CFD.getFrameData(FrameTypes.YVel)
         Dim speeds As New List(Of Double)
 
         For yCount As Integer = 0 To yLines - 1
@@ -146,8 +132,8 @@ Public Class frmCFDCanvas
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Friend Sub UpdatePalette()
-        offset = New DoubleRange(0, reader.ColorLevels)
-        colors = GetColors(reader.Colors.Description, reader.ColorLevels + 1) _
+        offset = New DoubleRange(0, toolkit.pars.ColorLevels)
+        colors = GetColors(toolkit.pars.Colors.Description, toolkit.pars.ColorLevels + 1) _
             .Select(Function(c) New SolidBrush(c)) _
             .ToArray
     End Sub
@@ -168,20 +154,21 @@ Public Class frmCFDCanvas
 
     Private Sub PictureBox1_MouseClick(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseClick
         If e.Button = MouseButtons.Left AndAlso CheckDrawBarrier() Then
-            Call reader.SetBarrierPoint(GetCFDPosition, 1)
+            ' Call reader.SetBarrierPoint(GetCFDPosition, 1)
         End If
     End Sub
 
     Private Function GetCFDPosition() As Point
         Dim xy As Point = PictureBox1.PointToClient(Cursor.Position)
         Dim sizeView As Size = PictureBox1.Size
-        Dim ratio As New SizeF(sizeView.Width / CFD.xdim, sizeView.Height / CFD.ydim)
+        Dim dims As Size = CFD.pars.getDims
+        Dim ratio As New SizeF(sizeView.Width / dims.Width, sizeView.Height / dims.Height)
         Dim x As Integer = xy.X / ratio.Width, y As Integer = xy.Y / ratio.Height
 
         If x < 0 Then x = 0
         If y < 0 Then y = 0
-        If x >= CFD.xdim Then x = CFD.xdim - 1
-        If y >= CFD.ydim Then y = CFD.ydim - 1
+        If x >= dims.Width Then x = dims.Width - 1
+        If y >= dims.Height Then y = dims.Height - 1
 
         Return New Point(x, y)
     End Function
@@ -191,7 +178,7 @@ Public Class frmCFDCanvas
         Dim tooltip As New StringBuilder
 
         If drawLine AndAlso CheckDrawBarrier() Then
-            Call reader.SetBarrierPoint(xy, 1)
+            'Call reader.SetBarrierPoint(xy, 1)
         End If
 
         Call Message($"[{xy.X},{xy.Y}]")
@@ -205,9 +192,9 @@ Public Class frmCFDCanvas
         tooltip.AppendLine($"density: {density}")
         tooltip.AppendLine($"velocity: [{xvel},{yvel}]")
 
-        If reader.GetBarrier(xy) Then
-            tooltip.AppendLine("current location is a barrier site")
-        End If
+        'If reader.GetBarrier(xy) Then
+        '    tooltip.AppendLine("current location is a barrier site")
+        'End If
 
         ToolTip1.SetToolTip(PictureBox1, tooltip.ToString)
     End Sub
@@ -217,11 +204,13 @@ Public Class frmCFDCanvas
         CFD.reset()
 
         AddHandler ribbonItems.ButtonReset.ExecuteEvent, Sub() resetCFD()
-        AddHandler ribbonItems.ButtonClearBarrier.ExecuteEvent, Sub() CFD.clearBarrier()
+        AddHandler ribbonItems.ButtonClearBarrier.ExecuteEvent, Sub()
+                                                                    ' CFD.clearBarrier()
+                                                                End Sub
 
         toolkit.Show(DockPanel)
         toolkit.DockState = DockState.DockLeft
-        toolkit.SetTarget(reader, callback:=Me)
+        toolkit.SetTarget(callback:=Me)
 
         TabText = $"CFD Project - {Now.Year}{Now.Month.ToString.PadLeft(1, "0"c)}{Now.Day.ToString.PadLeft(1, "0"c)}-{App.ElapsedMilliseconds}"
 
