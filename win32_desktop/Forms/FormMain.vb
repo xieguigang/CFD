@@ -55,10 +55,17 @@ Public Class FormMain
     End Sub
 
     Private Sub CreateNewSimulation()
-        Dim CFD As New frmCFDCanvas
+        Using folder As New FolderBrowserDialog With {
+            .ShowNewFolderButton = True,
+            .Description = "Select a folder for save simulation session result."
+        }
+            If folder.ShowDialog = DialogResult.OK Then
+                Dim CFD As New frmCFDCanvas With {.Workspace = folder.SelectedPath}
 
-        CFD.Show(dockPanel)
-        CFD.DockState = DockState.Document
+                CFD.Show(dockPanel)
+                CFD.DockState = DockState.Document
+            End If
+        End Using
     End Sub
 
     Private Sub FormMain_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing

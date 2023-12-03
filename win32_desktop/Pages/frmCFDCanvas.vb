@@ -23,6 +23,8 @@ Public Class frmCFDCanvas
     ReadOnly grays As SolidBrush() = Designer.GetBrushes(ScalerPalette.Gray.Description, 30)
     ReadOnly grayOffset As New DoubleRange(0, 29)
 
+    Public Property Workspace As String
+
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         If CFD IsNot Nothing AndAlso CFD.ready Then
             Call Render(frame:=CFD.getFrameData(toolkit.pars.DrawFrameData))
@@ -214,6 +216,8 @@ Public Class frmCFDCanvas
 
     Private Sub frmCFDCanvas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         CFD = Globals.CreateService
+        CFD.config(New SetupParameters With {.storagefile = $"{Workspace}/data.CFD"})
+
         UpdatePalette()
 
         AddHandler ribbonItems.ButtonReset.ExecuteEvent, Sub() resetCFD()
