@@ -21,4 +21,10 @@ Module Globals
         Return client
     End Function
 
+    Public current As CFDTcpProtocols
+
+    Public Sub SetupBackendUI()
+        AddHandler ribbonItems.ButtonSimulationStart.ExecuteEvent, Sub() Call current.start()
+    End Sub
+
 End Module

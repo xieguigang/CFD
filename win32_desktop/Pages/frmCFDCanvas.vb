@@ -231,6 +231,7 @@ Public Class frmCFDCanvas
 
         TabText = $"CFD Project - {Now.Year}{Now.Month.ToString.PadLeft(1, "0"c)}{Now.Day.ToString.PadLeft(1, "0"c)}-{App.ElapsedMilliseconds}"
 
+        Call SetCurrent()
         Call main.EnableVSRenderer(ContextMenuStrip1)
     End Sub
 
@@ -247,6 +248,7 @@ Public Class frmCFDCanvas
     End Sub
 
     Private Sub SetCurrent()
+        Globals.current = CFD
         toolkit.SetTarget(callback:=Me)
         ribbonItems.TabSimulationPage.ContextAvailable = ContextAvailability.Active
     End Sub
