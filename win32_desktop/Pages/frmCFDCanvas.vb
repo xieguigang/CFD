@@ -15,7 +15,8 @@ Imports std = System.Math
 
 Public Class frmCFDCanvas
 
-    Dim CFD As CFDTcpProtocols
+    Friend CFD As CFDTcpProtocols
+
     Dim colors As SolidBrush()
     Dim offset As New DoubleRange(0, 255)
     Dim drawLine As Boolean = False

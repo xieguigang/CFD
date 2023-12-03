@@ -1,6 +1,7 @@
 ﻿Imports CFD
 Imports CFD_clr
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
+Imports Microsoft.VisualBasic.Net
 
 Public Class CFDHelper
 
@@ -25,6 +26,9 @@ Public Class CFDHelper
         End Get
     End Property
 
+    Public ReadOnly Property host As String
+    Public ReadOnly Property port As Integer
+
     Dim timer As Timer
     Dim dims As Size
 
@@ -34,6 +38,11 @@ Public Class CFDHelper
 
     Public Sub SetParameters(pars As SetupParameters)
         dims = New Size(pars.dims(0), pars.dims(1))
+    End Sub
+
+    Public Sub SetBackend(endpoint As IPEndPoint)
+        _host = endpoint.ipAddress
+        _port = endpoint.port
     End Sub
 End Class
 
