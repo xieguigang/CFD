@@ -3,7 +3,7 @@
     ''' <summary>
     ''' setup the CFD session
     ''' </summary>
-    Setup
+    Setup = 1
     Reset
 
     ''' <summary>
