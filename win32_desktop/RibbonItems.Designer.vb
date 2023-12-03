@@ -18,6 +18,7 @@ Namespace RibbonLib.Controls
         Private Class Cmd
             Public Const cmdFileOpen As UInteger = 8
             Public Const cmdButtonAbout As UInteger = 12
+            Public Const cmdButtonLicense As UInteger = 24
             Public Const cmdButtonAppExit As UInteger = 13
             Public Const cmdTabSimulationPage As UInteger = 15
             Public Const cmdGroupSimulation As UInteger = 16
@@ -56,6 +57,12 @@ Namespace RibbonLib.Controls
         Public ReadOnly Property ButtonAbout As RibbonButton
             Get
                 Return _ButtonAbout
+            End Get
+        End Property
+        Private _ButtonLicense As RibbonButton
+        Public ReadOnly Property ButtonLicense As RibbonButton
+            Get
+                Return _ButtonLicense
             End Get
         End Property
         Private _ButtonAppExit As RibbonButton
@@ -174,6 +181,7 @@ Namespace RibbonLib.Controls
             _ribbon = ribbon
             _FileOpen = New RibbonButton(_ribbon, Cmd.cmdFileOpen)
             _ButtonAbout = New RibbonButton(_ribbon, Cmd.cmdButtonAbout)
+            _ButtonLicense = New RibbonButton(_ribbon, Cmd.cmdButtonLicense)
             _ButtonAppExit = New RibbonButton(_ribbon, Cmd.cmdButtonAppExit)
             _TabSimulationPage = New RibbonTabGroup(_ribbon, Cmd.cmdTabSimulationPage)
             _GroupSimulation = New RibbonTab(_ribbon, Cmd.cmdGroupSimulation)

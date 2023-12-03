@@ -21,6 +21,7 @@ namespace RibbonLib.Controls
         {
             public const uint cmdFileOpen = 8;
             public const uint cmdButtonAbout = 12;
+            public const uint cmdButtonLicense = 24;
             public const uint cmdButtonAppExit = 13;
             public const uint cmdTabSimulationPage = 15;
             public const uint cmdGroupSimulation = 16;
@@ -46,6 +47,7 @@ namespace RibbonLib.Controls
         public Ribbon Ribbon { get; private set; }
         public RibbonButton FileOpen { get; private set; }
         public RibbonButton ButtonAbout { get; private set; }
+        public RibbonButton ButtonLicense { get; private set; }
         public RibbonButton ButtonAppExit { get; private set; }
         public RibbonTabGroup TabSimulationPage { get; private set; }
         public RibbonTab GroupSimulation { get; private set; }
@@ -72,6 +74,7 @@ namespace RibbonLib.Controls
             this.Ribbon = ribbon;
             FileOpen = new RibbonButton(ribbon, Cmd.cmdFileOpen);
             ButtonAbout = new RibbonButton(ribbon, Cmd.cmdButtonAbout);
+            ButtonLicense = new RibbonButton(ribbon, Cmd.cmdButtonLicense);
             ButtonAppExit = new RibbonButton(ribbon, Cmd.cmdButtonAppExit);
             TabSimulationPage = new RibbonTabGroup(ribbon, Cmd.cmdTabSimulationPage);
             GroupSimulation = new RibbonTab(ribbon, Cmd.cmdGroupSimulation);

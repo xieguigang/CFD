@@ -46,6 +46,7 @@ Public Class FormMain
         AddHandler ribbonItems.ButtonAbout.ExecuteEvent, Sub() Call New SplashScreen() With {.ShowAbout = True}.Show()
         AddHandler ribbonItems.ButtonAppExit.ExecuteEvent, Sub() Call Me.Close()
         AddHandler ribbonItems.FileNew.ExecuteEvent, Sub() Call CreateNewSimulation()
+        AddHandler ribbonItems.ButtonLicense.ExecuteEvent, Sub() Call New FormLicense().ShowDialog()
     End Sub
 
     Friend Sub EnableVSRenderer(ParamArray toolStrips As ToolStrip())

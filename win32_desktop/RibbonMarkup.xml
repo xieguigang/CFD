@@ -107,6 +107,14 @@
         <Image MinDPI="192">Resources/icons8-new-file-96.png</Image>
       </Command.LargeImages>
     </Command>
+    <Command Name="cmdButtonLicense" Id="24" LabelTitle="License" LabelDescription="License" TooltipTitle="License" TooltipDescription="License">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-software-license-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-software-license-96.png</Image>
+      </Command.LargeImages>
+    </Command>
   </Application.Commands>
   <Application.Views>
     <Ribbon>
@@ -120,6 +128,7 @@
           </MenuGroup>
           <MenuGroup>
             <Button CommandName="cmdButtonAbout" />
+            <Button CommandName="cmdButtonLicense" />
             <Button CommandName="cmdButtonAppExit" />
           </MenuGroup>
         </ApplicationMenu>
@@ -153,7 +162,8 @@
             <Button CommandName="cmdFileOpen" />
             <Button CommandName="cmdFileNew" />
           </Group>
-          <Group CommandName="cmdGroupApp" SizeDefinition="OneButton">
+          <Group CommandName="cmdGroupApp" SizeDefinition="TwoButtons">
+            <Button CommandName="cmdButtonLicense" />
             <Button CommandName="cmdButtonAbout" />
           </Group>
         </Tab>

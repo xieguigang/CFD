@@ -102,5 +102,12 @@
 #define cmdFileNew_TooltipDescription_RESID 60073
 #define cmdFileNew_SmallImages_192__RESID 60074
 #define cmdFileNew_LargeImages_192__RESID 60075
-#define InternalCmd2_LabelTitle_RESID 60076
-#define InternalCmd4_LabelTitle_RESID 60077
+#define cmdButtonLicense 24 
+#define cmdButtonLicense_LabelTitle_RESID 60076
+#define cmdButtonLicense_LabelDescription_RESID 60077
+#define cmdButtonLicense_TooltipTitle_RESID 60078
+#define cmdButtonLicense_TooltipDescription_RESID 60079
+#define cmdButtonLicense_SmallImages_192__RESID 60080
+#define cmdButtonLicense_LargeImages_192__RESID 60081
+#define InternalCmd2_LabelTitle_RESID 60082
+#define InternalCmd4_LabelTitle_RESID 60083

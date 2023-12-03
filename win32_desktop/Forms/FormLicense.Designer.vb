@@ -22,9 +22,42 @@ Partial Class FormLicense
     '不要使用代码编辑器修改它。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        components = New System.ComponentModel.Container
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 450)
-        Me.Text = "Form1"
+        TextBox1 = New TextBox()
+        Label1 = New Label()
+        SuspendLayout()
+        ' 
+        ' TextBox1
+        ' 
+        TextBox1.Location = New Point(35, 163)
+        TextBox1.Multiline = True
+        TextBox1.Name = "TextBox1"
+        TextBox1.Size = New Size(498, 323)
+        TextBox1.TabIndex = 0
+        ' 
+        ' Label1
+        ' 
+        Label1.AutoSize = True
+        Label1.Location = New Point(74, 47)
+        Label1.Name = "Label1"
+        Label1.Size = New Size(122, 15)
+        Label1.TabIndex = 1
+        Label1.Text = "Moria Workshop 2024"
+        ' 
+        ' FormLicense
+        ' 
+        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(610, 530)
+        Controls.Add(Label1)
+        Controls.Add(TextBox1)
+        FormBorderStyle = FormBorderStyle.FixedSingle
+        Name = "FormLicense"
+        StartPosition = FormStartPosition.CenterParent
+        Text = "License"
+        ResumeLayout(False)
+        PerformLayout()
     End Sub
+
+    Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents Label1 As Label
 End Class
