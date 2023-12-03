@@ -3,6 +3,8 @@
   <PropertyGroup>
     <RootNamespace>BackgroundHost</RootNamespace>
     <TargetFramework>net6.0</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+    <Configurations>Debug;Release;CFD_win32</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
