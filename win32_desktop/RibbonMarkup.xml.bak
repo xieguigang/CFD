@@ -1,58 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Application xmlns="http://schemas.microsoft.com/windows/2009/Ribbon">
   <Application.Commands>
-    <Command Name="cmdButtonReset" Id="2" LabelTitle="Reset" LabelDescription="Reset" TooltipTitle="Reset" TooltipDescription="Reset">
-      <Command.SmallImages>
-        <Image MinDPI="192">Resources/icons8-reset-96.png</Image>
-      </Command.SmallImages>
-      <Command.LargeImages>
-        <Image MinDPI="192">Resources/icons8-reset-96.png</Image>
-      </Command.LargeImages>
-    </Command>
-    <Command Name="cmdTabPage" Id="3" />
-    <Command Name="cmdCommandGroup" Id="4" LabelTitle="Menu" LabelDescription="Menu" TooltipTitle="Menu" TooltipDescription="Menu" />
-    <Command Name="cmdCommandPanel" Id="5" LabelTitle="Menu" LabelDescription="Menu" TooltipTitle="Menu" TooltipDescription="Menu" />
-    <Command Name="cmdButtonClearBarrier" Id="6" LabelTitle="Clear All Barrier" LabelDescription="Clear All Barrier" TooltipTitle="Clear All Barrier" TooltipDescription="Clear All Barrier">
-      <Command.SmallImages>
-        <Image MinDPI="192">Resources/icons8-erase-96.png</Image>
-      </Command.SmallImages>
-      <Command.LargeImages>
-        <Image MinDPI="192">Resources/icons8-erase-96.png</Image>
-      </Command.LargeImages>
-    </Command>
-    <Command Name="cmdCheckDrawBarrier" Id="7" LabelTitle="Draw Barrier" LabelDescription="Draw Barrier" TooltipTitle="Draw Barrier" TooltipDescription="Draw Barrier">
-      <Command.SmallImages>
-        <Image MinDPI="192">Resources/icons8-edit-96.png</Image>
-      </Command.SmallImages>
-      <Command.LargeImages>
-        <Image MinDPI="192">Resources/icons8-edit-96.png</Image>
-      </Command.LargeImages>
-    </Command>
-    <Command Name="cmdFileOpen" Id="8" LabelTitle="Open" LabelDescription="Open" TooltipTitle="Open" TooltipDescription="Open">
-      <Command.SmallImages>
-        <Image MinDPI="192">Resources/icons8-open-file-96.png</Image>
-      </Command.SmallImages>
-      <Command.LargeImages>
-        <Image MinDPI="192">Resources/icons8-open-file-96.png</Image>
-      </Command.LargeImages>
-    </Command>
-    <Command Name="cmdCheckShowTracer" Id="9" LabelTitle="Show Tracer" LabelDescription="Show Tracer" TooltipTitle="Show Tracer" TooltipDescription="Show Tracer">
-      <Command.SmallImages>
-        <Image MinDPI="192">Resources/icons8-trace-96.png</Image>
-      </Command.SmallImages>
-      <Command.LargeImages>
-        <Image MinDPI="192">Resources/icons8-trace-96.png</Image>
-      </Command.LargeImages>
-    </Command>
-    <Command Name="cmdMenu2" Id="10" LabelTitle="Debugger" LabelDescription="Debugger" TooltipTitle="Debugger" TooltipDescription="Debugger" />
-    <Command Name="cmdCheckShowFlowLine" Id="11" LabelTitle="Show Flowline" LabelDescription="Show Flowline" TooltipTitle="Show Flowline" TooltipDescription="Show Flowline">
-      <Command.SmallImages>
-        <Image MinDPI="192">Resources/icons8-journey-96.png</Image>
-      </Command.SmallImages>
-      <Command.LargeImages>
-        <Image MinDPI="192">Resources/icons8-journey-96.png</Image>
-      </Command.LargeImages>
-    </Command>
     <Command Name="cmdButtonAbout" Id="12" LabelTitle="About">
       <Command.SmallImages>
         <Image MinDPI="192">Resources/icons8-information-96.png</Image>
@@ -69,16 +17,20 @@
         <Image MinDPI="192">Resources/icons8-exit-96.png</Image>
       </Command.LargeImages>
     </Command>
-    <Command Name="cmdGroupApp" Id="14" LabelTitle="Application" />
-    <Command Name="cmdTabSimulationPage" Id="15" LabelTitle="Simulation" />
-    <Command Name="cmdGroupSimulation" Id="16" LabelTitle="Simulation" />
-    <Command Name="cmdPageSimulation" Id="17" LabelTitle="CFD Simulation" />
-    <Command Name="cmdButtonSimulationStart" Id="18" LabelTitle="Start">
+    <Command Name="cmdButtonClearBarrier" Id="6" LabelTitle="Clear All Barrier" LabelDescription="Clear All Barrier" TooltipTitle="Clear All Barrier" TooltipDescription="Clear All Barrier">
       <Command.SmallImages>
-        <Image MinDPI="192">Resources/icons8-start-96.png</Image>
+        <Image MinDPI="192">Resources/icons8-erase-96.png</Image>
       </Command.SmallImages>
       <Command.LargeImages>
-        <Image MinDPI="192">Resources/icons8-start-96.png</Image>
+        <Image MinDPI="192">Resources/icons8-erase-96.png</Image>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="cmdButtonReset" Id="2" LabelTitle="Reset" LabelDescription="Reset" TooltipTitle="Reset" TooltipDescription="Reset">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-reset-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-reset-96.png</Image>
       </Command.LargeImages>
     </Command>
     <Command Name="cmdButtonSimulationPause" Id="19" LabelTitle="Pause">
@@ -89,6 +41,14 @@
         <Image MinDPI="192">Resources/icons8-pause-96.png</Image>
       </Command.LargeImages>
     </Command>
+    <Command Name="cmdButtonSimulationStart" Id="18" LabelTitle="Start">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-start-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-start-96.png</Image>
+      </Command.LargeImages>
+    </Command>
     <Command Name="cmdButtonSimulationStop" Id="20" LabelTitle="Stop">
       <Command.SmallImages>
         <Image MinDPI="192">Resources/icons8-stop-96.png</Image>
@@ -97,8 +57,56 @@
         <Image MinDPI="192">Resources/icons8-stop-96.png</Image>
       </Command.LargeImages>
     </Command>
+    <Command Name="cmdCheckDrawBarrier" Id="7" LabelTitle="Draw Barrier" LabelDescription="Draw Barrier" TooltipTitle="Draw Barrier" TooltipDescription="Draw Barrier">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-edit-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-edit-96.png</Image>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="cmdCheckShowFlowLine" Id="11" LabelTitle="Show Flowline" LabelDescription="Show Flowline" TooltipTitle="Show Flowline" TooltipDescription="Show Flowline">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-journey-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-journey-96.png</Image>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="cmdCheckShowTracer" Id="9" LabelTitle="Show Tracer" LabelDescription="Show Tracer" TooltipTitle="Show Tracer" TooltipDescription="Show Tracer">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-trace-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-trace-96.png</Image>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="cmdCommandGroup" Id="4" LabelTitle="Menu" LabelDescription="Menu" TooltipTitle="Menu" TooltipDescription="Menu" />
+    <Command Name="cmdCommandPanel" Id="5" LabelTitle="Menu" LabelDescription="Menu" TooltipTitle="Menu" TooltipDescription="Menu" />
+    <Command Name="cmdFileOpen" Id="8" LabelTitle="Open" LabelDescription="Open" TooltipTitle="Open" TooltipDescription="Open">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-open-file-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-open-file-96.png</Image>
+      </Command.LargeImages>
+    </Command>
+    <Command Name="cmdGroupApp" Id="14" LabelTitle="Application" />
+    <Command Name="cmdGroupSimulation" Id="16" LabelTitle="Simulation" />
+    <Command Name="cmdMenu2" Id="10" LabelTitle="Debugger" LabelDescription="Debugger" TooltipTitle="Debugger" TooltipDescription="Debugger" />
+    <Command Name="cmdPageSimulation" Id="17" LabelTitle="CFD Simulation" />
     <Command Name="cmdTabApplicationMain" Id="21" LabelTitle="Application" />
+    <Command Name="cmdTabPage" Id="3" />
     <Command Name="cmdTabSimulationOperations" Id="22" LabelTitle="Operations" />
+    <Command Name="cmdTabSimulationPage" Id="15" LabelTitle="Simulation" />
+    <Command Name="cmdFileNew" Id="23" LabelTitle="Create Project" LabelDescription="Create Project" TooltipTitle="Create Project" TooltipDescription="Create Project">
+      <Command.SmallImages>
+        <Image MinDPI="192">Resources/icons8-new-file-96.png</Image>
+      </Command.SmallImages>
+      <Command.LargeImages>
+        <Image MinDPI="192">Resources/icons8-new-file-96.png</Image>
+      </Command.LargeImages>
+    </Command>
   </Application.Commands>
   <Application.Views>
     <Ribbon>

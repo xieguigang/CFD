@@ -34,6 +34,7 @@ Namespace RibbonLib.Controls
             Public Const cmdCheckDrawBarrier As UInteger = 7
             Public Const cmdTabApplicationMain As UInteger = 21
             Public Const cmdCommandGroup As UInteger = 4
+            Public Const cmdFileNew As UInteger = 23
             Public Const cmdGroupApp As UInteger = 14
         End Class
 
@@ -153,6 +154,12 @@ Namespace RibbonLib.Controls
                 Return _CommandGroup
             End Get
         End Property
+        Private _FileNew As RibbonButton
+        Public ReadOnly Property FileNew As RibbonButton
+            Get
+                Return _FileNew
+            End Get
+        End Property
         Private _GroupApp As RibbonGroup
         Public ReadOnly Property GroupApp As RibbonGroup
             Get
@@ -183,6 +190,7 @@ Namespace RibbonLib.Controls
             _CheckDrawBarrier = New RibbonToggleButton(_ribbon, Cmd.cmdCheckDrawBarrier)
             _TabApplicationMain = New RibbonTab(_ribbon, Cmd.cmdTabApplicationMain)
             _CommandGroup = New RibbonGroup(_ribbon, Cmd.cmdCommandGroup)
+            _FileNew = New RibbonButton(_ribbon, Cmd.cmdFileNew)
             _GroupApp = New RibbonGroup(_ribbon, Cmd.cmdGroupApp)
         End Sub
 
