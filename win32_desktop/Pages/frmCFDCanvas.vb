@@ -181,13 +181,9 @@ Public Class frmCFDCanvas
         Return New Point(x, y)
     End Function
 
-    Private Sub PictureBox1_MouseMove(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseMove
+    Private Sub ShowPointInformation()
         Dim xy = GetCFDPosition()
         Dim tooltip As New StringBuilder
-
-        If drawLine AndAlso CheckDrawBarrier() Then
-            'Call reader.SetBarrierPoint(xy, 1)
-        End If
 
         Call Message($"[{xy.X},{xy.Y}]")
 
@@ -205,6 +201,16 @@ Public Class frmCFDCanvas
         'End If
 
         ToolTip1.SetToolTip(PictureBox1, tooltip.ToString)
+    End Sub
+
+    Private Sub PictureBox1_MouseMove(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseMove
+        If drawLine AndAlso CheckDrawBarrier() Then
+            'Call reader.SetBarrierPoint(xy, 1)
+        End If
+
+        If CFD IsNot Nothing AndAlso CFD.ready Then
+            Call ShowPointInformation()
+        End If
     End Sub
 
     Private Sub frmCFDCanvas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
