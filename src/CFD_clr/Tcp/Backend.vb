@@ -65,6 +65,22 @@ Public Class Backend : Implements ITaskDriver, IDisposable
         Return New DataPipe(ms)
     End Function
 
+    <Protocol(Protocols.RequestPoint)>
+    Public Function RequestPoint(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
+        Dim par As PointRequestParameters = request.LoadObject(Of PointRequestParameters)
+        Dim reader As New DataAdapter(session)
+        Dim val As Double = Double.NegativeInfinity
+
+        Select Case par.frame
+            Case FrameTypes.Density : val = reader.GetDensity(par.GetPoint)
+            Case FrameTypes.Speed : val = reader.GetSpeed(par.GetPoint)
+            Case FrameTypes.XVel : val = reader.GetXVel(par.GetPoint)
+            Case FrameTypes.YVel : val = reader.GetYVel(par.GetPoint)
+        End Select
+
+        Return New DataPipe(BitConverter.GetBytes(val))
+    End Function
+
     <Protocol(Protocols.RequestFrame)>
     Public Function Setup(request As RequestStream, remoteAddress As System.Net.IPEndPoint) As BufferPipe
         Dim args As SetupParameters = request.LoadObject(Of SetupParameters)
