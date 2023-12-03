@@ -81,6 +81,8 @@ Public Class frmCFDCanvas
 
                 g.FillRectangle(colors(index), New Rectangle(i, j, 1, 1))
             Next
+
+            Call Application.DoEvents()
         Next
 
         If ribbonItems.CheckShowTracer.BooleanValue Then

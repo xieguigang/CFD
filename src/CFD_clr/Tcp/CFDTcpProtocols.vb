@@ -2,6 +2,7 @@
 Imports CFD
 Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.Net
+Imports Microsoft.VisualBasic.Net.HTTP
 Imports Microsoft.VisualBasic.Net.Protocols.Reflection
 Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Parallel
@@ -49,7 +50,7 @@ Public Class CFDTcpProtocols
         Dim req As New RequestStream(lpProtocol, Protocols.RequestFrame, BitConverter.GetBytes(CInt(type)))
         Dim data = requestData(req)
 
-        If data.Protocol <> 200 Then
+        If data.Protocol <> HTTP_RFC.RFC_OK AndAlso data.Protocol <> 0 Then
             Return Nothing
         End If
 
