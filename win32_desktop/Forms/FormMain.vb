@@ -58,6 +58,8 @@ Public Class FormMain
     End Sub
 
     Private Sub CreateNewSimulation()
+        Call New FormProjectWizard().ShowDialog()
+
         Using folder As New FolderBrowserDialog With {
             .ShowNewFolderButton = True,
             .Description = "Select a folder for save simulation session result."

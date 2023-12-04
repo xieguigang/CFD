@@ -25,6 +25,8 @@ Module Globals
 
     Public Sub SetupBackendUI()
         AddHandler ribbonItems.ButtonSimulationStart.ExecuteEvent, Sub() Call current.start()
+        AddHandler ribbonItems.ButtonSimulationPause.ExecuteEvent, Sub() Call current.pause()
+
     End Sub
 
 End Module
