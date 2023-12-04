@@ -140,7 +140,11 @@ Public Class CFDTcpProtocols
         Dim req As New RequestStream(lpProtocol, Protocols.RequestPoint, pars.GetJson)
         Dim data = requestData(req)
 
-        Return BitConverter.ToDouble(data.ChunkBuffer)
+        If data.ChunkBuffer.Length = 0 Then
+            Return 0
+        Else
+            Return BitConverter.ToDouble(data.ChunkBuffer)
+        End If
     End Function
 
     Public Function GetDensity(xy As Point) As Double
@@ -148,7 +152,11 @@ Public Class CFDTcpProtocols
         Dim req As New RequestStream(lpProtocol, Protocols.RequestPoint, pars.GetJson)
         Dim data = requestData(req)
 
-        Return BitConverter.ToDouble(data.ChunkBuffer)
+        If data.ChunkBuffer.Length = 0 Then
+            Return 0
+        Else
+            Return BitConverter.ToDouble(data.ChunkBuffer)
+        End If
     End Function
 
     Public Function GetXVel(xy As Point) As Double
@@ -156,7 +164,11 @@ Public Class CFDTcpProtocols
         Dim req As New RequestStream(lpProtocol, Protocols.RequestPoint, pars.GetJson)
         Dim data = requestData(req)
 
-        Return BitConverter.ToDouble(data.ChunkBuffer)
+        If data.ChunkBuffer.Length = 0 Then
+            Return 0
+        Else
+            Return BitConverter.ToDouble(data.ChunkBuffer)
+        End If
     End Function
 
     Public Function GetYVel(xy As Point) As Double
@@ -164,6 +176,10 @@ Public Class CFDTcpProtocols
         Dim req As New RequestStream(lpProtocol, Protocols.RequestPoint, pars.GetJson)
         Dim data = requestData(req)
 
-        Return BitConverter.ToDouble(data.ChunkBuffer)
+        If data.ChunkBuffer.Length = 0 Then
+            Return 0
+        Else
+            Return BitConverter.ToDouble(data.ChunkBuffer)
+        End If
     End Function
 End Class
