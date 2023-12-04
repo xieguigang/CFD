@@ -8,6 +8,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors.Scaler
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Parallel.Tasks
 Imports RibbonLib.Interop
 Imports WeifenLuo.WinFormsUI.Docking
 Imports bitmap = System.Drawing.Bitmap
@@ -23,10 +24,11 @@ Public Class frmCFDCanvas
 
     ReadOnly grays As SolidBrush() = Designer.GetBrushes(ScalerPalette.Gray.Description, 30)
     ReadOnly grayOffset As New DoubleRange(0, 29)
+    ReadOnly timer1 As New UpdateThread(1000 / 30, Sub() Call Timer1_Tick())
 
     Public Property Workspace As String
 
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+    Private Sub Timer1_Tick()
         If CFD IsNot Nothing AndAlso CFD.ready Then
             Dim bitmap As bitmap = Render(frame:=CFD.getFrameData(toolkit.pars.DrawFrameData)) ' Await GetRenderBitmap()
 
@@ -90,9 +92,7 @@ Public Class frmCFDCanvas
                     index = CInt(range.ScaleMapping(v, offset))
                 End If
 
-                SyncLock colors
-                    g.FillRectangle(colors(index), New Rectangle(i, j, 1, 1))
-                End SyncLock
+                g.FillRectangle(colors(index), New Rectangle(i, j, 1, 1))
             Next
         Next
 
@@ -261,16 +261,16 @@ Public Class frmCFDCanvas
         Call main.EnableVSRenderer(ContextMenuStrip1)
     End Sub
 
-    Private Sub frmCFDCanvas_Activated(sender As Object, e As EventArgs) Handles Me.Activated
-        Call SetCurrent()
+    Private Sub frmCFDCanvas_Activated(sender As Object, e As EventArgs) Handles MyBase.Activated
+        SetCurrent()
     End Sub
 
-    Private Sub frmCFDCanvas_LostFocus(sender As Object, e As EventArgs) Handles Me.LostFocus
+    Private Sub frmCFDCanvas_LostFocus(sender As Object, e As EventArgs) Handles MyBase.LostFocus
         ' ribbonItems.TabSimulationPage.ContextAvailable = ContextAvailability.NotAvailable
     End Sub
 
-    Private Sub frmCFDCanvas_GotFocus(sender As Object, e As EventArgs) Handles Me.GotFocus
-        Call SetCurrent()
+    Private Sub frmCFDCanvas_GotFocus(sender As Object, e As EventArgs) Handles MyBase.GotFocus
+        SetCurrent()
     End Sub
 
     Private Sub SetCurrent()

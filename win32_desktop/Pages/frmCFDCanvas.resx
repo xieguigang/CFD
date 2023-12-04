@@ -124,7 +124,7 @@
   <data name="MarkPointToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DQAACw0B7QfALAAABrJJREFUeF7tm91P01cYx8m2i7nbzV0KAr5OobyjIIVCa5G++FYKzOuR6K7cxZYs
+        DAAACwwBP0AiyAAABrJJREFUeF7tm91P01cYx8m2i7nbzV0KAr5OobyjIIVCa5G++FYKzOuR6K7cxZYs
         cYnbhC1TWJygxrtt/gvLrnXOjDmvjMQtMRFoeSmlUi6m23j2nNOnPw5y+kMKh2z5PZ/kG6V97O/k8zs8
         5ynUAoZhGIZhGIZhmP8qqeCp0nSo58xCqOdmOtzz20KwezYd7Ho+H4g+T3dEE/Mdnb/Nd0Rvzh/pPJ3y
         R0vonzHrAdzu19Kh7ndR/J2FcA/IhLplUD6kAyJRwBuA6QSUj4nAfDvGf/KnlC/SA5HIq/RyzFpYCHb5
@@ -158,8 +158,5 @@
   </data>
   <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
-  </metadata>
-  <metadata name="Timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>115, 17</value>
   </metadata>
 </root>

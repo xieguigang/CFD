@@ -28,7 +28,6 @@ Partial Class frmCFDCanvas
         ContextMenuStrip1 = New ContextMenuStrip(components)
         MarkPointToolStripMenuItem = New ToolStripMenuItem()
         ToolTip1 = New ToolTip(components)
-        Timer1 = New Timer(components)
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         ContextMenuStrip1.SuspendLayout()
         SuspendLayout()
@@ -57,14 +56,9 @@ Partial Class frmCFDCanvas
         MarkPointToolStripMenuItem.Size = New Size(132, 22)
         MarkPointToolStripMenuItem.Text = "Mark Point"
         ' 
-        ' Timer1
-        ' 
-        Timer1.Enabled = True
-        Timer1.Interval = 20
-        ' 
         ' frmCFDCanvas
         ' 
-        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(800, 450)
         Controls.Add(PictureBox1)
@@ -76,7 +70,6 @@ Partial Class frmCFDCanvas
 
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents ToolTip1 As ToolTip
-    Friend WithEvents Timer1 As Timer
     Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
     Friend WithEvents MarkPointToolStripMenuItem As ToolStripMenuItem
 End Class

@@ -1,5 +1,6 @@
 ﻿Imports CFD
 Imports CFD_clr
+Imports Microsoft.VisualBasic.ComponentModel.Triggers
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Net
 
@@ -29,10 +30,10 @@ Public Class CFDHelper
     Public ReadOnly Property host As String
     Public ReadOnly Property port As Integer
 
-    Dim timer As Timer
+    Dim timer As ITimer
     Dim dims As Size
 
-    Public Sub New(timer As Timer)
+    Public Sub New(timer As ITimer)
         Me.timer = timer
     End Sub
 
