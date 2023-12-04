@@ -120,7 +120,7 @@ Public Class frmCFDCanvas
         Dim showFlowline As Boolean = Invoke(Function() ribbonItems.CheckShowFlowLine.BooleanValue)
 
         If Not model Is Nothing Then
-            Call g.DrawImageUnscaled(model, New Point)
+            Call g.DrawImage(model, New Rectangle(New Point, bitmap.Size))
         End If
 
         If showTracer Then
