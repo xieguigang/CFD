@@ -36,6 +36,7 @@ Partial Class frmCFDCanvas
         ' 
         PictureBox1.BackgroundImageLayout = ImageLayout.Stretch
         PictureBox1.ContextMenuStrip = ContextMenuStrip1
+        PictureBox1.Cursor = Cursors.Cross
         PictureBox1.Dock = DockStyle.Fill
         PictureBox1.Location = New Point(0, 0)
         PictureBox1.Name = "PictureBox1"
@@ -58,7 +59,7 @@ Partial Class frmCFDCanvas
         ' 
         ' frmCFDCanvas
         ' 
-        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
+        AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(800, 450)
         Controls.Add(PictureBox1)

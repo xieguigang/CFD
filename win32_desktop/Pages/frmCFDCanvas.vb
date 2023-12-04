@@ -314,7 +314,7 @@ Public Class frmCFDCanvas
         Call UpdatePalette()
     End Sub
 
-    Private Sub frmCFDCanvas_Closed(sender As Object, e As EventArgs) Handles Me.Closed
-        Call timer1.Stop()
+    Private Sub frmCFDCanvas_Closed(sender As Object, e As EventArgs) Handles MyBase.Closed
+        timer1.Stop
     End Sub
 End Class
