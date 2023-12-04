@@ -24,7 +24,11 @@ Public Class frmCFDCanvas
 
     ReadOnly grays As SolidBrush() = Designer.GetBrushes(ScalerPalette.Gray.Description, 30)
     ReadOnly grayOffset As New DoubleRange(0, 29)
-    ReadOnly timer1 As New UpdateThread(1000 / 30, Sub() Call Timer1_Tick())
+
+    ''' <summary>
+    ''' the animation rendering thread
+    ''' </summary>
+    Friend ReadOnly timer1 As New UpdateThread(1000 / 30, Sub() Call Timer1_Tick())
 
     Public Property Workspace As String
 
