@@ -15,6 +15,7 @@ Public Module ModelLoader
         ' transparent is none
         For i As Integer = 0 To CFD.xdim - 1
             For j As Integer = 0 To CFD.ydim - 1
+                CFD.barrier(i)(j) = False 'removes the pre-defined model
                 CFD.barrier(i)(j) = Not img.GetPixel(i, j).IsTransparent
             Next
         Next
