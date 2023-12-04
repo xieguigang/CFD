@@ -33,7 +33,7 @@ Public Class frmCFDCanvas
             Dim bitmap As bitmap = Render(frame:=CFD.getFrameData(toolkit.pars.DrawFrameData)) ' Await GetRenderBitmap()
 
             If Not bitmap Is Nothing Then
-                PictureBox1.BackgroundImage = bitmap
+                Call Me.Invoke(Sub() PictureBox1.BackgroundImage = bitmap)
             End If
         End If
     End Sub
