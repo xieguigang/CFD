@@ -24,7 +24,7 @@ Public Class frmCFDCanvas
     Dim colors As SolidBrush()
     Dim offset As New DoubleRange(0, 255)
     Dim drawLine As Boolean = False
-    Dim model As Image
+    Dim model As Image = Nothing
 
     ReadOnly grays As SolidBrush() = Designer.GetBrushes(ScalerPalette.Gray.Description, 30)
     ReadOnly grayOffset As New DoubleRange(0, 29)
@@ -41,6 +41,8 @@ Public Class frmCFDCanvas
             If Not bitmap Is Nothing Then
                 Call Me.Invoke(Sub() PictureBox1.BackgroundImage = bitmap)
             End If
+        Else
+            Call Me.Invoke(Sub() PictureBox1.BackgroundImage = model)
         End If
     End Sub
 
