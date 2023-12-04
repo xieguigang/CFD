@@ -231,7 +231,7 @@ Public Class frmCFDCanvas
     End Function
 
     Private Sub ShowPointInformation()
-        Dim xy = GetCFDPosition()
+        Dim xy As Point = GetCFDPosition()
         Dim tooltip As New StringBuilder
 
         Call Message($"[{xy.X},{xy.Y}]")
@@ -242,6 +242,7 @@ Public Class frmCFDCanvas
         Dim yvel As Double = CFD.GetYVel(xy)
 
         tooltip.AppendLine($"point xy: ({xy.X},{xy.Y})")
+        tooltip.AppendLine($"speed: {speed}")
         tooltip.AppendLine($"density: {density}")
         tooltip.AppendLine($"velocity: [{xvel},{yvel}]")
 
