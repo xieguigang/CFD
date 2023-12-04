@@ -1,5 +1,6 @@
 ﻿Imports System.Drawing.Drawing2D
 Imports System.Drawing.Text
+Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports CFD
@@ -22,6 +23,7 @@ Public Class frmCFDCanvas
     Dim colors As SolidBrush()
     Dim offset As New DoubleRange(0, 255)
     Dim drawLine As Boolean = False
+    Dim model As Byte()
 
     ReadOnly grays As SolidBrush() = Designer.GetBrushes(ScalerPalette.Gray.Description, 30)
     ReadOnly grayOffset As New DoubleRange(0, 29)
@@ -48,9 +50,16 @@ Public Class frmCFDCanvas
     '        End Function)
     'End Function
 
+    Private Function requestFrame() As bitmap
+        If model Is Nothing Then
+            Return New bitmap(CFD.pars.dims(0), CFD.pars.dims(1))
+        Else
+            Return bitmap.FromStream(New MemoryStream(model.ToArray))
+        End If
+    End Function
+
     Private Function Render(frame As Double()()) As bitmap
-        Dim xyDims As Size = CFD.pars.getDims
-        Dim bitmap As New bitmap(xyDims.Width, xyDims.Height)
+        Dim bitmap As bitmap = requestFrame()
         Dim g As Graphics = Graphics.FromImage(bitmap)
 
         If frame.IsNullOrEmpty Then
@@ -280,6 +289,10 @@ Public Class frmCFDCanvas
         Call SetCurrent()
         Call main.EnableVSRenderer(ContextMenuStrip1)
         Call timer1.Start()
+
+        If setup.modelfile.FileExists Then
+            model = setup.modelfile.ReadBinary
+        End If
     End Sub
 
     Private Sub frmCFDCanvas_Activated(sender As Object, e As EventArgs) Handles MyBase.Activated
