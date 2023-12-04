@@ -15,7 +15,7 @@ Public Module ModelLoader
         ' transparent is none
         For i As Integer = 0 To CFD.xdim - 1
             For j As Integer = 0 To CFD.ydim - 1
-                CFD.barrier(i)(j) = Not img.GetPixel(i + 1, j + 1).IsTransparent
+                CFD.barrier(i)(j) = Not img.GetPixel(i, j).IsTransparent
             Next
         Next
     End Sub
