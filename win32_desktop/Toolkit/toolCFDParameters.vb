@@ -10,6 +10,8 @@ Public Class toolCFDParameters
         Dim helper As New CFDHelper(callback.Timer1)
 
         helper.SetBackend(callback.CFD.EndPoint)
+        helper.SetParameters(callback.setup)
+
         _pars = helper
 
         PropertyGrid1.SelectedObject = helper

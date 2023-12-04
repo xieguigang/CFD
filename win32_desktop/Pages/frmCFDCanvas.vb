@@ -17,6 +17,7 @@ Imports std = System.Math
 Public Class frmCFDCanvas
 
     Friend CFD As CFDTcpProtocols
+    Friend setup As SetupParameters
 
     Dim colors As SolidBrush()
     Dim offset As New DoubleRange(0, 255)
@@ -264,8 +265,10 @@ Public Class frmCFDCanvas
     End Sub
 
     Private Sub frmCFDCanvas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        setup = New SetupParameters With {.storagefile = $"{Workspace}/data.CFD"}
+
         CFD = Globals.CreateService
-        CFD.config(New SetupParameters With {.storagefile = $"{Workspace}/data.CFD"})
+        CFD.config(setup)
 
         AddHandler ribbonItems.ButtonReset.ExecuteEvent, Sub() resetCFD()
         AddHandler ribbonItems.ButtonClearBarrier.ExecuteEvent, Sub()
