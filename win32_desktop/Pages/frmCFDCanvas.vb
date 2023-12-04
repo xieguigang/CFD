@@ -100,12 +100,15 @@ Public Class frmCFDCanvas
             Next
         Next
 
-        If ribbonItems.CheckShowTracer.BooleanValue Then
+        Dim showTracer As Boolean = Invoke(Function() ribbonItems.CheckShowTracer.BooleanValue)
+        Dim showFlowline As Boolean = Invoke(Function() ribbonItems.CheckShowFlowLine.BooleanValue)
+
+        If showTracer Then
             For Each pt As PointF In CFD.moveTracers(toolkit.pars.TracerSpeedLevel)
                 Call g.FillRectangle(Brushes.Black, New RectangleF(pt, New Size(1, 1)))
             Next
         End If
-        If ribbonItems.CheckShowFlowLine.BooleanValue Then
+        If showFlowline Then
             Call drawFlowlines(g)
         End If
 
