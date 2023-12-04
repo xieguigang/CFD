@@ -22,38 +22,31 @@ Partial Class FormLicense
     '不要使用代码编辑器修改它。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormLicense))
         TextBox1 = New TextBox()
         Label1 = New Label()
         SuspendLayout()
         ' 
         ' TextBox1
         ' 
-        TextBox1.Location = New Point(35, 163)
-        TextBox1.Multiline = True
+        resources.ApplyResources(TextBox1, "TextBox1")
         TextBox1.Name = "TextBox1"
-        TextBox1.Size = New Size(498, 323)
-        TextBox1.TabIndex = 0
         ' 
         ' Label1
         ' 
-        Label1.AutoSize = True
-        Label1.Location = New Point(74, 47)
+        resources.ApplyResources(Label1, "Label1")
         Label1.Name = "Label1"
-        Label1.Size = New Size(122, 15)
-        Label1.TabIndex = 1
-        Label1.Text = "Moria Workshop 2024"
         ' 
         ' FormLicense
         ' 
-        AutoScaleDimensions = New SizeF(7F, 15F)
+        resources.ApplyResources(Me, "$this")
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(610, 530)
         Controls.Add(Label1)
         Controls.Add(TextBox1)
         FormBorderStyle = FormBorderStyle.FixedSingle
+        MaximizeBox = False
+        MinimizeBox = False
         Name = "FormLicense"
-        StartPosition = FormStartPosition.CenterParent
-        Text = "License"
         ResumeLayout(False)
         PerformLayout()
     End Sub

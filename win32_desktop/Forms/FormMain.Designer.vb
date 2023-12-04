@@ -41,9 +41,9 @@ Partial Class FormMain
         ' StatusStrip1
         ' 
         StatusStrip1.Items.AddRange(New ToolStripItem() {ToolStripStatusLabel1, ToolStripStatusLabel2, ToolStripProgressBar1})
-        StatusStrip1.Location = New Point(0, 686)
+        StatusStrip1.Location = New Point(0, 441)
         StatusStrip1.Name = "StatusStrip1"
-        StatusStrip1.Size = New Size(1120, 22)
+        StatusStrip1.Size = New Size(933, 22)
         StatusStrip1.TabIndex = 1
         StatusStrip1.Text = "StatusStrip1"
         ' 
@@ -74,7 +74,7 @@ Partial Class FormMain
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(1120, 708)
+        ClientSize = New Size(933, 463)
         Controls.Add(StatusStrip1)
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
         Name = "FormMain"
