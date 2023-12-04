@@ -31,8 +31,6 @@ Public Class frmCFDCanvas
     ''' </summary>
     Friend ReadOnly timer1 As New UpdateThread(1000 / 30, Sub() Call Timer1_Tick())
 
-    Public Property Workspace As String
-
     Private Sub Timer1_Tick()
         If CFD IsNot Nothing AndAlso CFD.ready Then
             Dim bitmap As bitmap = Render(frame:=CFD.getFrameData(toolkit.pars.DrawFrameData)) ' Await GetRenderBitmap()
@@ -265,8 +263,6 @@ Public Class frmCFDCanvas
     End Sub
 
     Private Sub frmCFDCanvas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        setup = New SetupParameters With {.storagefile = $"{Workspace}/data.CFD"}
-
         CFD = Globals.CreateService
         CFD.config(setup)
 

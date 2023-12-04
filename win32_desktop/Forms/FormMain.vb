@@ -1,4 +1,5 @@
-﻿Imports CFD_win32.RibbonLib.Controls
+﻿Imports CFD_clr
+Imports CFD_win32.RibbonLib.Controls
 Imports RibbonLib
 Imports WeifenLuo.WinFormsUI.Docking
 
@@ -58,19 +59,21 @@ Public Class FormMain
     End Sub
 
     Private Sub CreateNewSimulation()
-        Call New FormProjectWizard().ShowDialog()
+        Dim wizard As New FormProjectWizard()
 
-        Using folder As New FolderBrowserDialog With {
-            .ShowNewFolderButton = True,
-            .Description = "Select a folder for save simulation session result."
-        }
-            If folder.ShowDialog = DialogResult.OK Then
-                Dim CFD As New frmCFDCanvas With {.Workspace = folder.SelectedPath}
+        If wizard.ShowDialog() = DialogResult.OK Then
+            Using folder As New FolderBrowserDialog With {
+                .ShowNewFolderButton = True
+            }
+                If folder.ShowDialog = DialogResult.OK Then
+                    Dim pars = wizard.GetParameters(folder.SelectedPath)
+                    Dim CFD As New frmCFDCanvas With {.setup = pars}
 
-                CFD.Show(dockPanel)
-                CFD.DockState = DockState.Document
-            End If
-        End Using
+                    CFD.Show(dockPanel)
+                    CFD.DockState = DockState.Document
+                End If
+            End Using
+        End If
     End Sub
 
     Private Sub FormMain_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
