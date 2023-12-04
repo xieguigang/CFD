@@ -259,6 +259,7 @@ Public Class frmCFDCanvas
 
         Call SetCurrent()
         Call main.EnableVSRenderer(ContextMenuStrip1)
+        Call timer1.Start()
     End Sub
 
     Private Sub frmCFDCanvas_Activated(sender As Object, e As EventArgs) Handles MyBase.Activated
@@ -279,5 +280,9 @@ Public Class frmCFDCanvas
         ribbonItems.TabSimulationPage.ContextAvailable = ContextAvailability.Active
 
         Call UpdatePalette()
+    End Sub
+
+    Private Sub frmCFDCanvas_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+        Call timer1.Stop()
     End Sub
 End Class
