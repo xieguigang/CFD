@@ -66,8 +66,9 @@ Public Class frmCFDCanvas
         Dim v As Double
         Dim index As Integer
         Dim cut As Double = Double.MaxValue
+        Dim enableTrIQ As Boolean = toolkit.pars.enableTrIQ
 
-        If toolkit.pars.enableTrIQ Then
+        If enableTrIQ Then
             cut = frame.IteratesALL.FindThreshold(toolkit.pars.TrIQ)
             range = New DoubleRange(range.Min, cut)
         End If
@@ -76,9 +77,11 @@ Public Class frmCFDCanvas
         g.TextRenderingHint = TextRenderingHint.SystemDefault
         g.SmoothingMode = SmoothingMode.None
 
-        If range.Min.IsNaNImaginary OrElse range.Max.IsNaNImaginary Then
+        If range Is Nothing OrElse range.Min.IsNaNImaginary OrElse range.Max.IsNaNImaginary Then
             Return Nothing
         End If
+
+        Dim colors = Me.colors.ToArray
 
         For i As Integer = 0 To frame.Length - 1
             Dim row = frame(i)
@@ -86,7 +89,7 @@ Public Class frmCFDCanvas
             For j As Integer = 0 To row.Length - 1
                 v = row(j)
 
-                If toolkit.pars.enableTrIQ AndAlso v > cut Then
+                If enableTrIQ AndAlso v > cut Then
                     v = cut
                 End If
 
