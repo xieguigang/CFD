@@ -99,6 +99,16 @@ Public Class frmCFDCanvas
                     index = CInt(range.ScaleMapping(v, offset))
                 End If
 
+                If index < 0 Then
+                    index = 0
+                ElseIf index >= colors.Length Then
+                    index = colors.Length - 1
+                End If
+
+                If colors.Length = 0 Then
+                    Exit For
+                End If
+
                 g.FillRectangle(colors(index), New Rectangle(i, j, 1, 1))
             Next
         Next
