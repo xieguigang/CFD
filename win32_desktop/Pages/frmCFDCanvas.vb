@@ -6,6 +6,7 @@ Imports System.Text
 Imports CFD
 Imports CFD_clr
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
+Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors.Scaler
 Imports Microsoft.VisualBasic.Linq
@@ -23,7 +24,7 @@ Public Class frmCFDCanvas
     Dim colors As SolidBrush()
     Dim offset As New DoubleRange(0, 255)
     Dim drawLine As Boolean = False
-    Dim model As Byte()
+    Dim model As Image
 
     ReadOnly grays As SolidBrush() = Designer.GetBrushes(ScalerPalette.Gray.Description, 30)
     ReadOnly grayOffset As New DoubleRange(0, 29)
@@ -50,16 +51,8 @@ Public Class frmCFDCanvas
     '        End Function)
     'End Function
 
-    Private Function requestFrame() As bitmap
-        If model Is Nothing Then
-            Return New bitmap(CFD.pars.dims(0), CFD.pars.dims(1))
-        Else
-            Return bitmap.FromStream(New MemoryStream(model.ToArray))
-        End If
-    End Function
-
     Private Function Render(frame As Double()()) As bitmap
-        Dim bitmap As bitmap = requestFrame()
+        Dim bitmap As New bitmap(CFD.pars.dims(0), CFD.pars.dims(1))
         Dim g As Graphics = Graphics.FromImage(bitmap)
 
         If frame.IsNullOrEmpty Then
@@ -123,6 +116,10 @@ Public Class frmCFDCanvas
 
         Dim showTracer As Boolean = Invoke(Function() ribbonItems.CheckShowTracer.BooleanValue)
         Dim showFlowline As Boolean = Invoke(Function() ribbonItems.CheckShowFlowLine.BooleanValue)
+
+        If Not model Is Nothing Then
+            Call g.DrawImageUnscaled(model, New Point)
+        End If
 
         If showTracer Then
             For Each pt As PointF In CFD.moveTracers(toolkit.pars.TracerSpeedLevel)
@@ -291,7 +288,7 @@ Public Class frmCFDCanvas
         Call timer1.Start()
 
         If setup.modelfile.FileExists Then
-            model = setup.modelfile.ReadBinary
+            model = setup.modelfile.LoadImage
         End If
     End Sub
 
