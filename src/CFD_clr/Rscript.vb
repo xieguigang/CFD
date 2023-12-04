@@ -56,12 +56,16 @@ Module Rscript
                            <RRawVectorArgument>
                            Optional dims As Object = "1920,1080",
                            Optional interval As Integer = 30,
+                           Optional model_file As String = Nothing,
                            Optional env As Environment = Nothing) As Object
 
         Dim size = InteropArgumentHelper.getSize(dims, env, [default]:="1920,1080")
         Dim session As New Session(storage)
 
-        Return session.dims(size.SizeParser).interval(interval)
+        Return session _
+            .dims(size.SizeParser) _
+            .interval(interval) _
+            .model(model_file)
     End Function
 
     ''' <summary>
