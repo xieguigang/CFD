@@ -15,6 +15,7 @@ Public Class Session : Implements IDisposable
     Dim dimension As New Size(1280, 720)
     Dim time As Integer
     Dim pause As Boolean = False
+    Dim modelfile As String = Nothing
 
     Private disposedValue As Boolean
 
@@ -41,6 +42,11 @@ Public Class Session : Implements IDisposable
 
     Public Function interval(f As Integer) As Session
         snapshotInterval = f
+        Return Me
+    End Function
+
+    Public Function model(filepath As String) As Session
+        modelfile = filepath
         Return Me
     End Function
 
@@ -74,6 +80,10 @@ Public Class Session : Implements IDisposable
 
             Me.i = 0
             Me.time = 0
+        End If
+
+        If modelfile.FileExists Then
+            Call ModelLoader.LoadModelFile(modelfile, CFD)
         End If
 
         Dim startTime As Integer = Me.time

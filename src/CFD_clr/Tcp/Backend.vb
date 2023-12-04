@@ -106,7 +106,8 @@ Public Class Backend : Implements ITaskDriver, IDisposable
         session = New Session(save)
         session.dims(New Size(args.dims(0), args.dims(1))) _
             .interval(args.interval) _
-            .iterations(args.max_time)
+            .iterations(args.max_time) _
+            .model(args.modelfile)
     End Sub
 
     <Protocol(Protocols.Setup)>
