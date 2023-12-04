@@ -14,7 +14,10 @@ Module Tcp
     ''' the server thread will be blocked at here
     ''' </remarks>
     <ExportAPI("start")>
-    Public Function start(Optional debug_port As Integer? = Nothing, Optional session_file As String = Nothing) As Object
+    Public Function start(Optional debug_port As Integer? = Nothing,
+                          Optional model_file As String = Nothing,
+                          Optional session_file As String = Nothing) As Object
+
         Dim session As New Backend(debug_port)
         Call RunSlavePipeline.SendMessage($"port={session.TcpPort}")
 
@@ -24,7 +27,7 @@ Module Tcp
                 session_file = TempFileSystem.GetAppSysTempFile(".cfd")
             End If
 
-            Call session.Setup(New SetupParameters With {.storagefile = session_file})
+            Call session.Setup(SetupParameters.CreateSetup(session_file, model_file))
         End If
 
         Return session.Run
