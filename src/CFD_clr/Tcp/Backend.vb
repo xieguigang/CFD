@@ -5,6 +5,7 @@ Imports System.Threading
 Imports CFD
 Imports CFD.Storage
 Imports Microsoft.VisualBasic.ComponentModel
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.Net.HTTP
 Imports Microsoft.VisualBasic.Net.Protocols.Reflection
@@ -47,12 +48,19 @@ Public Class Backend : Implements ITaskDriver, IDisposable
         Dim frameData As Double()() = {}
         Dim reader As New DataAdapter(session)
 
-        Select Case frameType
-            Case FrameTypes.Density : frameData = reader.GetDensity
-            Case FrameTypes.Speed : frameData = reader.GetSpeed
-            Case FrameTypes.XVel : frameData = reader.GetXVel
-            Case FrameTypes.YVel : frameData = reader.GetYVel
-        End Select
+        If session.IsReady Then
+            Select Case frameType
+                Case FrameTypes.Density : frameData = reader.GetDensity
+                Case FrameTypes.Speed : frameData = reader.GetSpeed
+                Case FrameTypes.XVel : frameData = reader.GetXVel
+                Case FrameTypes.YVel : frameData = reader.GetYVel
+            End Select
+        Else
+            frameData = RectangularArray.Matrix(Of Double)(
+                m:=session.dimsVal.Width,
+                n:=session.dimsVal.Height
+            )
+        End If
 
         Dim ms As New MemoryStream
         Dim wr As New BinaryDataWriter(ms) With {.ByteOrder = ByteOrder.LittleEndian}

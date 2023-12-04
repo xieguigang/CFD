@@ -9,19 +9,31 @@ Public Class Session : Implements IDisposable
     ''' the simulation engine
     ''' </summary>
     Friend CFD As FluidDynamics
+    Friend dimension As New Size(1280, 720)
 
     Dim snapshotInterval As Integer = 30
     Dim max_time As Integer = 10 ^ 6
-    Dim dimension As New Size(1280, 720)
     Dim time As Integer
     Dim pause As Boolean = False
     Dim modelfile As String = Nothing
 
     Private disposedValue As Boolean
 
+    Public ReadOnly Property IsReady As Boolean
+        Get
+            Return Not CFD Is Nothing
+        End Get
+    End Property
+
     Public ReadOnly Property IsPaused As Boolean
         Get
             Return pause
+        End Get
+    End Property
+
+    Public ReadOnly Property dimsVal As Size
+        Get
+            Return dimension
         End Get
     End Property
 
