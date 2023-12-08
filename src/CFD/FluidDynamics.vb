@@ -228,6 +228,20 @@ Public Class FluidDynamics : Inherits Simulation
             stream()
             bounce()
         End SyncLock
+
+        Call SuppressDoubleRange(n0)
+        Call SuppressDoubleRange(nN)
+        Call SuppressDoubleRange(nS)
+        Call SuppressDoubleRange(nE)
+        Call SuppressDoubleRange(nW)
+        Call SuppressDoubleRange(nNW)
+        Call SuppressDoubleRange(nNE)
+        Call SuppressDoubleRange(nSW)
+        Call SuppressDoubleRange(nSE)
+        Call SuppressDoubleRange(rho)
+        Call SuppressDoubleRange(xvel)
+        Call SuppressDoubleRange(yvel)
+        Call SuppressDoubleRange(speed2)
     End Sub
 
     Dim m_collide As Tasks.collide

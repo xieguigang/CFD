@@ -23,8 +23,21 @@ Public MustInherit Class Simulation : Implements IDisposable
     ''' </summary>
     Public MustOverride Sub reset()
     Public MustOverride Sub advance()
-
     Protected MustOverride Sub close()
+
+    Friend Shared Sub SuppressDoubleRange(ByRef m As Double()(), Optional min As Double = -10000000000.0, Optional max As Double = 10000000000.0)
+        For x As Integer = 0 To m.Length - 1
+            Dim xi = m(x)
+
+            For y As Integer = 0 To xi.Length - 1
+                If xi(y) > max Then
+                    xi(y) = max
+                ElseIf xi(y) < min Then
+                    xi(y) = min
+                End If
+            Next
+        Next
+    End Sub
 
     Protected Overridable Sub Dispose(disposing As Boolean)
         If Not disposedValue Then
