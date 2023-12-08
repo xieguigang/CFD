@@ -112,6 +112,7 @@ Public Class Session : Implements IDisposable
             End If
 
             Call CFD.advance()
+            Call CFD.CheckNaN()
 
             If time Mod d = 0 Then
                 Call VBDebugger.EchoLine($"[{time}/{max_time}] {(time / max_time * 100).ToString("F1")}% ..... {StringFormats.ReadableElapsedTime((Now - t0).TotalMilliseconds)}")
