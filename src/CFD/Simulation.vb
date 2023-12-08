@@ -25,7 +25,9 @@ Public MustInherit Class Simulation : Implements IDisposable
     Public MustOverride Sub advance()
     Protected MustOverride Sub close()
 
-    Friend Shared Sub SuppressDoubleRange(ByRef m As Double()(), Optional min As Double = -10000000000.0, Optional max As Double = 10000000000.0)
+    Const max As Double = 10
+
+    Friend Shared Sub SuppressDoubleRange(ByRef m As Double()(), Optional min As Double = -max, Optional max As Double = max)
         For x As Integer = 0 To m.Length - 1
             Dim xi = m(x)
 
