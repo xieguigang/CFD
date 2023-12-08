@@ -4,9 +4,15 @@ Module DebugHelper
 
     <Extension>
     Private Sub CheckNaN(m As Double()())
-        If m.Any(Function(r) r.Any(Function(mi) mi.IsNaNImaginary)) Then
-            Throw New InvalidProgramException
-        End If
+        For i As Integer = 0 To m.Length - 1
+            Dim row = m(i)
+
+            For j As Integer = 0 To row.Length - 1
+                If row(j).IsNaNImaginary Then
+                    Throw New InvalidProgramException($"[x={i}, y={j}]")
+                End If
+            Next
+        Next
     End Sub
 
     <Extension>
