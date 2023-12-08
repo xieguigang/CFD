@@ -5,6 +5,8 @@ Namespace Tasks
     Public Class collide : Inherits VectorTask
 
         ReadOnly cfd As FluidDynamics
+        ReadOnly rho_max As Double = 1
+        ReadOnly rho_min As Double = -1
 
         Public Sub New(cfd As FluidDynamics)
             MyBase.New(nsize:=cfd.xdim)
@@ -53,16 +55,13 @@ Namespace Tasks
                 barrier = cfd.barrier(x)
 
                 For y As Integer = 0 To cfd.ydim - 1
-                    If y = 237 Then
-                        Console.Write(".")
-                    End If
                     If Not barrier(y) Then
                         this_rho = n0(y) + nN(y) + nS(y) + nE(y) + nW(y) + nNW(y) + nNE(y) + nSW(y) + nSE(y)
 
-                        If this_rho > 1 Then
-                            this_rho = 1
-                        ElseIf this_rho < -1 Then
-                            this_rho = -1
+                        If this_rho > rho_max Then
+                            this_rho = rho_max
+                        ElseIf this_rho < rho_min Then
+                            this_rho = rho_min
                         End If
 
                         ' macroscopic density may be needed for plotting
