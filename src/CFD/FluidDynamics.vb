@@ -223,11 +223,9 @@ Public Class FluidDynamics : Inherits Simulation
     ''' **************************************************************************
     ''' </summary>
     Public Overrides Sub advance()
-        SyncLock Me
-            collide()
-            stream()
-            bounce()
-        End SyncLock
+        Call collide()
+        Call stream()
+        Call bounce()
 
         Call SuppressDoubleRange(n0)
         Call SuppressDoubleRange(nN)
