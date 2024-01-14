@@ -50,10 +50,12 @@ declare namespace CFD {
      * + default value Is ``'1920,1080'``.
      * @param interval 
      * + default value Is ``30``.
+     * @param model_file 
+     * + default value Is ``null``.
      * @param env 
      * + default value Is ``null``.
    */
-   function session(storage: object, dims?: any, interval?: object, env?: object): object;
+   function session(storage: object, dims?: any, interval?: object, model_file?: string, env?: object): object;
    /**
     * start run the simulation
     * 

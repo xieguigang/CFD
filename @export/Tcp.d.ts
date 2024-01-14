@@ -15,8 +15,10 @@ declare namespace Tcp {
     * 
      * @param debug_port 
      * + default value Is ``null``.
+     * @param model_file 
+     * + default value Is ``null``.
      * @param session_file 
      * + default value Is ``null``.
    */
-   function start(debug_port?: object, session_file?: string): any;
+   function start(debug_port?: object, model_file?: string, session_file?: string): any;
 }
