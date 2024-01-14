@@ -9,12 +9,22 @@ Namespace My
 
         Shared ReadOnly default_file As String = $"{App.ProductProgramData}/workbench_settings.json"
 
+        Private Shared Function CreateNew()
+            Dim config As New Settings()
+            Call config.GetJson.SaveTo(default_file)
+            Return config
+        End Function
+
         Public Shared Function LoadSettings() As Settings
             If Not default_file.FileExists Then
-                Call New Settings().GetJson.SaveTo(default_file)
+                CreateNew()
             End If
 
             Dim config As Settings = default_file.LoadJsonFile(Of Settings)
+
+            If config Is Nothing Then
+                config = CreateNew()
+            End If
 
             If config.form_pos.TryCount < 2 Then
                 config.form_pos = {100, 100}
