@@ -38,14 +38,14 @@ Public Class FormMain
         Globals.ribbonItems = ribbonItems
         Globals.dockPanel = dockPanel
         Globals.main = Me
-
-        Me.Location = New Point(Globals.settings.form_pos(0), Globals.settings.form_pos(1))
-        Me.Size = New Point(Globals.settings.form_size(0), Globals.settings.form_size(1))
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         dockPanel.Theme = vS2015LightTheme1
         EnableVSRenderer(StatusStrip1)
+
+        Me.Location = New Point(Globals.settings.form_pos(0), Globals.settings.form_pos(1))
+        Me.Size = New Point(Globals.settings.form_size(0), Globals.settings.form_size(1))
 
         AddHandler ribbonItems.ButtonAbout.ExecuteEvent, Sub() Call New SplashScreen() With {.ShowAbout = True}.Show()
         AddHandler ribbonItems.ButtonAppExit.ExecuteEvent, Sub() Call Me.Close()
