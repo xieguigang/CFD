@@ -78,7 +78,6 @@ Partial Class FormMain
         Controls.Add(StatusStrip1)
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
         Name = "FormMain"
-        StartPosition = FormStartPosition.CenterScreen
         Text = "Moira Workshop 2024"
         StatusStrip1.ResumeLayout(False)
         StatusStrip1.PerformLayout()

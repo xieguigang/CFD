@@ -38,6 +38,9 @@ Public Class FormMain
         Globals.ribbonItems = ribbonItems
         Globals.dockPanel = dockPanel
         Globals.main = Me
+
+        Me.Location = New Point(Globals.settings.form_pos(0), Globals.settings.form_pos(1))
+        Me.Size = New Point(Globals.settings.form_size(0), Globals.settings.form_size(1))
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -77,6 +80,8 @@ Public Class FormMain
     End Sub
 
     Private Sub FormMain_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-
+        Globals.settings.form_pos = {Location.X, Location.Y}
+        Globals.settings.form_size = {Size.Width, Size.Height}
+        Globals.settings.Save()
     End Sub
 End Class
