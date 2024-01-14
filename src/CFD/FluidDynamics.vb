@@ -179,7 +179,7 @@ Public Class FluidDynamics : Inherits Simulation
                 Dim rely As Integer = ydim / 2 - y
                 Dim r = std.Sqrt(relx * relx + rely * rely)
 
-                barrier(x)(y) = r < std.Min(xdim, ydim) * 0.05
+                ' barrier(x)(y) = r < std.Min(xdim, ydim) * 0.05
 
                 If barrier(x)(y) Then
                     n0(x)(y) = 0

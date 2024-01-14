@@ -96,6 +96,7 @@ Public Class Session : Implements IDisposable
 
         If modelfile.FileExists Then
             Call ModelLoader.LoadModelFile(modelfile, CFD)
+            Call CFD.reset()
         End If
 
         Dim startTime As Integer = Me.time
