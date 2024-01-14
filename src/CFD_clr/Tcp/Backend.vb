@@ -108,6 +108,18 @@ Public Class Backend : Implements ITaskDriver, IDisposable
         Return New DataPipe(ms)
     End Function
 
+    <Protocol(Protocols.SetBarrier)>
+    Public Function SetBarrier(request As RequestStream, remote As System.Net.IPEndPoint) As BufferPipe
+        Dim xy As Integer() = request.LoadObject(Of Integer())
+        Dim ss As New DataAdapter(session)
+
+        SyncLock ss.CFD
+            ss.SetBarrier(New Point(xy(0), xy(1)), True)
+        End SyncLock
+
+        Return New DataPipe("ok")
+    End Function
+
     Public Sub Setup(args As SetupParameters)
         Dim save As New FrameWriter(args.storagefile.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False))
 

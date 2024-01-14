@@ -1,6 +1,5 @@
 ﻿Imports System.Drawing.Drawing2D
 Imports System.Drawing.Text
-Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports CFD
@@ -262,7 +261,7 @@ Public Class frmCFDCanvas
 
     Private Sub PictureBox1_MouseMove(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseMove
         If drawLine AndAlso CheckDrawBarrier() Then
-            'Call reader.SetBarrierPoint(xy, 1)
+            Call CFD.SetBarrierPoint(GetCFDPosition())
         End If
 
         If CFD IsNot Nothing AndAlso CFD.ready Then
@@ -315,6 +314,6 @@ Public Class frmCFDCanvas
     End Sub
 
     Private Sub frmCFDCanvas_Closed(sender As Object, e As EventArgs) Handles MyBase.Closed
-        timer1.Stop
+        timer1.Stop()
     End Sub
 End Class

@@ -182,4 +182,12 @@ Public Class CFDTcpProtocols
             Return BitConverter.ToDouble(data.ChunkBuffer)
         End If
     End Function
+
+    Public Function SetBarrierPoint(xy As Point) As Boolean
+        Dim pars As Integer() = {xy.X, xy.Y}
+        Dim req As New RequestStream(lpProtocol, Protocols.SetBarrier, pars.GetJson)
+        Dim data = requestData(req)
+
+        Return True
+    End Function
 End Class

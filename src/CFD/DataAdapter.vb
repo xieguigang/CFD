@@ -70,6 +70,11 @@ Public Class DataAdapter
         Return CFD.barrier(xy.X)(xy.Y)
     End Function
 
+    Public Function SetBarrier(xy As Point, flag As Boolean) As Boolean
+        CFD.barrier(xy.X)(xy.Y) = flag
+        Return flag
+    End Function
+
 End Class
 
 Public Enum FrameTypes
