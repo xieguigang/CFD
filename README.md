@@ -8,4 +8,5 @@ CFD is applied to a wide range of research and engineering problems in many fiel
 
 ![](./docs/Desktop.PNG)
 
-View [help page](vignettes/index.html)
++ View [help page](vignettes/index.html)
++ Play [a online version](docs/html/index.html)
