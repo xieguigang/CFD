@@ -9,4 +9,4 @@ CFD is applied to a wide range of research and engineering problems in many fiel
 ![](./docs/Desktop.PNG)
 
 + View [help page](vignettes/index.html)
-+ Play [a online version](docs/html/index.html)
++ Play [a online version](docs/html/index.html) (original source link [https://physics.weber.edu/schroeder/fluids/](https://physics.weber.edu/schroeder/fluids/))
