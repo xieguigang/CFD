@@ -2373,5 +2373,6 @@ Global
 		..\GCModeller\src\R-sharp\Library\shares\R_graphic.interop\R_graphic.interop.projitems*{7dd708a4-7c5b-43ab-a389-ec47f24799e1}*SharedItemsImports = 5
 		..\GCModeller\src\runtime\Darwinism\src\networking\TcpRequest\TcpRequest.projitems*{7df565ae-6e7a-4667-ab6d-9908acbeed8b}*SharedItemsImports = 13
 		..\GCModeller\src\R-sharp\studio\Rstudio.common\Rstudio.common.projitems*{d321a206-623e-4975-8419-abc64df7bf68}*SharedItemsImports = 5
+		..\GCModeller\src\runtime\Darwinism\src\networking\TcpRequest\TcpRequest.projitems*{d321a206-623e-4975-8419-abc64df7bf68}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal
