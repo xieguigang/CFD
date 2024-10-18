@@ -1,5 +1,6 @@
 ﻿Imports System.Drawing.Drawing2D
 Imports System.Drawing.Text
+Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports CFD
@@ -13,6 +14,7 @@ Imports Microsoft.VisualBasic.Parallel.Tasks
 Imports RibbonLib.Interop
 Imports WeifenLuo.WinFormsUI.Docking
 Imports bitmap = System.Drawing.Bitmap
+Imports image = System.Drawing.Image
 Imports std = System.Math
 
 Public Class frmCFDCanvas
@@ -23,7 +25,7 @@ Public Class frmCFDCanvas
     Dim colors As SolidBrush()
     Dim offset As New DoubleRange(0, 255)
     Dim drawLine As Boolean = False
-    Dim model As Image = Nothing
+    Dim model As image = Nothing
 
     ReadOnly grays As SolidBrush() = Designer.GetBrushes(ScalerPalette.Gray.Description, 30)
     ReadOnly grayOffset As New DoubleRange(0, 29)
@@ -289,7 +291,9 @@ Public Class frmCFDCanvas
         Call timer1.Start()
 
         If setup.modelfile.FileExists Then
-            model = setup.modelfile.LoadImage
+            Using s As Stream = setup.modelfile.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+                model = image.FromStream(s)
+            End Using
         End If
     End Sub
 
