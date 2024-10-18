@@ -14,7 +14,10 @@ Imports Microsoft.VisualBasic.Parallel.Tasks
 Imports RibbonLib.Interop
 Imports WeifenLuo.WinFormsUI.Docking
 Imports bitmap = System.Drawing.Bitmap
+Imports brushes = System.Drawing.Brushes
 Imports image = System.Drawing.Image
+Imports pen = System.Drawing.Pen
+Imports solidbrush = System.Drawing.SolidBrush
 Imports std = System.Math
 
 Public Class frmCFDCanvas
@@ -27,7 +30,10 @@ Public Class frmCFDCanvas
     Dim drawLine As Boolean = False
     Dim model As image = Nothing
 
-    ReadOnly grays As SolidBrush() = Designer.GetBrushes(ScalerPalette.Gray.Description, 30)
+    ReadOnly grays As solidbrush() = Designer _
+        .GetColors(ScalerPalette.Gray.Description, 30) _
+        .Select(Function(c) New solidbrush(c)) _
+        .ToArray
     ReadOnly grayOffset As New DoubleRange(0, 29)
 
     ''' <summary>
