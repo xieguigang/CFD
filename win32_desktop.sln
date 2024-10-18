@@ -2176,11 +2176,11 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\GCModeller\src\R-sharp\studio\Rstudio.common\Rstudio.common.projitems*{1148e965-1483-44ed-b8e5-5652f32977cc}*SharedItemsImports = 5
 		..\GCModeller\src\R-sharp\Library\shares\dataframeHelper\dataframeHelper.projitems*{15343fd3-e3e5-4c1f-935e-1bd1e2a4090b}*SharedItemsImports = 5
+		..\GCModeller\src\R-sharp\Library\shares\JsonHelper\JsonHelper.projitems*{15343fd3-e3e5-4c1f-935e-1bd1e2a4090b}*SharedItemsImports = 5
 		..\GCModeller\src\R-sharp\Library\shares\R_graphic.interop\R_graphic.interop.projitems*{53af2b13-ccd5-4f73-94d5-612191e785a9}*SharedItemsImports = 13
 		..\GCModeller\src\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{6bae2cd3-a6d3-44f0-a41a-0f5f82af0c2b}*SharedItemsImports = 5
 		..\GCModeller\src\R-sharp\Library\shares\R_graphic.interop\R_graphic.interop.projitems*{7dd708a4-7c5b-43ab-a389-ec47f24799e1}*SharedItemsImports = 5
 		..\GCModeller\src\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{7df565ae-6e7a-4667-ab6d-9908acbeed8b}*SharedItemsImports = 13
 		..\GCModeller\src\R-sharp\studio\Rstudio.common\Rstudio.common.projitems*{d321a206-623e-4975-8419-abc64df7bf68}*SharedItemsImports = 5
-		..\GCModeller\src\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems*{d321a206-623e-4975-8419-abc64df7bf68}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal
