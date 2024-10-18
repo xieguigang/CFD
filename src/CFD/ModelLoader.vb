@@ -1,10 +1,14 @@
-﻿Imports Microsoft.VisualBasic.ComponentModel.Collection
+﻿Imports System.Drawing
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.BitmapImage
+Imports SkiaSharp
 
 Public Module ModelLoader
 
     Public Sub LoadModelFile(filepath As String, CFD As FluidDynamics)
-        Dim img As Bitmap = filepath.LoadImage
+        Dim skia = SKBitmap.Decode(filepath)
+        Dim img As New Bitmap(New BitmapBuffer(skia.Bytes, New Size(skia.Width, skia.Height), skia.BytesPerPixel))
         Dim rasterModel As Boolean()() = RectangularArray.Matrix(Of Boolean)(CFD.xdim, CFD.ydim)
 
         If img.Width <> CFD.xdim OrElse img.Height <> CFD.ydim Then
