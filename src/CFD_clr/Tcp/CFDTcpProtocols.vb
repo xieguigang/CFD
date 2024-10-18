@@ -1,10 +1,11 @@
 ﻿Imports System.Drawing
+Imports System.Runtime.CompilerServices
 Imports CFD
+Imports Darwinism.IPC.Networking.Protocols.Reflection
+Imports Darwinism.IPC.Networking.Tcp
 Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.Net
-Imports Microsoft.VisualBasic.Net.HTTP
-Imports Microsoft.VisualBasic.Net.Protocols.Reflection
-Imports Microsoft.VisualBasic.Net.Tcp
+Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Serialization.JSON
 
@@ -42,6 +43,7 @@ Public Class CFDTcpProtocols
         End If
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Private Function requestData(req As RequestStream) As RequestStream
         Return New TcpRequest(EndPoint).SendMessage(req)
     End Function

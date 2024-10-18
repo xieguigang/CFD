@@ -4,11 +4,12 @@ Imports System.Runtime.CompilerServices
 Imports System.Threading
 Imports CFD
 Imports CFD.Storage
+Imports Darwinism.IPC.Networking.HTTP
+Imports Darwinism.IPC.Networking.Protocols.Reflection
+Imports Darwinism.IPC.Networking.Tcp
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.IO
-Imports Microsoft.VisualBasic.Net.HTTP
-Imports Microsoft.VisualBasic.Net.Protocols.Reflection
 Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Parallel
 

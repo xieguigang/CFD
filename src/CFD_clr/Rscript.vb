@@ -15,6 +15,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports Folder = Microsoft.VisualBasic.FileIO.Directory
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 <Package("CFD")>
 Module Rscript
@@ -113,7 +114,7 @@ Module Rscript
         Dim dir As IFileSystemEnvironment
 
         If fs Is Nothing Then
-            Return Internal.debug.stop("the required filesystem location should not be nothing!", env)
+            Return RInternal.debug.stop("the required filesystem location should not be nothing!", env)
         End If
         If TypeOf fs Is String Then
             dir = Folder.FromLocalFileSystem(CStr(fs))
@@ -149,7 +150,7 @@ Module Rscript
             )
             Dim file As Stream = dir.OpenFile($"/frame-{time.ToString.PadLeft(5, "0"c)}.png", access:=FileAccess.Write)
 
-            Call bitmap.Save(file, ImageFormats.Png.GetFormat)
+            Call bitmap.Save(file, ImageFormats.Png)
             Call file.Flush()
             Call file.Close()
         Next
