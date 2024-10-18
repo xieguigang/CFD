@@ -1,7 +1,5 @@
-﻿Imports System.Drawing
-Imports Microsoft.VisualBasic.ComponentModel.Collection
+﻿Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Imaging
-Imports Microsoft.VisualBasic.Imaging.BitmapImage
 
 Public Module ModelLoader
 
@@ -11,13 +9,14 @@ Public Module ModelLoader
 
         If img.Width <> CFD.xdim OrElse img.Height <> CFD.ydim Then
             ' resize image
-            img = img.ResizeScaled({CFD.xdim, CFD.ydim})
+            img = img.Resize(CFD.xdim, CFD.ydim)
         End If
 
         ' transparent is none
         For i As Integer = 0 To CFD.xdim - 1
             For j As Integer = 0 To CFD.ydim - 1
-                rasterModel(i)(j) = False 'removes the pre-defined model
+                ' removes the pre-defined model
+                rasterModel(i)(j) = False
                 rasterModel(i)(j) = Not img.GetPixel(i, j).IsTransparent
             Next
         Next

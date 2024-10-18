@@ -124,6 +124,6 @@
     </None>
   </ItemGroup>
 
-  <Import Project="..\..\GCModeller\src\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems" Label="Shared" />
+  <Import Project="..\..\GCModeller\src\runtime\Darwinism\src\networking\TcpRequest\TcpRequest.projitems" Label="Shared" /> 
 
 </Project>
