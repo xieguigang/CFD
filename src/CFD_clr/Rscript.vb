@@ -10,6 +10,7 @@ Imports Microsoft.VisualBasic.Drawing
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
+Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -142,6 +143,11 @@ Module Rscript
         Dim dims As Size = pack.dims
         Dim range As DoubleRange = pack.GetValueRange(dimension)
         Dim scaleTarget As New DoubleRange(0, color_levels - 1)
+        Dim model As SkiaImage = Nothing
+
+        If pack.hasModel Then
+            model = New SkiaImage(pack.getModel().CastSkiaBitmap)
+        End If
 
         For Each time As Integer In TqdmWrapper.Range(1, pack.total)
             Dim frame As Double()() = pack.ReadFrame(time, dimension)
@@ -164,7 +170,18 @@ Module Rscript
             )
             Dim file As Stream = dir.OpenFile($"/frame-{time.ToString.PadLeft(5, "0"c)}.png", access:=FileAccess.Write)
 
-            Call bitmap.Save(file, ImageFormats.Png)
+            If Not model Is Nothing Then
+                Using g As IGraphics = Driver.CreateGraphicsDevice(bitmap.Size, driver:=Drivers.GDI)
+                    Call g.DrawImage(bitmap, New Point)
+                    Call g.DrawImage(model, New Point)
+                    Call g.Flush()
+
+                    Call DirectCast(g, GdiRasterGraphics).ImageResource.Save(file, ImageFormats.Png)
+                End Using
+            Else
+                Call bitmap.Save(file, ImageFormats.Png)
+            End If
+
             Call file.Flush()
             Call file.Close()
         Next

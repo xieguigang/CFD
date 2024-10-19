@@ -6,6 +6,8 @@ Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.DataStorage.HDSPack
 Imports Microsoft.VisualBasic.DataStorage.HDSPack.FileSystem
+Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Serialization.JSON
 
 Namespace Storage
@@ -38,6 +40,20 @@ Namespace Storage
             buf = New StreamPack(file, [readonly]:=True)
             Call loadMetadata()
         End Sub
+
+        Public Function hasModel() As Boolean
+            Dim path As String = $"/model.img"
+            Dim size As String = $"/model.json"
+
+            Return buf.FileExists(path) AndAlso buf.FileExists(size)
+        End Function
+
+        Public Function getModel() As Bitmap
+            Dim size As Integer() = buf.ReadText($"/model.json").Trim.LoadJSON(Of Integer())
+            Dim bmpBuf As Byte() = buf.ReadBinary($"/model.img").ToArray
+            Dim bmp As New BitmapBuffer(bmpBuf, New Size(size(0), size(1)), size(2))
+            Return New Bitmap(bmp)
+        End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function GetValueRange(dimension As String) As DoubleRange

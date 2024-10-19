@@ -36,8 +36,10 @@ Namespace Storage
         Public Sub setModelBitmap(model As Bitmap)
             Dim path As String = $"/model.img"
             Dim size As String = $"/model.json"
+            Dim pixelSize As Integer = model.MemoryBuffer.GetPixelChannels
+            Dim dims As Integer() = New Integer() {model.Width, model.Height, pixelSize}
 
-            Call buf.WriteText(New Integer() {model.Width, model.Height}.GetJson, fileName:=size, encoding:=Encodings.ASCII)
+            Call buf.WriteText(dims.GetJson, fileName:=size, encoding:=Encodings.ASCII)
 
             Using s As Stream = buf.OpenBlock(path)
                 Call s.Write(model.MemoryBuffer.RawBuffer, Scan0, model.MemoryBuffer.Length)
