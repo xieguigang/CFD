@@ -3,6 +3,7 @@ Imports System.IO
 Imports CFD
 Imports CFD.Storage
 Imports Microsoft.VisualBasic.ApplicationServices
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal.ProgressBar.Tqdm
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -132,7 +133,7 @@ Module Rscript
         Dim range As DoubleRange = pack.GetValueRange(dimension)
         Dim scaleTarget As New DoubleRange(0, color_levels - 1)
 
-        For time As Integer = 1 To pack.total
+        For Each time As Integer In TqdmWrapper.Range(1, pack.total + 1)
             Dim frame As Double()() = pack.ReadFrame(time, dimension)
             Dim pixels As PixelData() = frame _
                 .AsParallel _
