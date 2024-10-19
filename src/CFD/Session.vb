@@ -121,7 +121,7 @@ Public Class Session : Implements IDisposable
 
             If time Mod d = 0 Then
                 speed = time / (Now - t0).TotalSeconds
-                estimate_total = TimeSpan.FromSeconds((max_time - startTime) / speed)
+                estimate_total = TimeSpan.FromSeconds((max_time - startTime) / (speed + 1))
 
                 Call VBDebugger.EchoLine($"[{time}/{max_time}] {(time / max_time * 100).ToString("F1")}% {speed.ToString("F2")}itrs/s ..... {StringFormats.ReadableElapsedTime((Now - t0).TotalMilliseconds)} < {StringFormats.ReadableElapsedTime(estimate_total.TotalMilliseconds)}")
             End If
