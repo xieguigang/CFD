@@ -48,10 +48,16 @@ Namespace Storage
             Return buf.FileExists(path) AndAlso buf.FileExists(size)
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <returns>An in-memory bitmap image object with transparent channels</returns>
         Public Function getModel() As Bitmap
             Dim size As Integer() = buf.ReadText($"/model.json").Trim.LoadJSON(Of Integer())
             Dim bmpBuf As Byte() = buf.ReadBinary($"/model.img").ToArray
             Dim bmp As New BitmapBuffer(bmpBuf, New Size(size(0), size(1)), size(2))
+
+            ' replace the black to transparent?
             Return New Bitmap(bmp)
         End Function
 

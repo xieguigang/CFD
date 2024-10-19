@@ -147,6 +147,7 @@ Module Rscript
 
         If pack.hasModel Then
             model = New SkiaImage(pack.getModel().CastSkiaBitmap)
+            model = model.SetTransparent
         End If
 
         For Each time As Integer In TqdmWrapper.Range(1, pack.total)
