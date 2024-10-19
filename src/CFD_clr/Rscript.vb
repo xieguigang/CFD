@@ -133,7 +133,7 @@ Module Rscript
         Dim range As DoubleRange = pack.GetValueRange(dimension)
         Dim scaleTarget As New DoubleRange(0, color_levels - 1)
 
-        For Each time As Integer In TqdmWrapper.Range(1, pack.total + 1)
+        For Each time As Integer In TqdmWrapper.Range(1, pack.total)
             Dim frame As Double()() = pack.ReadFrame(time, dimension)
             Dim pixels As PixelData() = frame _
                 .AsParallel _

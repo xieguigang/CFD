@@ -64,6 +64,8 @@ declare namespace CFD {
      * @param max_time -
      * 
      * + default value Is ``1000000``.
+     * @param n_threads 
+     * + default value Is ``8``.
    */
-   function start(ss: object, max_time?: object): object;
+   function start(ss: object, max_time?: object, n_threads?: object): object;
 }
