@@ -8,5 +8,5 @@ const dynamics = CFD::session(file, dims = [800,500],
     model.file = "../src/desktop/demo_model.png");
 
 # run
-CFD::start(dynamics, max.time = 100000);
+CFD::start(dynamics, max.time = 10000);
 close(file);

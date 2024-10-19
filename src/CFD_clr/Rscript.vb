@@ -9,6 +9,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
@@ -76,7 +77,9 @@ Module Rscript
     ''' <param name="max_time"></param>
     ''' <returns></returns>
     <ExportAPI("start")>
-    Public Function start(ss As Session, Optional max_time As Integer = 10 ^ 6) As Session
+    Public Function start(ss As Session, Optional max_time As Integer = 10 ^ 6, Optional n_threads As Integer = 8) As Session
+        VectorTask.n_threads = n_threads
+
         Call ss.iterations(max_time).Run()
         Call ss.Dispose()
 

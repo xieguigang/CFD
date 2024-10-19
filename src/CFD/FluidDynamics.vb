@@ -215,6 +215,8 @@ Public Class FluidDynamics : Inherits Simulation
 
         m_collide = New Tasks.collide(Me)
         m_bounce = New Tasks.bounce(Me)
+
+        Call VBDebugger.EchoLine($"Run CFD engine in parallel with {m_collide.cpu_threads} CPU threads.")
     End Sub
 
     ''' <summary>

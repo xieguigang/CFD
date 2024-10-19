@@ -8,6 +8,12 @@ Namespace Tasks
         ReadOnly rho_max As Double = 1
         ReadOnly rho_min As Double = -1
 
+        Public ReadOnly Property cpu_threads As Integer
+            Get
+                Return cpu_count
+            End Get
+        End Property
+
         Public Sub New(cfd As FluidDynamics)
             MyBase.New(nsize:=cfd.xdim)
             Me.cfd = cfd
