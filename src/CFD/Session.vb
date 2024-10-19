@@ -102,6 +102,8 @@ Public Class Session : Implements IDisposable
         End If
 
         Dim startTime As Integer = Me.time
+        Dim speed As Double
+        Dim estimate_total As TimeSpan
 
         For time As Integer = startTime To max_time
             If time Mod snapshotInterval = 0 Then
@@ -118,7 +120,10 @@ Public Class Session : Implements IDisposable
             ' Call CFD.CheckNaN()
 
             If time Mod d = 0 Then
-                Call VBDebugger.EchoLine($"[{time}/{max_time}] {(time / max_time * 100).ToString("F1")}% ..... {StringFormats.ReadableElapsedTime((Now - t0).TotalMilliseconds)}")
+                speed = time / (Now - t0).TotalSeconds
+                estimate_total = TimeSpan.FromSeconds((max_time - startTime) / speed)
+
+                Call VBDebugger.EchoLine($"[{time}/{max_time}] {(time / max_time * 100).ToString("F1")}% {speed.ToString("F2")}itrs/s ..... {StringFormats.ReadableElapsedTime((Now - t0).TotalMilliseconds)} < {StringFormats.ReadableElapsedTime(estimate_total.TotalMilliseconds)}")
             End If
             If pause Then
                 Exit For
