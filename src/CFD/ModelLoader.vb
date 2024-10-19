@@ -11,6 +11,8 @@ Public Module ModelLoader
         Dim img As New Bitmap(New BitmapBuffer(skia.Bytes, New Size(skia.Width, skia.Height), skia.BytesPerPixel))
         Dim rasterModel As Boolean()() = RectangularArray.Matrix(Of Boolean)(CFD.xdim, CFD.ydim)
 
+        Call VBDebugger.EchoLine($"load model png image file: {filepath.GetFullPath} [{skia.Width}x{skia.Height}]")
+
         If img.Width <> CFD.xdim OrElse img.Height <> CFD.ydim Then
             ' resize image
             img = img.Resize(CFD.xdim, CFD.ydim)

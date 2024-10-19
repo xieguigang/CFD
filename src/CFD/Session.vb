@@ -83,8 +83,10 @@ Public Class Session : Implements IDisposable
     ''' </summary>
     ''' <param name="reset"></param>
     Public Sub Run(Optional reset As Boolean = True)
-        Dim d As Integer = max_time / 50
+        Dim d As Integer = max_time / 100
         Dim t0 As Date = Now
+
+        Call VBDebugger.EchoLine($"Create new CFD session for grid dimension size: [{dimension.Width}x{dimension.Height}]")
 
         If reset Then
             CFD = New FluidDynamics(dimension.Width, dimension.Height)
