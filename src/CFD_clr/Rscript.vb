@@ -150,6 +150,9 @@ Module Rscript
             model = model.SetTransparent
         End If
 
+        ' there is a bug about image overlaps in skiasharp
+        model = Nothing
+
         For Each time As Integer In TqdmWrapper.Range(1, pack.total)
             Dim frame As Double()() = pack.ReadFrame(time, dimension)
             Dim pixels As PixelData() = frame _
