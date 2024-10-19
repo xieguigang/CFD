@@ -253,7 +253,8 @@ Public Class FluidDynamics : Inherits Simulation
     ''' **************************************************************************
     ''' </summary>
     Private Sub collide()
-        Call m_collide.Solve()
+        ' Call m_collide.Solve()
+        Call m_collide.Run()
     End Sub
 
     ''' <summary>
@@ -266,7 +267,8 @@ Public Class FluidDynamics : Inherits Simulation
     ''' **************************************************************************
     ''' </summary>
     Private Sub bounce()
-        Call m_bounce.Solve()
+        ' Call m_bounce.Solve()
+        Call m_bounce.Run()
     End Sub
 
     ''' <summary>
