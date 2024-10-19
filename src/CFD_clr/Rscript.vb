@@ -6,6 +6,7 @@ Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.ProgressBar.Tqdm
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
+Imports Microsoft.VisualBasic.Drawing
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
@@ -13,6 +14,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports SkiaSharp
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -64,6 +66,14 @@ Module Rscript
 
         Dim size = InteropArgumentHelper.getSize(dims, env, [default]:="1920,1080")
         Dim session As New Session(storage)
+
+        If model_file.FileExists Then
+            Call storage.setModelBitmap(New Bitmap(New SkiaImage(SKBitmap.Decode(model_file))))
+        Else
+            If Not model_file Is Nothing Then
+                Call $"model file {model_file} is not existsed on the filesystem location!".Warning
+            End If
+        End If
 
         Return session _
             .dims(size.SizeParser) _

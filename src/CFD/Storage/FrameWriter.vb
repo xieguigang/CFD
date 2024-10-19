@@ -5,6 +5,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.DataStorage.HDSPack
 Imports Microsoft.VisualBasic.DataStorage.HDSPack.FileSystem
+Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
@@ -30,6 +31,18 @@ Namespace Storage
 
         Public Sub dimension(val As Size)
             dims = {val.Width, val.Height}
+        End Sub
+
+        Public Sub setModelBitmap(model As Bitmap)
+            Dim path As String = $"/model.img"
+            Dim size As String = $"/model.json"
+
+            Call buf.WriteText(New Integer() {model.Width, model.Height}.GetJson, fileName:=size, encoding:=Encodings.ASCII)
+
+            Using s As Stream = buf.OpenBlock(path)
+                Call s.Write(model.MemoryBuffer.RawBuffer, Scan0, model.MemoryBuffer.Length)
+                Call s.Flush()
+            End Using
         End Sub
 
         Public Sub addFrame(time As Integer, dimension As String, framedata As Double()())
